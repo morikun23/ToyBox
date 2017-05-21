@@ -8,7 +8,7 @@ using UnityEngine;
 using System.Linq;
 
 namespace ToyBox.AudioNS {
-	public class AudioListBase : MonoBehaviour {
+	public abstract class AudioListBase : MonoBehaviour {
 
 		//実際に格納されるリスト
 		protected List<AudioSource> m_list;
