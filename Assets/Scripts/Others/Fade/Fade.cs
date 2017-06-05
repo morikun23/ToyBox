@@ -8,7 +8,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ToyBox {
+namespace ToyBox.FadeNS {
 	public class Fade : MonoBehaviour {
 
 		#region フェードの情報をまとめたクラス

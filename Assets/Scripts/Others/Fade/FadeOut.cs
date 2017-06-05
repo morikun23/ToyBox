@@ -1,24 +1,23 @@
 ﻿//担当者：森田　勝
-//概要　：フェードイン（徐々に明るくなる）の実装クラス
+//概要　：フェードアウト（徐々に暗くなる）の実装クラス
 //参考　：なし
 
 using UnityEngine;
 
-namespace ToyBox {
-	public class FadeIn : IFadeAction {
-
+namespace ToyBox.FadeNS {
+	public class FadeOut : IFadeAction {
+		
 		/// <summary>
 		/// フェード開始処理
 		/// </summary>
 		/// <param name="arg_fadeInfo">フェード情報</param>
 		public void OnEnter(Fade.FadeInfo arg_fadeInfo) {
-			arg_fadeInfo.m_currentAlpha = Fade.FadeInfo.MAX;
+			arg_fadeInfo.m_currentAlpha = Fade.FadeInfo.ZERO;
 
 			Color color = arg_fadeInfo.m_fadeObject.color;
 			color.a = arg_fadeInfo.m_currentAlpha;
 
 			arg_fadeInfo.m_fadeObject.color = color;
-
 		}
 
 		/// <summary>
@@ -28,10 +27,9 @@ namespace ToyBox {
 		public void UpdateByFrame(Fade.FadeInfo arg_fadeInfo) {
 			Color color = arg_fadeInfo.m_fadeObject.color;
 
-			color.a = arg_fadeInfo.m_currentAlpha - Time.deltaTime / arg_fadeInfo.m_duration;
+			color.a = arg_fadeInfo.m_currentAlpha + Time.deltaTime / arg_fadeInfo.m_duration;
 			arg_fadeInfo.m_fadeObject.color = color;
 			arg_fadeInfo.m_currentAlpha = arg_fadeInfo.m_fadeObject.color.a;
-
 		}
 
 		/// <summary>
@@ -40,7 +38,7 @@ namespace ToyBox {
 		/// <param name="arg_fadeInfo">フェード情報</param>
 		/// <returns></returns>
 		public bool IsEnd(Fade.FadeInfo arg_fadeInfo) {
-			return arg_fadeInfo.m_currentAlpha <= 0.01f;
+			return arg_fadeInfo.m_currentAlpha >= 0.99f;
 		}
 
 		/// <summary>
@@ -48,7 +46,7 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_fadeInfo">フェード情報</param>
 		public void OnExit(Fade.FadeInfo arg_fadeInfo) {
-			arg_fadeInfo.m_currentAlpha = Fade.FadeInfo.ZERO;
+			arg_fadeInfo.m_currentAlpha = Fade.FadeInfo.MAX;
 		}
 	}
 }

@@ -2,7 +2,7 @@
 //概要　：フェード実装用のインターフェイス
 //参考　：なし
 
-namespace ToyBox {
+namespace ToyBox.FadeNS {
 	public interface IFadeAction {
 		
 		//フェード開始処理
