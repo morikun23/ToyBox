@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-namespace ToyBox.AudioNS {
+namespace ToyBox {
 	public class SeList : AudioListBase, IAudioList {
 
 		/// <summary>

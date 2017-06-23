@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ToyBox.AudioNS {
+namespace ToyBox {
 	public interface IAudioList {
 
 		//初期化
