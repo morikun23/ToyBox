@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ToyBox.Main.View {
+namespace ToyBox.View {
 	public class ViewManager : MonoBehaviour {
 
 		public void Initialize(Logic.LogicManager arg_logic) {
