@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace ToyBox.FadeNS {
+namespace ToyBox {
 	public class FadeOut : IFadeAction {
 		
 		/// <summary>
