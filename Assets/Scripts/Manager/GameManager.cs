@@ -20,14 +20,14 @@ namespace ToyBox {
 		private GameManager() { }
 		#endregion
 
-		AudioNS.AudioManager m_audioManager;
+		AudioManager m_audioManager;
 
 		Logic.LogicManager m_logicManager;
 		View.ViewManager m_viewManager;
 
 		// Use this for initializationm
 		void Start() {
-			m_audioManager = AudioNS.AudioManager.Instance;
+			m_audioManager = AudioManager.Instance;
 			
 			m_logicManager = new Logic.LogicManager();
 			m_viewManager = new View.ViewManager();
