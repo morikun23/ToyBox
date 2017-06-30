@@ -78,6 +78,7 @@ namespace ToyBox {
 		/// </summary>
 		public void Clear() {
 			m_fadeInfo.m_fadeObject.color = Color.clear;
+			m_fadeInfo.m_currentAlpha = 0;
 		}
 
 		/// <summary>
@@ -86,6 +87,7 @@ namespace ToyBox {
 		/// <param name="arg_color">色</param>
 		public void Fill(Color arg_color) {
 			m_fadeInfo.m_fadeObject.color = arg_color;
+			m_fadeInfo.m_currentAlpha = 1;
 		}
 	}
 }

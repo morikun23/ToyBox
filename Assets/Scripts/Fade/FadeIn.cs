@@ -12,13 +12,9 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_fadeInfo">フェード情報</param>
 		public void OnEnter(Fade.FadeInfo arg_fadeInfo) {
-			arg_fadeInfo.m_currentAlpha = Fade.FadeInfo.MAX;
-
 			Color color = arg_fadeInfo.m_fadeObject.color;
 			color.a = arg_fadeInfo.m_currentAlpha;
-
 			arg_fadeInfo.m_fadeObject.color = color;
-
 		}
 
 		/// <summary>
