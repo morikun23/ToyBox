@@ -22,7 +22,7 @@ namespace ToyBox {
 			m_fade = Instantiate(Resources.Load<GameObject>("Effect/FadeCanvas")).GetComponentInChildren<Fade>();
 			m_fade.Initialize();
 			m_fade.Fill(Color.black);
-			m_currentScene = new Title.TitleScene();
+			m_currentScene = new Main.MainScene();
 			m_nextScene = null;
 			m_currentPhase = Phase.ENTER;
 		}
@@ -37,9 +37,7 @@ namespace ToyBox {
 				m_currentPhase = Phase.UPDATE;
 				break;
 				case Phase.UPDATE:
-				if (Input.GetKeyDown(KeyCode.Space)) {
-					SceneTransition(new Main.MainScene());
-				}
+				
 				m_currentScene.OnUpdate();
 				break;
 				case Phase.EXIT:
