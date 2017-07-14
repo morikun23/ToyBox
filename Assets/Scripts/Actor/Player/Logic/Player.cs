@@ -27,8 +27,8 @@ namespace ToyBox.Logic {
 			m_currentState = new PlayerIdle();
 			m_position = arg_player.transform.position;
 			m_rotation = arg_player.transform.eulerAngles.z;
-			m_speed = 0.5f;
-			m_direction = Direction.LEFT;
+			m_speed = 0.1f;
+			m_direction = Direction.RIGHT;
 		}
 
 		/// <summary>
@@ -36,6 +36,7 @@ namespace ToyBox.Logic {
 		/// </summary>
 		public void UpdateByFrame(Controller.Player arg_player){
 			
+			//Rigidbodyの影響で調整された座標など合わせる
 			m_position = arg_player.transform.position;
 			m_rotation = arg_player.transform.eulerAngles.z;
 
@@ -53,5 +54,6 @@ namespace ToyBox.Logic {
 			m_currentState = arg_nextState;
 			m_currentState.OnEnter(this);
 		}
+		
 	}
 }

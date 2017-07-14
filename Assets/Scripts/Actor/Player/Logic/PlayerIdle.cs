@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿//担当：森田　勝
+//概要：プレイヤーの静止状態の処理を行うクラス
+//参考：特になし
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,12 +14,7 @@ namespace ToyBox.Logic {
 		}
 
 		public void OnUpdate(Player arg_player) {
-			if (Input.GetKey((KeyCode.RightArrow))) {
-				arg_player.StateTransition(new PlayerRun());
-			}
-			if (Input.GetKey(KeyCode.LeftArrow)) {
-				arg_player.StateTransition(new PlayerRun());
-			}
+			
 		}
 
 		public void OnExit(Player arg_player) {

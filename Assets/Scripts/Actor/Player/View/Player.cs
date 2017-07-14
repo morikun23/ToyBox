@@ -30,10 +30,12 @@ namespace ToyBox.View {
 		public void UpdateByFrame(Logic.Player arg_logic) {
 			m_logic = arg_logic;
 			
-			//m_transform.position = m_logic.m_position;
+			//Logicで調整された座標に描画させる
+			m_transform.position = m_logic.m_position;
 			m_transform.eulerAngles = new Vector3(0 , 0 , arg_logic.m_rotation);
 			m_spriteRenderer.sortingOrder = m_depth;
 
+			//向きに応じてスプライトの反転を行う
 			switch (m_logic.m_direction) {
 				case Logic.CharacterBase.Direction.LEFT:
 				m_spriteRenderer.flipX = true; break;
