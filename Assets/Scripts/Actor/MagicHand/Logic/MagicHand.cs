@@ -17,20 +17,21 @@ namespace ToyBox.Logic {
 			m_currentActions = new Queue<IMagicHandAction>();
 		}
 
-		/// <summary>
-		/// 初期化
-		/// </summary>
-		/// <param name="arg_player">自身を所持しているプレイヤー</param>
-		public void Initialize(Player arg_player) {
-			//m_position = arg_player.m_arm.GetTopPosition();
+		public void Initialize(Controller.MagicHand arg_controller) {
+			m_position = arg_controller.transform.position;
+			m_rotation = arg_controller.transform.eulerAngles.z;
+			m_currentActions = new Queue<IMagicHandAction>();
 		}
 
 		/// <summary>
 		/// 更新
 		/// </summary>
 		/// <param name="arg_player">自身を所持しているプレイヤー</param>
-		public void UpdateByFrame(Player arg_player) {
-			
+		public void UpdateByFrame(Controller.MagicHand arg_controller) {
+
+			//座標の補正
+			m_position = arg_controller.transform.position;
+
 			if (m_currentActions.Count > 0) {
 				IMagicHandAction currentAction = m_currentActions.Peek();
 				if (currentAction.IsFinished()) {
@@ -41,10 +42,6 @@ namespace ToyBox.Logic {
 				}
 			}
 
-			////座標の補正
-			//m_position = arg_player.m_arm.GetTopPosition();
-			////角度の補正
-			//this.Rotate(arg_player.m_arm.m_currentAngle);
 		}
 
 		public void AddTask(IMagicHandAction arg_action) {
@@ -59,7 +56,7 @@ namespace ToyBox.Logic {
 		/// アームの向きに合わせて角度を調整する
 		/// </summary>
 		/// <param name="arg_angle">角度</param>
-		private void Rotate(float arg_angle) {
+		public void Rotate(float arg_angle) {
 			m_rotation = arg_angle;
 		}
 	}

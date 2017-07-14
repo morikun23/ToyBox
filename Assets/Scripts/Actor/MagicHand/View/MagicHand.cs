@@ -20,6 +20,7 @@ namespace ToyBox.View {
 		public void Initialize(Logic.MagicHand arg_logic) {
 			base.Initialize();
 			m_logic = arg_logic;
+			m_depth = -1;
 		}
 
 		/// <summary>
@@ -28,8 +29,9 @@ namespace ToyBox.View {
 		/// <param name="arg_logic">ロジック部</param>
 		public void UpdateByFrame(Logic.MagicHand arg_logic) {
 			m_transform.position = m_logic.m_position;
-			m_transform.eulerAngles = new Vector3(0 , 0 , arg_logic.m_rotation - 90);
+			m_transform.eulerAngles = Vector3.forward * arg_logic.m_rotation;
 			m_spriteRenderer.sortingOrder = m_depth;
+
 		}
 	}
 }
