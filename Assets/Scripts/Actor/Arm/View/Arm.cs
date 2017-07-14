@@ -23,8 +23,9 @@ namespace ToyBox.View {
 		/// <param name="arg_arm">ロジック部</param>
 		public void Initialize(Logic.Arm arg_logic) {
 			m_logic = arg_logic;
-			m_spriteRenderer = GetComponent<SpriteRenderer>();
-			m_transform = this.transform;
+			m_depth = -5;
+			base.Initialize();
+
 			m_lineRenderer = GetComponent<LineRenderer>();
 			m_lineRenderer.material.color = Color.black;
 			m_lineRenderer.startWidth = 0.1f;
@@ -34,14 +35,14 @@ namespace ToyBox.View {
 		public void UpdateByFrame(Logic.Arm arg_logic) {
 			m_logic = arg_logic;
 
-			m_transform.position = m_logic.m_position;
+			//m_transform.position = m_logic.m_position;
 			m_transform.eulerAngles = new Vector3(0 , 0 , arg_logic.m_rotation);
 			m_lineRenderer.sortingOrder = m_depth;
 
 			if (m_logic.m_isActive) {
 				m_lineRenderer.numPositions = 2;
-				m_lineRenderer.SetPosition(0 , m_logic.GetBottomPosition());
-				m_lineRenderer.SetPosition(1 , m_logic.GetTopPosition());
+				m_lineRenderer.SetPosition(0 , (Vector3)m_logic.GetBottomPosition() + (Vector3.forward * m_depth));
+				m_lineRenderer.SetPosition(1 , (Vector3)m_logic.GetTopPosition() + (Vector3.forward * m_depth));
 			}
 			else {
 				m_lineRenderer.numPositions = 0;

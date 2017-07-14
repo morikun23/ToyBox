@@ -24,30 +24,44 @@ namespace ToyBox.Logic {
 		public float m_currentLength;
 
 		//アームのタスク
-		private Queue<IArmAction> m_tasks;
-		
+		private Stack<IArmAction> m_tasks;
+
+		//タスク実行中か
+		public bool m_isActive { get; private set; }
+
+		/// <summary>
+		/// コンストラクタ
+		/// 必要なメモリを取得
+		/// </summary>
+		public Arm() {
+			m_tasks = new Stack<IArmAction>();
+		}
+
 		/// <summary>
 		/// 初期化
 		/// </summary>
-		/// <param name="arg_player">自身を所持しているプレイヤー</param>
-		public void Initialize(Player arg_player) {
-			m_position = arg_player.m_position + new Vector2(0,0.3f);
-			m_rotation = 0f;
+		/// <param name="arg_controller">コントローラー部</param>
+		public void Initialize(Controller.Arm arg_controller) {
+			//プレイヤーの座標に依存する
+			m_position = arg_controller.transform.position;
+			m_rotation = arg_controller.transform.eulerAngles.z;
 	
 			m_currentAngle = 90;
 			m_currentRange = 5f;
 			m_currentLength = 0f;
-			m_tasks = new Queue<IArmAction>();
 			m_isActive = true;
 		}
 
 		/// <summary>
 		/// 更新
 		/// </summary>
-		/// <param name="arg_player">自身を所持しているプレイヤー</param>
-		public void UpdateByFrame(Player arg_player) {
-			m_position = arg_player.m_position + new Vector2(0,0.3f);
-			
+		/// <param name="arg_controller">コントローラー部</param>
+		public void UpdateByFrame(Controller.Arm arg_controller) {
+
+			//プレイヤーの座標に依存する
+			m_position = arg_controller.transform.position;
+
+			//タスクが残っていれば実行する
 			if (m_tasks.Count > 0) {
 				m_isActive = true;
 				IArmAction currentTask = m_tasks.Peek();
@@ -85,8 +99,19 @@ namespace ToyBox.Logic {
 			return m_position;
 		}
 
+		/// <summary>
+		/// タスク追加
+		/// </summary>
+		/// <param name="arg_armAction">追加するタスク</param>
 		public void AddTask(IArmAction arg_armAction) {
-			m_tasks.Enqueue(arg_armAction);
+			m_tasks.Push(arg_armAction);
+		}
+
+		/// <summary>
+		/// 現在のタスクを終了させる
+		/// </summary>
+		public void FinishCurrentTask() {
+			m_tasks.Pop();
 		}
 	}
 }
