@@ -31,6 +31,7 @@ namespace ToyBox.Logic {
 
 			//座標の補正
 			m_position = arg_controller.transform.position;
+			m_rotation = arg_controller.transform.eulerAngles.z;
 
 			if (m_currentActions.Count > 0) {
 				IMagicHandAction currentAction = m_currentActions.Peek();
