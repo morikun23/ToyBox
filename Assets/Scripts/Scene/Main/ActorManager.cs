@@ -16,6 +16,7 @@ namespace ToyBox.Main {
 			m_player = Instantiate
 				(Resources.Load<GameObject>("Actor/Player/BD_Player"),this.transform)
 				.GetComponent<Controller.Player>();
+			m_player.transform.position = new Vector3(-6 , 0);
 			m_player.Initialize();
 		}
 
