@@ -13,6 +13,8 @@ namespace ToyBox.Logic {
 		private Vector2 m_velocityBuf;
 		private Vector2 m_positionBuf;
 
+		private const float JUMP_POWER = 250f;
+
 		/// <summary>
 		/// コンストラクタ
 		/// 必要なコンポーネントを参照する
@@ -29,7 +31,7 @@ namespace ToyBox.Logic {
 		/// </summary>
 		/// <param name="arg_player"></param>
 		public void Execute(Player arg_player) {
-			m_rigidbody.AddForce(Vector2.up * 200);
+			m_rigidbody.AddForce(Vector2.up * JUMP_POWER);
 		}
 
 		/// <summary>
