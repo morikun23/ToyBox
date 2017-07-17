@@ -10,20 +10,24 @@ using UnityEngine;
 namespace ToyBox.Main {
 	public class MainScene : Scene {
 
-		private ActorManager m_actorManager { get; set; }
+		public ActorManager m_actorManager { get; private set; }
+		public InputManager m_inputManager { get; private set; }
 
 		public MainScene() : base("Scene/MainScene") {
 			m_actorManager = new GameObject("Actors").AddComponent<ActorManager>();
+			m_inputManager = new InputManager();
 		}
 
 		public override void OnEnter() {
 			base.OnEnter();
 			m_actorManager.Initialize();
+			m_inputManager.Initialize(this);
 		}
 
 		public override void OnUpdate() {
 			base.OnUpdate();
 			m_actorManager.UpdateByFrame();
+			m_inputManager.UpdateByFrame(this);
 		}
 
 		public override void OnExit() {
