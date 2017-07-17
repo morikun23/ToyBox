@@ -7,13 +7,28 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox.Logic {
-	public class ArmFreeze : IArmAction {
+	public class ArmFreezeState : IArmState {
 
 		/// <summary>
-		/// 更新（実際には固定しているので動きなし）
+		/// ステート開始時
+		/// </summary>
+		public void OnEnter(Arm arg_arm) {
+
+		}
+
+		/// <summary>
+		/// 更新
 		/// </summary>
 		/// <param name="arg_arm"></param>
 		public void OnUpdate(Arm arg_arm) {
+
+		}
+
+		/// <summary>
+		/// ステート終了時
+		/// </summary>
+		/// <param name="arg_arm"></param>
+		public void OnExit(Arm arg_arm) {
 
 		}
 	}

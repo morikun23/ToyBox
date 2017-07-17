@@ -6,17 +6,23 @@ namespace ToyBox.Main {
 	public class InputManager {
 		
 		private Playable m_player { get; set; }
-		
+		private Playable m_arm { get; set; }
+
 		private static InputManager m_instance;
 
 		public void Initialize(MainScene arg_mainScene) {
 			m_player = arg_mainScene.m_actorManager.m_player;
+			m_arm = arg_mainScene.m_actorManager.m_player.m_arm;
 		}
 
 		public void UpdateByFrame(MainScene arg_mainScene) {
 
-			if (Input.GetMouseButton(0)) {
+			if (Input.GetMouseButtonDown(0)) {
 				m_player.Action4();
+				m_arm.Action1();
+			}
+			if(Input.GetMouseButtonUp(0)){
+				m_arm.Action3();
 			}
 
 			InputKey();

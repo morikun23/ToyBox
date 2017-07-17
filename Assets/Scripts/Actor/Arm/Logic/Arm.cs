@@ -13,29 +13,26 @@ namespace ToyBox.Logic {
 		
 		//最大の射程
 		private const float MAX_RANGE = 10f;
-
-		//現在の射程（射程は変更可能）
+	
+		//現在の射程
 		public float m_currentRange { get; private set; }
 
-		//現在の射出角度
-		public float m_currentAngle;
+		//ターゲット座標（タップされた座標）
+		public Vector2 m_targetPosition { get; private set; }
+
+		public float m_currentAngle { get; set; }
 
 		//現在の射出距離
 		public float m_currentLength;
 
-		//アームのタスク
-		private Stack<IArmAction> m_tasks;
-
-		//タスク実行中か
-		public bool m_isActive { get; private set; }
+		//アームの状態
+		public IArmState m_currentState { get; private set; }
 
 		/// <summary>
 		/// コンストラクタ
 		/// 必要なメモリを取得
 		/// </summary>
-		public Arm() {
-			m_tasks = new Stack<IArmAction>();
-		}
+		public Arm() { }
 
 		/// <summary>
 		/// 初期化
@@ -45,13 +42,13 @@ namespace ToyBox.Logic {
 			//プレイヤーの座標に依存する
 			m_position = arg_controller.transform.position;
 			m_rotation = arg_controller.transform.eulerAngles.z;
-	
-			m_currentAngle = 90;
+
 			m_currentRange = 5f;
 			m_currentLength = 0f;
-			m_isActive = true;
+			m_currentState = new ArmIdleState();
+			m_currentState.OnEnter(this);
 		}
-
+		 
 		/// <summary>
 		/// 更新
 		/// </summary>
@@ -60,25 +57,18 @@ namespace ToyBox.Logic {
 
 			//プレイヤーの座標に依存する
 			m_position = arg_controller.transform.position;
+			
+			//ステートの更新
+			m_currentState.OnUpdate(this);
 
-			//タスクが残っていれば実行する
-			if (m_tasks.Count > 0) {
-				m_isActive = true;
-				IArmAction currentTask = m_tasks.Peek();
-				currentTask.OnUpdate(this);
-			}
-			else {
-				m_isActive = true;
-			}
 		}
-		
+
 		/// <summary>
-		/// アームを回転させる
+		/// タップされた座標をアームに伝える
 		/// </summary>
-		/// <param name="arg_angle">角度(度数)</param>
-		public void Rotate(float arg_angle) {
-			m_currentAngle += arg_angle;
-			m_currentAngle = Mathf.Repeat(m_currentAngle , 359);
+		/// <param name="arg_position"></param>
+		public void SetTargetPosition(Vector2 arg_position) {
+			m_targetPosition = arg_position;
 		}
 
 		/// <summary>
@@ -86,8 +76,8 @@ namespace ToyBox.Logic {
 		/// </summary>
 		/// <returns>※絶対座標</returns>
 		public Vector2 GetTopPosition() {
-			Vector2 pos = new Vector2(Mathf.Cos(Mathf.Deg2Rad * m_currentAngle),Mathf.Sin(Mathf.Deg2Rad * m_currentAngle)).normalized;
-			pos *= m_currentLength;
+			Vector2 pos = m_targetPosition - GetBottomPosition();
+			pos = pos.normalized * m_currentLength;
 			return this.GetBottomPosition() + pos;
 		}
 
@@ -100,18 +90,21 @@ namespace ToyBox.Logic {
 		}
 
 		/// <summary>
-		/// タスク追加
+		/// ステートを変更する
 		/// </summary>
-		/// <param name="arg_armAction">追加するタスク</param>
-		public void AddTask(IArmAction arg_armAction) {
-			m_tasks.Push(arg_armAction);
+		/// <param name="arg_nextState"></param>
+		public void StateTransition(IArmState arg_nextState) {
+			m_currentState.OnExit(this);
+			m_currentState = arg_nextState;
+			m_currentState.OnEnter(this);
 		}
 
 		/// <summary>
-		/// 現在のタスクを終了させる
+		/// アームが動作しているかを調べる
 		/// </summary>
-		public void FinishCurrentTask() {
-			m_tasks.Pop();
+		/// <returns></returns>
+		public bool IsActive() {
+			return m_currentState.GetType() != typeof(ArmIdleState);
 		}
 	}
 }

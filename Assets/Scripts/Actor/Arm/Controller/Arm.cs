@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox.Controller {
-	public class Arm : MonoBehaviour {
+	public class Arm : Playable {
 
 		//ロジック部
 		public Logic.Arm m_logic { get; private set; }
@@ -28,13 +28,6 @@ namespace ToyBox.Controller {
 		/// </summary>
 		/// <param name="arg_player"></param>
 		public void UpdateByFrame(Controller.Player arg_player) {
-
-			if(arg_player.m_logic.m_currentState.GetType() == typeof(Logic.PlayerReach)) {
-				if (!this.m_logic.m_isActive) {
-					StartAction();
-				}
-			}
-
 			m_logic.UpdateByFrame(this);
 			m_view.UpdateByFrame(m_logic);
 		}
@@ -44,9 +37,33 @@ namespace ToyBox.Controller {
 		/// 動きを開始させる
 		/// </summary>
 		private void StartAction() {
-			m_logic.AddTask(new Logic.ArmShorten());
-			m_logic.AddTask(new Logic.ArmFreeze());
-			m_logic.AddTask(new Logic.ArmLengthen());
+
+		}
+
+		//-------------------------------------
+		//　以下、Playableの実装
+		//-------------------------------------
+
+		/// <summary>
+		/// アームを伸ばす
+		/// </summary>
+		public override void Action1() {
+			m_logic.SetTargetPosition(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+			m_logic.StateTransition(new Logic.ArmLengthen());
+		}
+
+		/// <summary>
+		/// アームを固定させる
+		/// </summary>
+		public override void Action2() {
+			m_logic.StateTransition(new Logic.ArmFreezeState());
+		}
+
+		/// <summary>
+		/// アームを縮める
+		/// </summary>
+		public override void Action3() {
+			m_logic.StateTransition(new Logic.ArmShorten());
 		}
 	}
 }

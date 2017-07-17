@@ -39,7 +39,7 @@ namespace ToyBox.View {
 			m_transform.eulerAngles = new Vector3(0 , 0 , arg_logic.m_rotation);
 			m_lineRenderer.sortingOrder = m_depth;
 
-			if (m_logic.m_isActive) {
+			if (m_logic.IsActive()) {
 				m_lineRenderer.numPositions = 2;
 				m_lineRenderer.SetPosition(0 , (Vector3)m_logic.GetBottomPosition() + (Vector3.forward * m_depth));
 				m_lineRenderer.SetPosition(1 , (Vector3)m_logic.GetTopPosition() + (Vector3.forward * m_depth));
