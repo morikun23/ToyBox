@@ -9,20 +9,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox.Controller {
-	public class Player : MonoBehaviour {
+	public class Player : Playable {
 
 		//ロジック部
-		public Logic.Player m_logic { get; private set; }
+		[SerializeField]
+		private Logic.Player m_logic;
 
 		//描画部
 		private View.Player m_view { get; set; }
 
 		//RigidBody
 		private Rigidbody2D m_rigidbody { get; set; }
-		
+		//Collider
 		private BoxCollider2D m_collider { get; set; }
 
+		//アーム
 		public Arm m_arm { get; private set; }
+		//マジックハンド
 		public MagicHand m_magicHand { get; private set; }
 
 		/// <summary>
@@ -51,12 +54,6 @@ namespace ToyBox.Controller {
 		/// </summary>
 		public void UpdateByFrame() {
 
-			InputKey();
-
-			if (Input.GetKeyDown(KeyCode.Z) && IsGrounded()) {
-				Jump();
-			}
-			
 			m_logic.UpdateByFrame(this);
 
 			m_arm.UpdateByFrame(this);
@@ -65,97 +62,56 @@ namespace ToyBox.Controller {
 			m_view.UpdateByFrame(m_logic);
 		}
 
+		/// <summary>
+		/// 地面に着いているかを調べる
+		/// </summary>
+		/// <returns>着地しているか</returns>
 		public bool IsGrounded() {
-			Vector3 rightBottom = transform.position + Vector3.right * m_collider.bounds.size.x / 2 + Vector3.down * m_collider.bounds.size.y /2;
-			Vector3 leftBottom = transform.position + Vector3.left * m_collider.bounds.size.x / 2 + Vector3.down * m_collider.bounds.size.y / 2;
+			return Physics2D.BoxCast(transform.position , m_collider.bounds.size , 0f , Vector2.down , 0.05f , 1 << LayerMask.NameToLayer("Ground"));
+		}		
 
-			
-			if (Physics2D.Raycast(rightBottom , Vector2.down , 0.2f,1 << LayerMask.NameToLayer("Ground")) ||
-				Physics2D.Raycast(leftBottom , Vector2.down , 0.2f, 1 << LayerMask.NameToLayer("Ground"))) {
-				return true;
-			}
-			else{
-				return false;
+		//=============================================
+		//　以下、Playableの実装
+		//=============================================
+
+		/// <summary>
+		/// Action1
+		/// 左へ移動させる
+		/// めり込み防止の処理も行う
+		/// </summary>
+		public override void Action1() {
+			if (!Physics2D.BoxCast(transform.position , m_collider.bounds.size , 0f , Vector2.left , 0.1f , 1 << LayerMask.NameToLayer("Ground"))){
+				m_logic.AddTask(new Logic.PlayerRunLeftCommand(m_logic));
 			}
 		}
 
 		/// <summary>
-		/// Unity側から衝突の情報を取得する
+		/// Action2
+		/// 右へ移動させる
+		/// めり込み防止の処理も行う
 		/// </summary>
-		/// <param name="arg_collsionInfo">衝突した相手の情報</param>
-		private void OnCollisionEnter2D(Collision2D arg_collsionInfo) {
-
+		public override void Action2() {
+			if (!Physics2D.BoxCast(transform.position , m_collider.bounds.size , 0f , Vector2.right , 0.1f , 1 << LayerMask.NameToLayer("Ground"))) {
+				m_logic.AddTask(new Logic.PlayerRunRightCommand(m_logic));
+			}
 		}
 
 		/// <summary>
-		/// プレイヤーを移動させる
-		/// 特に外部からプレイヤーに対して移動をさせたいときに使用する
+		/// Action3
+		/// ジャンプさせる
 		/// </summary>
-		/// <param name="arg_direction">移動方向</param>
-		public void Move(Logic.CharacterBase.Direction arg_direction) {
-			switch (arg_direction) {
-				case Logic.CharacterBase.Direction.LEFT:
-					if(m_logic.m_currentState != typeof(Logic.PlayerRunLeft))
-					m_logic.StateTransition(new Logic.PlayerRunLeft());
-				break;
-
-				case Logic.CharacterBase.Direction.RIGHT:
-					if(m_logic.m_currentState != typeof(Logic.PlayerRunRight))
-					m_logic.StateTransition(new Logic.PlayerRunRight());
-				break;
+		public override void Action3() {
+			if (IsGrounded()) {
+				m_logic.AddTask(new Logic.PlayerJumpCommand(m_logic , m_rigidbody));
 			}
-		}
-
-		
-
-		/// <summary>
-		/// プレイヤーを静止させる
-		/// 特に外部からプレイヤーに対して移動をさせたいときに使用する
-		/// </summary>
-		public void Idle() {
-			m_logic.StateTransition(new Logic.PlayerIdle());
 		}
 
 		/// <summary>
-		/// プレイヤーをジャンプさせる
-		/// 特に外部からプレイヤーに対して移動をさせたいときに使用する
+		/// Action4
+		/// マジックハンドを射出し始める
 		/// </summary>
-		public void Jump() {
-			m_rigidbody.AddForce(Vector2.up * 200);
+		public override void Action4() {
+			m_logic.AddTask(new Logic.PlayerReachCommand(m_logic,m_rigidbody,m_arm.m_logic));
 		}
-
-		private void InputKey() {
-			
-			#region PCキーボード入力
-			if (Input.GetKey(KeyCode.RightArrow)) {
-				Move(Logic.CharacterBase.Direction.RIGHT);
-			}
-			if (Input.GetKey(KeyCode.LeftArrow)) {
-				Move(Logic.CharacterBase.Direction.LEFT);
-			}
-			if (!Input.GetKey(KeyCode.RightArrow) && !Input.GetKey(KeyCode.LeftArrow)) {
-				Idle();
-			}
-			#endregion
-		}
-		
-		private void InputSwipe() {
-			#region スマホスワイプ入力
-			if (Input.touchCount > 0) {
-				Touch touchInfo = Input.GetTouch(0);
-				if (touchInfo.deltaPosition.x > 10) {
-					Move(Logic.CharacterBase.Direction.RIGHT);
-				}
-				if (touchInfo.deltaPosition.x < -10) {
-					Move(Logic.CharacterBase.Direction.LEFT);
-				}
-			}
-			else {
-				Idle();
-			}
-			#endregion
-		}
-
-		
 	}
 }

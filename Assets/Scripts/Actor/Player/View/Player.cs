@@ -11,7 +11,6 @@ namespace ToyBox.View {
 	public class Player : CharacterBase {
 		
 		//自身のLogic部分、検証用にInspectorで制御できるようになっている
-		[SerializeField]
 		private Logic.Player m_logic;
 		
 		/// <summary>
