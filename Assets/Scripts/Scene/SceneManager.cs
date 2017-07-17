@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿//担当：森田　勝
+//概要：
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,7 +36,7 @@ namespace ToyBox {
 			switch (m_currentPhase) {
 				case Phase.ENTER:
 				m_currentScene.OnEnter();
-				m_fade.StartFade(new FadeIn() , Color.black , 3.0f);
+				m_fade.StartFade(new FadeIn() , Color.black , 1.5f);
 				m_currentPhase = Phase.UPDATE;
 				break;
 				case Phase.UPDATE:
