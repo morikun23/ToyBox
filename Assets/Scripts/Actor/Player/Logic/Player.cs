@@ -44,7 +44,6 @@ namespace ToyBox.Logic {
 		/// 更新
 		/// </summary>
 		public void UpdateByFrame(Controller.Player arg_player){
-			Debug.Log(m_currentState);
 			//Rigidbodyの影響で調整された座標など合わせる
 			m_position = arg_player.transform.position;
 			m_rotation = arg_player.transform.eulerAngles.z;
