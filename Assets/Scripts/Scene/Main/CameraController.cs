@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ToyBox {
+namespace ToyBox.Main {
 	public class CameraController : MonoBehaviour {
 
 		private Camera m_mainCamera;
