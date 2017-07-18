@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox.Logic {
-	public class ArmLengthen : IArmState {
+	public class ArmLengthenState : IArmState {
 
 		//キーフレームで動かすためのフレームレート
 		private const int RATE = 20;
@@ -51,7 +51,7 @@ namespace ToyBox.Logic {
 			else {
 				//伸ばし切っていたら固定状態へ
 				arg_arm.m_currentLength = m_range;
-				arg_arm.StateTransition(new ArmFreezeState());
+				arg_arm.StateTransition(new ArmShortenState());
 			}
 		}
 

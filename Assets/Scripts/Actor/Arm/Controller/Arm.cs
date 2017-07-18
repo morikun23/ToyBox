@@ -49,21 +49,8 @@ namespace ToyBox.Controller {
 		/// </summary>
 		public override void Action1() {
 			m_logic.SetTargetPosition(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-			m_logic.StateTransition(new Logic.ArmLengthen());
+			m_logic.StateTransition(new Logic.ArmLengthenState());
 		}
 
-		/// <summary>
-		/// アームを固定させる
-		/// </summary>
-		public override void Action2() {
-			m_logic.StateTransition(new Logic.ArmFreezeState());
-		}
-
-		/// <summary>
-		/// アームを縮める
-		/// </summary>
-		public override void Action3() {
-			m_logic.StateTransition(new Logic.ArmShorten());
-		}
 	}
 }

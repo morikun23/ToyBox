@@ -21,10 +21,6 @@ namespace ToyBox.Main {
 				m_player.Action4();
 				m_arm.Action1();
 			}
-			if(Input.GetMouseButtonUp(0)){
-				m_arm.Action3();
-			}
-
 			InputKey();
 		}
 

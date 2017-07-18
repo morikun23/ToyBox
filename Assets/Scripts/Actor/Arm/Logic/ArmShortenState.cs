@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox.Logic {
-	public class ArmShorten : IArmState {
+	public class ArmShortenState : IArmState {
 
 		//キーフレームで動かすためのフレームレート
 		private const int RATE = 20;
