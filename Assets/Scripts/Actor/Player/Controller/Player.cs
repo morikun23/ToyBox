@@ -38,15 +38,17 @@ namespace ToyBox.Controller {
 
 			m_logic = new Logic.Player();
 			m_view = GetComponent<View.Player>();
-			m_logic.Initialize(this);
-			m_view.Initialize(m_logic);
-
+			
 			m_arm = GetComponentInChildren<Arm>();
-			m_arm.Initialize(this);
 
 			m_magicHand = GetComponentInChildren<MagicHand>();
+
+			m_arm.Initialize(this);
 			m_magicHand.Initalize(this);
-		
+			m_logic.Initialize(this);
+			m_view.Initialize(m_logic);
+			
+
 		}
 
 		/// <summary>
@@ -111,7 +113,7 @@ namespace ToyBox.Controller {
 		/// マジックハンドを射出し始める
 		/// </summary>
 		public override void Action4() {
-			m_logic.AddTask(new Logic.PlayerReachCommand(m_logic,m_rigidbody,m_arm.m_logic));
+			m_logic.AddTask(new Logic.PlayerReachCommand(m_logic,m_rigidbody));
 		}
 	}
 }

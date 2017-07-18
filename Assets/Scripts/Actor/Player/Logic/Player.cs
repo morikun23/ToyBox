@@ -21,6 +21,11 @@ namespace ToyBox.Logic {
 		//地面に接しているか
 		public bool m_isGrounded { get; private set; }
 
+		//アーム
+		public Arm m_arm { get; private set; }
+		//マジックハンド
+		public MagicHand m_magicHand { get; private set; }
+
 		/// <summary>
 		/// 必要なメモリを確保
 		/// </summary>
@@ -31,25 +36,29 @@ namespace ToyBox.Logic {
 		/// <summary>
 		/// 初期化
 		/// </summary>
-		public void Initialize(Controller.Player arg_player) {
-			m_position = arg_player.transform.position;
-			m_rotation = arg_player.transform.eulerAngles.z;
+		public void Initialize(Controller.Player arg_controller) {
+			m_position = arg_controller.transform.position;
+			m_rotation = arg_controller.transform.eulerAngles.z;
 			m_currentState = new PlayerIdleState();
 			m_speed = 0.1f;
 			m_direction = Direction.RIGHT;
-			m_isGrounded = arg_player.IsGrounded();
+			m_isGrounded = arg_controller.IsGrounded();
+
+			//アームとマジックハンドを結びつける
+			m_arm = arg_controller.m_arm.m_logic;
+			m_magicHand = arg_controller.m_magicHand.m_logic;
 		}
 
 		/// <summary>
 		/// 更新
 		/// </summary>
-		public void UpdateByFrame(Controller.Player arg_player){
+		public void UpdateByFrame(Controller.Player arg_controller){
 			//Rigidbodyの影響で調整された座標など合わせる
-			m_position = arg_player.transform.position;
-			m_rotation = arg_player.transform.eulerAngles.z;
+			m_position = arg_controller.transform.position;
+			m_rotation = arg_controller.transform.eulerAngles.z;
 
-			m_isGrounded = arg_player.IsGrounded();
-
+			m_isGrounded = arg_controller.IsGrounded();
+			
 			if (m_currentState != null) {
 				m_currentState.OnUpdate(this);
 			}

@@ -106,5 +106,22 @@ namespace ToyBox.Logic {
 		public bool IsActive() {
 			return m_currentState.GetType() != typeof(ArmIdleState);
 		}
+
+		
+		/// <summary>
+		/// すでに伸びきっているかどうか
+		/// </summary>
+		/// <returns></returns>
+		public bool IsLengthened() {
+			return m_currentLength >= (m_targetPosition - GetBottomPosition()).magnitude;
+		}
+
+		/// <summary>
+		/// すでに縮みきっているかどうか
+		/// </summary>
+		/// <returns></returns>
+		public bool IsShotened() {
+			return m_currentLength <= 0;
+		}
 	}
 }

@@ -32,7 +32,7 @@ namespace ToyBox.Logic {
 		/// </summary>
 		/// <param name="arg_player"></param>
 		public void OnExit(Player arg_player) {
-			arg_player.m_task.Clear();
+			
 		}
 
 		public void AddTask(Player arg_player, IPlayerCommand arg_command) {
@@ -49,8 +49,8 @@ namespace ToyBox.Logic {
 				arg_player.m_task.Enqueue(arg_command);
 			}
 			else if (arg_command.GetType() == typeof(PlayerReachCommand)) {
-				arg_player.StateTransition(new PlayerReachState());
 				arg_player.m_task.Enqueue(arg_command);
+				arg_player.StateTransition(new PlayerReachState());
 			}
 		}
 	}
