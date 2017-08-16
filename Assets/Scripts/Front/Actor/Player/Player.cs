@@ -33,6 +33,8 @@ namespace ToyBox {
 		public bool m_isGrounded { get; private set; }
 
 		public void Initialize() {
+			m_currentState = new PlayerIdleState();
+			m_currentState.OnEnter(this);
 			m_task = new Queue<IPlayerCommand>();
 			m_rigidbody = GetComponent<Rigidbody2D>();
 			m_collider = GetComponent<BoxCollider2D>();
@@ -42,20 +44,10 @@ namespace ToyBox {
 
 		public void UpdateByFrame() {
 			m_arm.UpdateByFrame(this);
-			
+			m_currentState.OnUpdate(this);
 		}
 
-		public void View() {
-			m_spriteRenderer.sortingOrder = m_depth;
-
-			//向きに応じてスプライトの反転を行う
-			switch (m_direction) {
-				case Direction.LEFT:
-				m_spriteRenderer.flipX = true; break;
-				case Direction.RIGHT:
-				m_spriteRenderer.flipX = false; break;
-			}
-		}
+		
 
 		/// <summary>
 		/// タスクを追加する
