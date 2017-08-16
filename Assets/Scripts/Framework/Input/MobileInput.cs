@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class K_Swipe : MonoBehaviour {
+public class MobileInput : MonoBehaviour {
 
 	Vector3[] pos_input = new Vector3[10];
 	Vector3[] pos_inputScreen = new Vector3[10];
