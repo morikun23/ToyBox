@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ToyBox {
 	[System.Serializable]
-	public class Arm : ViewObject {
+	public class Arm : ObjectBase {
 
 		public enum Phase {
 			Lengthen,
@@ -15,9 +15,6 @@ namespace ToyBox {
 		//---------------------------
 		// UnityComponent
 		//---------------------------
-
-		//LineRendererコンポーネント（直線の描画用）
-		private LineRenderer m_lineRenderer { get; set; }
 
 		//---------------------------
 		// メンバー
@@ -57,16 +54,10 @@ namespace ToyBox {
 			m_hand = GetComponentInChildren<Hand>();
 
 			m_hand.Initialize(this);
-			m_depth = -5;
-
 			m_currentRange = 5f;
 			m_currentLength = 0f;
 			m_currentPhase = Phase.Freeze;
 
-			m_lineRenderer = GetComponent<LineRenderer>();
-			m_lineRenderer.material.color = Color.black;
-			m_lineRenderer.startWidth = 0.1f;
-			m_lineRenderer.endWidth = 0.1f;
 		}
 
 		/// <summary>
@@ -102,17 +93,7 @@ namespace ToyBox {
 				case Phase.Freeze:
 				break;
 			}
-
-			m_lineRenderer.sortingOrder = m_depth;
-
-			if (IsShotened()) {
-				m_lineRenderer.numPositions = 0;
-			}
-			else {
-				m_lineRenderer.numPositions = 2;
-				m_lineRenderer.SetPosition(0 , (Vector3)this.GetBottomPosition() + (Vector3.forward * m_depth));
-				m_lineRenderer.SetPosition(1 , (Vector3)this.GetTopPosition() + (Vector3.forward * m_depth));
-			}
+			
 		}
 
 		/// <summary>

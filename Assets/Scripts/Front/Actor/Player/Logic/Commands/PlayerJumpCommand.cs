@@ -20,9 +20,9 @@ namespace ToyBox {
 		/// 必要なコンポーネントを参照する
 		/// </summary>
 		/// <param name="arg_rigidBody"></param>
-		public PlayerJumpCommand(Player arg_player,Rigidbody2D arg_rigidbody) {
-			m_rigidbody = arg_rigidbody;
-			m_velocityBuf = arg_rigidbody.velocity;
+		public PlayerJumpCommand(Player arg_player) {
+			m_rigidbody = arg_player.m_rigidbody;
+			m_velocityBuf = arg_player.m_rigidbody.velocity;
 			m_positionBuf = arg_player.m_transform.position;
 		}
 

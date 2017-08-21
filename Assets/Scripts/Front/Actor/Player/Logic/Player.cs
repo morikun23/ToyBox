@@ -11,13 +11,13 @@ namespace ToyBox {
 		//--------------------------
 		
 		//RigidBody
-		private Rigidbody2D m_rigidbody { get; set; }
+		public Rigidbody2D m_rigidbody { get; private set; }
 		
 		//Collider
-		private BoxCollider2D m_collider { get; set; }
+		public BoxCollider2D m_collider { get; private set; }
 
 		//--------------------------
-		//メンバ
+		//パラメータ
 		//--------------------------
 
 		//アーム
@@ -32,6 +32,8 @@ namespace ToyBox {
 		//地面に接しているか
 		public bool m_isGrounded { get; private set; }
 
+		private PlayerViewer m_viewer { get; set; }
+
 		public void Initialize() {
 			m_currentState = new PlayerIdleState();
 			m_currentState.OnEnter(this);
@@ -40,14 +42,22 @@ namespace ToyBox {
 			m_collider = GetComponent<BoxCollider2D>();
 			m_arm = GetComponentInChildren<Arm>();
 			m_arm.Initialize(this);
+
+			m_viewer = GetComponentInChildren<PlayerViewer>();
+			m_viewer.Initialize(this);
 		}
 
 		public void UpdateByFrame() {
+
+			Debug.Log(m_currentState);
+
+			m_isGrounded = IsGrounded();
+
 			m_arm.UpdateByFrame(this);
 			m_currentState.OnUpdate(this);
-		}
 
-		
+			m_viewer.UpdateByFrame(this);
+		}
 
 		/// <summary>
 		/// タスクを追加する
@@ -62,7 +72,7 @@ namespace ToyBox {
 		/// </summary>
 		/// <returns>着地しているか</returns>
 		public bool IsGrounded() {
-			return Physics2D.BoxCast(transform.position , m_collider.bounds.size , 0f , Vector2.down , 0.05f , 1 << LayerMask.NameToLayer("Ground"));
+			return Physics2D.BoxCast(transform.position , m_collider.bounds.size , 0f , Vector2.down , 0.1f , 1 << LayerMask.NameToLayer("Ground"));
 		}
 
 		/// <summary>

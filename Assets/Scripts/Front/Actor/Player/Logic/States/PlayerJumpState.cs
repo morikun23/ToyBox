@@ -24,10 +24,14 @@ namespace ToyBox {
 		public override void OnUpdate(Player arg_player) {
 
 			if (arg_player.m_task.Count > 0) {
-				arg_player.m_task.Dequeue().Execute(arg_player);
+				for (int i = 0; i < arg_player.m_task.Count; i++) {
+					arg_player.m_task.Dequeue().Execute(arg_player);
+				}
 			}
-			else if (arg_player.m_isGrounded) {
-				arg_player.StateTransition(new PlayerIdleState());
+			if (arg_player.m_isGrounded) {
+				if (arg_player.m_rigidbody.velocity.y < 0) {
+					arg_player.StateTransition(new PlayerIdleState());
+				}
 			}
 		}
 

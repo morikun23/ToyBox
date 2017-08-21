@@ -23,7 +23,10 @@ namespace ToyBox {
 		/// <param name="arg_player"></param>
 		public override void OnUpdate(Player arg_player) {
 			if (arg_player.m_task.Count > 0) {
-				arg_player.m_task.Dequeue().Execute(arg_player);
+				for (int i = 0; i < arg_player.m_task.Count; i++) {
+					Debug.Log(arg_player.m_task.Peek());
+					arg_player.m_task.Dequeue().Execute(arg_player);
+				}
 			}
 			else {
 				arg_player.StateTransition(new PlayerIdleState());
