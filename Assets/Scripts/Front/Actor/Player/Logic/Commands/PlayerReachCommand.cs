@@ -21,10 +21,10 @@ namespace ToyBox {
 		/// 実行後、取り消せるようにバッファを用意する
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public PlayerReachCommand(Player arg_player,Rigidbody2D arg_rigidbody) {
+		public PlayerReachCommand(Player arg_player) {
 			m_stateBuf = arg_player.m_currentState;
-			m_rigidbody = arg_rigidbody;
-			m_bodyTypeBuf = arg_rigidbody.bodyType;
+			m_rigidbody = arg_player.m_rigidbody;
+			m_bodyTypeBuf = arg_player.m_rigidbody.bodyType;
 		}
 
 		/// <summary>

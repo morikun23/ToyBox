@@ -6,18 +6,17 @@ namespace ToyBox.Main {
 	public class ActorManager : MonoBehaviour {
 
 		//プレイヤー
-		public Player m_player { get; set; }
+		public Player m_player { get; private set; }
+
 		
 		/// <summary>
 		/// 初期化
 		/// </summary>
 		public void Initialize() {
 			//プレイヤーのプレハブを生成し、参照する
-			m_player = Instantiate
-				(Resources.Load<GameObject>("Actor/Player/BD_Player"),this.transform)
-				.GetComponent<Player>();
-			m_player.transform.position = new Vector3(-6 , 0);
+			m_player = FindObjectOfType<Player>();
 			m_player.Initialize();
+			
 		}
 
 		/// <summary>
