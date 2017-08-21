@@ -1,7 +1,23 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 5d7c7b9783cf8784282d85cc440eaeee
 folderAsset: yes
 timeCreated: 1502870426
+=======
+<<<<<<< HEAD
+guid: 3d7d1ae62a4e105408870f526a7df60a
+folderAsset: yes
+<<<<<<< HEAD
+timeCreated: 1502864604
+=======
+timeCreated: 1502866384
+>>>>>>> feature/front/player
+=======
+guid: c05d8518185640f41a59ba0573ba5435
+folderAsset: yes
+timeCreated: 1502859767
+>>>>>>> origin/feature/framework/input
+>>>>>>> develop
 licenseType: Free
 DefaultImporter:
   userData: 
