@@ -15,7 +15,7 @@ public class MobileInput : MonoBehaviour {
 
 	bool[] flg_start = new bool[10];
 	bool[] flg_move = new bool[10];
-	int[] num_rotateDirection = new int[10];
+	float[] num_rotateDirection = new float[10];
 
 	// Use this for initialization
 	public void Start () {
@@ -89,10 +89,10 @@ public class MobileInput : MonoBehaviour {
 			}
 
 			if (flg_move[baf_i] && flg_start[baf_i]) {
-				if(num_rotateDirection[baf_i] == 1){
-					RightR (1);
-				}else if(num_rotateDirection[baf_i] == -1){
-					LeftR (-1);
+				if(num_rotateDirection[baf_i] > 0){
+					RightR (num_rotateDirection[baf_i]);
+				}else if(num_rotateDirection[baf_i] < 0){
+					LeftR (num_rotateDirection[baf_i]);
 				}
 				break;
 			}
@@ -119,17 +119,20 @@ public class MobileInput : MonoBehaviour {
 
 	void CheckRotate(Touch t,int i){
 		Vector2 baf_pos = pos_rotatePoint.position;
-		float baf_rotBef = Vector2.Angle(pos_rotatePoint.position,pos_inputBefore[i] - pos_rotatePoint.position);
-		float baf_rotNew = Vector2.Angle(pos_rotatePoint.position,pos_input[i] - pos_rotatePoint.position);
+		float baf_rotBef = Mathf.Atan2(pos_rotatePoint.position.y - pos_inputBefore[i].y,
+			pos_rotatePoint.position.x - pos_inputBefore[i].x) * Mathf.Rad2Deg;
+
+		float baf_rotNew = Mathf.Atan2(pos_rotatePoint.position.y - pos_input[i].y,
+			pos_rotatePoint.position.x - pos_input[i].x) * Mathf.Rad2Deg;
 
 		Debug.DrawRay (pos_rotatePoint.position,pos_input[i] - pos_rotatePoint.position);
-		Debug.Log (baf_rotNew - baf_rotBef);
+//		Debug.Log (baf_rotNew - baf_rotBef);
 
 		if(baf_rotNew - baf_rotBef > 5 && ((baf_rotBef > 0 && baf_rotNew > 0) || (baf_rotBef < 0 && baf_rotNew < 0))){
-			num_rotateDirection[i] = 1;
+			num_rotateDirection[i] = baf_rotNew - baf_rotBef;
 		}
 		else if(baf_rotNew - baf_rotBef < -5 && ((baf_rotBef > 0 && baf_rotNew > 0) || (baf_rotBef < 0 && baf_rotNew < 0))){
-			num_rotateDirection[i] = -1;
+			num_rotateDirection[i] = baf_rotNew - baf_rotBef;
 		}
 	}
 
@@ -139,7 +142,5 @@ public class MobileInput : MonoBehaviour {
 	public virtual void SwipeE(){}
 	public virtual void RightR(float dist){}
 	public virtual void LeftR(float dist){}
-
-
 
 }
