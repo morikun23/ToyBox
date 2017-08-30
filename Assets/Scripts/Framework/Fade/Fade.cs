@@ -6,6 +6,7 @@
 //参考　：なし
 
 using UnityEngine;
+using System.Collections;
 using UnityEngine.UI;
 
 namespace ToyBox {
@@ -30,7 +31,7 @@ namespace ToyBox {
 		#endregion
 
 		//フェードが動いているか
-		public bool isActive { get; private set; }
+		private bool m_isActive { get; set; }
 
 		//フェードのインターフェイス
 		private IFadeAction m_fadeAction;
@@ -41,7 +42,7 @@ namespace ToyBox {
 		public void Initialize() {
 			m_fadeInfo = new FadeInfo();
 			m_fadeInfo.m_fadeObject = GetComponent<Image>();
-			isActive = false;
+			m_isActive = false;
 			Clear();
 		}
 
@@ -56,21 +57,20 @@ namespace ToyBox {
 			m_fadeInfo.m_duration = arg_duration;
 			m_fadeInfo.m_fadeObject.color = arg_color;
 			m_fadeAction.OnEnter(this.m_fadeInfo);
-			isActive = true;
+			m_isActive = true;
+			StartCoroutine(OnFading());
 		}
 
 		/// <summary>
 		/// アップデート処理
 		/// </summary>
-		public void UpdateByFrame() {
-
-			if (m_fadeAction.IsEnd(this.m_fadeInfo)) {
-				m_fadeAction.OnExit(this.m_fadeInfo);
-				isActive = false;
-
-				return;
+		private IEnumerator OnFading() {
+			while (!m_fadeAction.IsEnd(this.m_fadeInfo)) {
+				m_fadeAction.OnUpdate(this.m_fadeInfo);
+				yield return null;
 			}
-			m_fadeAction.UpdateByFrame(this.m_fadeInfo);
+			m_fadeAction.OnExit(this.m_fadeInfo);
+			m_isActive = false;
 		}
 
 		/// <summary>
@@ -88,6 +88,10 @@ namespace ToyBox {
 		public void Fill(Color arg_color) {
 			m_fadeInfo.m_fadeObject.color = arg_color;
 			m_fadeInfo.m_currentAlpha = 1;
+		}
+
+		public bool IsFading() {
+			return m_isActive;
 		}
 	}
 }
