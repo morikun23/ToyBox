@@ -20,7 +20,12 @@ namespace ToyBox {
 		/// 初期化
 		/// </summary>
 		public override void Initialize() {
+			Transform bgm = new GameObject("BGM").GetComponent<Transform>();
 			base.Initialize();
+			foreach (AudioSource audioSource in m_list) {
+				audioSource.transform.SetParent(bgm);
+			}
+			DontDestroyOnLoad(bgm);
 		}
 
 		/// <summary>

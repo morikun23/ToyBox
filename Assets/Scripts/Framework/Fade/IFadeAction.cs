@@ -9,7 +9,7 @@ namespace ToyBox {
 		void OnEnter(Fade.FadeInfo arg_fadeInfo);
 
 		//アップデート
-		void UpdateByFrame(Fade.FadeInfo arg_fadeInfo);
+		void OnUpdate(Fade.FadeInfo arg_fadeInfo);
 
 		//フェード終了したか
 		bool IsEnd(Fade.FadeInfo arg_fadeInfo);
