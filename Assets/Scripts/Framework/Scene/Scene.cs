@@ -21,8 +21,7 @@ namespace ToyBox {
 		public abstract IEnumerator OnExit();
 
 		protected IEnumerator GameLoop() {
-			while (true) {
-
+			
 				Debug.Log(SceneManager.GetActiveScene().name + "EnterStart");
 				//シーンを開始する
 				yield return OnEnter();
@@ -37,7 +36,7 @@ namespace ToyBox {
 				//シーンを終了する
 				yield return OnExit();
 				Debug.Log(SceneManager.GetActiveScene().name + "ExitEnd");
-			}
+			
 		}
 	}
 }
