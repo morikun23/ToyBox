@@ -1,31 +1,42 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace ToyBox {
 	public abstract class Scene : MonoBehaviour {
 
-		//シーン遷移に生成するプレハブ
-		protected GameObject m_scenePrefab;
-
-		//シーン遷移時に生成されたGameObject
-		protected GameObject m_sceneObject;
-
-		protected Scene(string arg_scenePrefabPass) {
-			m_scenePrefab = Resources.Load<GameObject>(arg_scenePrefabPass);
-		}
-		~Scene() {}
-
-		public virtual void OnEnter() {
-			m_sceneObject = Instantiate(m_scenePrefab);
+		public virtual void Start() {
+			StartCoroutine(GameLoop());
 		}
 
-		public virtual void OnUpdate() {
+		protected void Update() {
+
+		}
+
+		public abstract IEnumerator OnEnter();
+
+		public abstract IEnumerator OnUpdate();
+
+		public abstract IEnumerator OnExit();
+
+		protected IEnumerator GameLoop() {
 			
-		}
+				Debug.Log(SceneManager.GetActiveScene().name + "EnterStart");
+				//シーンを開始する
+				yield return OnEnter();
+				Debug.Log(SceneManager.GetActiveScene().name + "EnterEnd");
 
-		public virtual void OnExit() {
-			Destroy(m_sceneObject);
+				Debug.Log(SceneManager.GetActiveScene().name + "UpdateStart");
+				//シーンを実行する
+				yield return OnUpdate();
+				Debug.Log(SceneManager.GetActiveScene().name + "UpdateEnd");
+
+				Debug.Log(SceneManager.GetActiveScene().name + "ExitStart");
+				//シーンを終了する
+				yield return OnExit();
+				Debug.Log(SceneManager.GetActiveScene().name + "ExitEnd");
+			
 		}
 	}
 }

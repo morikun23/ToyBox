@@ -9,6 +9,10 @@ using UnityEngine;
 namespace ToyBox {
 	public class PlayerReachState : PlayerStateBase {
 
+		protected override bool AbleRun { get { return false; } }
+
+		protected override bool AbleJump { get { return false; } }
+
 		private IPlayerCommand m_commandBuf;
 
 		/// <summary>
@@ -43,18 +47,6 @@ namespace ToyBox {
 		/// <param name="arg_player"></param>
 		public override void OnExit(Player arg_player) {
 			arg_player.m_task.Clear();
-		}
-
-		protected override bool IsAbleRun() {
-			return false;
-		}
-
-		protected override bool IsAbleReach() {
-			return false;
-		}
-
-		protected override bool IsAbleJump() {
-			return false;
 		}
 	}
 }
