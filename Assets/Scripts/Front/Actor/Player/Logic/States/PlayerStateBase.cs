@@ -13,6 +13,13 @@ using UnityEngine;
 namespace ToyBox {
 	public abstract class PlayerStateBase : IPlayerState {
 
+		protected virtual bool AbleRun{ get { return true; } }
+
+		protected virtual bool AbleJump{ get { return true; } }
+
+		protected virtual bool AbleReach{ get { return true; } }
+
+
 		/// <summary>
 		/// ステート開始時
 		/// </summary>
@@ -39,31 +46,25 @@ namespace ToyBox {
 		/// <param name="arg_command"></param>
 		public virtual void AddTaskIfAble(Player arg_player , IPlayerCommand arg_command) {
 			if (arg_command.GetType() == typeof(PlayerRunLeftCommand)) {
-				if (!IsAbleRun()) return;
+				if (!AbleRun) return;
 				arg_player.StateTransition(new PlayerRunState());
 				arg_player.m_task.Enqueue(arg_command);
 			}
 			else if (arg_command.GetType() == typeof(PlayerRunRightCommand)) {
-				if (!IsAbleRun()) return;
+				if (!AbleRun) return;
 				arg_player.StateTransition(new PlayerRunState());
 				arg_player.m_task.Enqueue(arg_command);
 			}
 			else if (arg_command.GetType() == typeof(PlayerJumpCommand)) {
-				if (!IsAbleJump()) return;
+				if (!AbleJump) return;
 				arg_player.StateTransition(new PlayerJumpState());
 				arg_player.m_task.Enqueue(arg_command);
 			}
 			else if (arg_command.GetType() == typeof(PlayerReachCommand)) {
-				if (!IsAbleReach()) return;
+				if (!AbleReach) return;
 				arg_player.StateTransition(new PlayerReachState());
 				arg_player.m_task.Enqueue(arg_command);
 			}
 		}
-
-		protected virtual bool IsAbleRun() { return true; }
-
-		protected virtual bool IsAbleJump() { return true; }
-
-		protected virtual bool IsAbleReach() { return true; }
 	}
 }
