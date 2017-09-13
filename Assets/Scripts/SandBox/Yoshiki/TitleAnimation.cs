@@ -11,6 +11,10 @@ namespace ToyBox.Title
         Animator animator;
         SpriteRenderer renderer;
 
+        GameObject sp_Comment;
+        TitleComment titleComment;
+
+
         bool stop = true;
 
         // Use this for initialization
@@ -18,12 +22,10 @@ namespace ToyBox.Title
         {
             animator = GetComponent<Animator>();
             renderer = GetComponent<SpriteRenderer>();
+            sp_Comment = GameObject.Find("SP_Comment");
+            titleComment = sp_Comment.GetComponent<TitleComment>();
             StartCoroutine("Wait");
-        }
-
-        void Update()
-        {
-
+            
         }
 
         private IEnumerator Wait()
@@ -37,7 +39,10 @@ namespace ToyBox.Title
                     renderer.flipX = false;
                     animator.SetBool("RunFlag", false);
                     animator.SetBool("IdleFlag", true);
+                    titleComment.Spawn();
                     yield return new WaitForSeconds(4.0f);
+                    titleComment.Delete();
+
                     stop = false;
                 }
                 else

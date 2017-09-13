@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox.Title {
-	public class TitleScene : Scene {
+	public class TitleScene : ToyBox.Scene {
         private static TitleScene m_instance;
 
         public static TitleScene Instance
@@ -27,6 +27,10 @@ namespace ToyBox.Title {
         public SpriteRenderer m_filterRenderer;
         float alphaAdd = 0.015f;
 
+        //public TitleScene():base ("Scene/TitleScene")
+        //{
+
+        //}
 
         bool next;
 
@@ -34,12 +38,8 @@ namespace ToyBox.Title {
 
         GearRotate gear1, gear2, gear3;
 
-        public TitleScene() : base("Scene/TitleScene") {
-
-		}
-
-		public override void OnEnter() {
-			base.OnEnter();
+		public override IEnumerator OnEnter() {
+            //base.OnEnter();
 
             m_startMessage = GameObject.Find("SP_StartMessage");
             m_startMessageRenderer = m_startMessage.GetComponent<SpriteRenderer>();
@@ -54,52 +54,61 @@ namespace ToyBox.Title {
 
             gear1 = GameObject.Find("SP_Logo/SP_LogoGear1").GetComponent<GearRotate>();
             gear1.Init(1);
-
-            
-
             gear2 = GameObject.Find("SP_Logo/SP_LogoGear2").GetComponent<GearRotate>();
             gear2.Init(-0.5f);
             gear3 = GameObject.Find("SP_Logo/SP_LogoGear3").GetComponent<GearRotate>();
             gear3.Init(2.5f);
 
-        }
-
-		public override void OnUpdate() {
-			base.OnUpdate();
-
-
-            gear1.OnUpdate();
-            gear2.OnUpdate();
-            gear3.OnUpdate();
-
-            //タッチでスタート！！の点滅
-            m_startMessageRenderer.color = new Color(1, 1, 1, Mathf.PingPong(Time.time, 1));
-
-            if (next) m_filterRenderer.color += new Color(0, 0, 0, alphaAdd);
-
-            if (m_filterRenderer.color.a > 1)
-            {
-                Application.LoadLevel(1);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                AudioSource.PlayClipAtPoint(sound, Camera.main.gameObject.transform.position);
-                next = true;
-            }
-            if (Input.touchCount < 1) return;
-            if (Input.GetTouch(0).phase == TouchPhase.Began && next == false)
-            {
-                //シーン移動したい
-                AudioSource.PlayClipAtPoint(sound, Camera.main.gameObject.transform.position);
-                next = true;
-                Debug.Log("in");
-            }
+            //yield return null ;
+            AppManager.Instance.m_fade.StartFade(new FadeIn(), Color.black, 0.5f);
+            yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
 
         }
 
-		public override void OnExit() {
-			base.OnExit();
-		}
+		public override IEnumerator OnUpdate() {
+            //base.OnUpdate();
+            while (true)
+            {
+
+                gear1.OnUpdate();
+                gear2.OnUpdate();
+                gear3.OnUpdate();
+
+                //タッチでスタート！！の点滅
+                m_startMessageRenderer.color = new Color(1, 1, 1, Mathf.PingPong(Time.time, 1));
+
+                if (next) m_filterRenderer.color += new Color(0, 0, 0, alphaAdd);
+
+                if (m_filterRenderer.color.a > 1)
+                {
+                    Application.LoadLevel(1);
+                }
+
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    AudioSource.PlayClipAtPoint(sound, Camera.main.gameObject.transform.position);
+                    next = true;
+                    break;
+                }
+
+                //if (Input.GetTouch(0).phase == TouchPhase.Began && next == false)
+                //{
+                //    //シーン移動したい
+                //    AudioSource.PlayClipAtPoint(sound, Camera.main.gameObject.transform.position);
+                //    next = true;
+                //    Debug.Log("in");
+                //}
+                yield return null;
+            }
+
+        }
+
+		public override IEnumerator OnExit() {
+            //base.OnExit();
+            AppManager.Instance.m_fade.StartFade(new FadeOut(), Color.black, 0.5f);
+            yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
+            UnityEngine.SceneManagement.SceneManager.LoadScene("StartUp");
+            yield return null;
+        }
 	}
 }
