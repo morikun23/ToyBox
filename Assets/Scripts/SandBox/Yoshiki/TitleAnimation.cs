@@ -23,8 +23,9 @@ namespace ToyBox.Title
             animator = GetComponent<Animator>();
             renderer = GetComponent<SpriteRenderer>();
             sp_Comment = GameObject.Find("SP_Comment");
-            titleComment = sp_Comment.GetComponent<TitleComment>();
+            //titleComment = sp_Comment.GetComponent<TitleComment>();
             StartCoroutine("Wait");
+            //titleComment.Initialize();
             
         }
 
@@ -39,9 +40,9 @@ namespace ToyBox.Title
                     renderer.flipX = false;
                     animator.SetBool("RunFlag", false);
                     animator.SetBool("IdleFlag", true);
-                    titleComment.Spawn();
+                    //titleComment.Spawn();
                     yield return new WaitForSeconds(4.0f);
-                    titleComment.Delete();
+                    //titleComment.Delete();
 
                     stop = false;
                 }

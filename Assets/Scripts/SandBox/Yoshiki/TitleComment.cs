@@ -8,18 +8,25 @@ namespace ToyBox.Title
 
         SpriteRenderer renderer;
 
-        void Start()
+        public void Initialize()
         {
-            renderer = GetComponent<SpriteRenderer>();
+            renderer = this.GetComponent<SpriteRenderer>();
         }
 
         public void Spawn()
         {
-            
-            
+
+            //Color color = renderer.color;
+            //color.a = 1;
+            //renderer.color = color;
+
+
         }
         public void Delete()
         {
+            //Color color = renderer.color;
+            //color.a = 0;
+            //renderer.color = color;
 
         }
     }
