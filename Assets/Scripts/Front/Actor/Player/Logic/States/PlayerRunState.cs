@@ -7,37 +7,42 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public class PlayerRunState : PlayerStateBase {
+	public class PlayerRunState : PlayerStateBase , IPlayerState{
+		
+		public int Priority { get { return 1; } }
+
+
+		private ActorBase.Direction m_directionBuf;
+
+		public PlayerRunState(ActorBase.Direction arg_direction) {
+			m_directionBuf = arg_direction;
+		}
 
 		/// <summary>
 		/// ステート開始時
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public override void OnEnter(Player arg_player) {
-
+		public void OnEnter(Player arg_player) {
+			arg_player.m_direction = m_directionBuf;
 		}
 
 		/// <summary>
 		/// ステート中の更新
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public override void OnUpdate(Player arg_player) {
-			if (arg_player.m_task.Count > 0) {
-				for (int i = 0; i < arg_player.m_task.Count; i++) {
-					Debug.Log(arg_player.m_task.Peek());
-					arg_player.m_task.Dequeue().Execute(arg_player);
-				}
-			}
-			else {
-				arg_player.StateTransition(new PlayerIdleState());
-			}
+		public void OnUpdate(Player arg_player) {
+			arg_player.m_transform.position += new Vector3() {
+				x = arg_player.m_speed * (int)arg_player.m_direction ,
+				y = 0 ,
+				z = 0
+			};
 		}
 
 		/// <summary>
 		/// ステート終了時
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public override void OnExit(Player arg_player) {
+		public void OnExit(Player arg_player) {
 			
 		}
 

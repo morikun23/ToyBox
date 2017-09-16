@@ -7,46 +7,36 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public class PlayerReachState : PlayerStateBase {
+	public class PlayerReachState : PlayerStateBase , IPlayerState {
+
+		public int Priority { get { return 3; } }
 
 		protected override bool AbleRun { get { return false; } }
 
 		protected override bool AbleJump { get { return false; } }
 
-		private IPlayerCommand m_commandBuf;
-
 		/// <summary>
 		/// ステート開始時
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public override void OnEnter(Player arg_player) {
-			m_commandBuf = arg_player.m_task.Peek();
+		public void OnEnter(Player arg_player) {
+			arg_player.m_rigidbody.isKinematic = true;
 		}
 
 		/// <summary>
 		/// ステート中の更新
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public override void OnUpdate(Player arg_player) {
-			if (arg_player.m_task.Count > 0) {
-				for(int i = 0; i < arg_player.m_task.Count; i++) {
-					arg_player.m_task.Dequeue().Execute(arg_player);
-				}
-			}
-			else if (arg_player.m_arm.IsShotened()) {
-				arg_player.m_task.Enqueue(m_commandBuf);
-				arg_player.m_task.Dequeue().Undo(arg_player);
-				arg_player.StateTransition(new PlayerIdleState());
-			}
-
+		public void OnUpdate(Player arg_player) {
+			
 		}
 
 		/// <summary>
 		/// ステート終了時
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public override void OnExit(Player arg_player) {
-			arg_player.m_task.Clear();
+		public void OnExit(Player arg_player) {
+			arg_player.m_rigidbody.isKinematic = false;
 		}
 	}
 }

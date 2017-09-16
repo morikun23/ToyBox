@@ -9,10 +9,11 @@ using UnityEngine;
 namespace ToyBox {
 	public interface IPlayerState {
 
+		int Priority { get; }
+
 		void OnEnter(Player arg_player);
 		void OnUpdate(Player arg_player);
 		void OnExit(Player arg_player);
 
-		void AddTaskIfAble(Player arg_player,IPlayerCommand arg_command);
 	}
 }

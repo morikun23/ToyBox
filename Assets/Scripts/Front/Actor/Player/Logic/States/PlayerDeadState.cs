@@ -7,13 +7,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public class PlayerDeadState : PlayerStateBase {
+	public class PlayerDeadState : PlayerStateBase , IPlayerState {
+
+		public int Priority { get { return 10; } }
 
 		/// <summary>
 		/// ステート開始時
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public override void OnEnter(Player arg_player) {
+		public void OnEnter(Player arg_player) {
 
 		}
 
@@ -21,7 +23,7 @@ namespace ToyBox {
 		/// ステート中の更新
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public override void OnUpdate(Player arg_player) {
+		public void OnUpdate(Player arg_player) {
 
 		}
 
@@ -29,12 +31,9 @@ namespace ToyBox {
 		/// ステート終了時
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public override void OnExit(Player arg_player) {
-			arg_player.m_task.Clear();
+		public void OnExit(Player arg_player) {
+
 		}
 
-		public override void AddTaskIfAble(Player arg_player, IPlayerCommand arg_command) {
-			return;
-		}
 	}
 }
