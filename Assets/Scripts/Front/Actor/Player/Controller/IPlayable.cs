@@ -15,7 +15,7 @@ namespace ToyBox {
 
 		void OnJumpButton();
 
-		void OnItemTap();
+		void OnItemTap(Item arg_item);
 
 	}
 }

@@ -60,14 +60,6 @@ namespace ToyBox {
 		}
 
 		/// <summary>
-		/// タスクを追加する
-		/// </summary>
-		/// <param name="arg_command"></param>
-		public void AddTask(IPlayerCommand arg_command) {
-			m_currentState.AddTaskIfAble(this , arg_command);
-		}
-
-		/// <summary>
 		/// 地面に着いているかを調べる
 		/// </summary>
 		/// <returns>着地しているか</returns>
