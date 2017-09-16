@@ -20,14 +20,10 @@ namespace ToyBox {
 		//パラメータ
 		//--------------------------
 
-		//アーム
-		public Arm m_arm { get; private set; }
-
 		//自身の状態（Stateパターンでの実装）
 		public IPlayerState m_currentState { get; private set; }
-		
-		//タスク
-		public Queue<IPlayerCommand> m_task { get; private set; }
+		//自身の状態（並行している状態）
+		public IPlayerState m_subState { get; private set; }
 
 		//地面に接しているか
 		public bool m_isGrounded { get; private set; }
@@ -37,11 +33,8 @@ namespace ToyBox {
 		public void Initialize() {
 			m_currentState = new PlayerIdleState();
 			m_currentState.OnEnter(this);
-			m_task = new Queue<IPlayerCommand>();
 			m_rigidbody = GetComponent<Rigidbody2D>();
 			m_collider = GetComponent<BoxCollider2D>();
-			m_arm = GetComponentInChildren<Arm>();
-			m_arm.Initialize(this);
 
 			m_viewer = GetComponentInChildren<PlayerViewer>();
 			m_viewer.Initialize(this);
@@ -52,13 +45,11 @@ namespace ToyBox {
 			Debug.Log(m_currentState);
 
 			m_isGrounded = IsGrounded();
-
-			m_arm.UpdateByFrame(this);
 			m_currentState.OnUpdate(this);
 
 			m_viewer.UpdateByFrame(this);
 		}
-
+		
 		/// <summary>
 		/// 地面に着いているかを調べる
 		/// </summary>

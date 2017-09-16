@@ -3,41 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public class PlayerController : ObjectBase ,IPlayable {
+	public class PlayerController : ObjectBase {
 
-		public Player m_player { get; private set; }
+		[SerializeField]
+		private Player m_player;
 
-		public Arm m_arm { get; private set; }
+		[SerializeField]
+		private Arm m_arm;
 
-		public Hand m_hand { get; private set; }
+		[SerializeField]
+		private Hand m_hand;
 
 		public void Initialize() {
 			m_player = FindObjectOfType<Player>();
 			if (!m_player) { PlayerGenerate(); }
+			m_player.Initialize();
 		}
 
 		public void UpdateByFrame() {
 
+			if (Input.GetKey(KeyCode.LeftArrow)) {
+				m_player.StateTransition(new PlayerRunState(ActorBase.Direction.LEFT));
+			}
+			if (Input.GetKey(KeyCode.RightArrow)) {
+				m_player.StateTransition(new PlayerRunState(ActorBase.Direction.RIGHT));
+			}
+
+			if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) {
+				m_player.StateTransition(new PlayerIdleState());
+			}
+
+			m_player.UpdateByFrame();
 		}
 
 		private void PlayerGenerate() {
 			Instantiate(Resources.Load<Player>("Actor/Player/Player") , m_transform);
 		}
 
-		public void OnLeftButton() {
-
-		}
-
-		public void OnRightButton() {
-
-		}
-
-		public void OnJumpButton() {
-
-		}
-
-		public void OnItemTap(Item arg_item) {
-
-		}
 	}
 }
