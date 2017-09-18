@@ -4,60 +4,43 @@ using UnityEngine;
 
 namespace ToyBox.Title {
 	public class TitleScene : ToyBox.Scene {
-        private static TitleScene m_instance;
-
-        public static TitleScene Instance
-        {
-            get
-            {
-                if (m_instance == null)
-                {
-                    m_instance = new GameObject("TitleScene").AddComponent<TitleScene>();
-                }
-                return m_instance;
-            }
-        }
 
         //「タッチでスタート！！」
+        [SerializeField]
         GameObject m_startMessage;
         public SpriteRenderer m_startMessageRenderer;
 
         //フェード用
+        [SerializeField]
         GameObject m_filter;
         public SpriteRenderer m_filterRenderer;
-        float alphaAdd = 0.015f;
 
-        //public TitleScene():base ("Scene/TitleScene")
-        //{
+        float m_alphaAdd = 0.015f;
 
-        //}
+        public AudioClip m_sound;
 
-        bool next;
+        [SerializeField]
+        GameObject m_gear1, m_gear2, m_gear3;
 
-        public AudioClip sound;
-
-        GearRotate gear1, gear2, gear3;
+        GearRotate m_gear1Script, m_gear2Script, m_gear3Script;
 
 		public override IEnumerator OnEnter() {
             //base.OnEnter();
 
-            m_startMessage = GameObject.Find("SP_StartMessage");
             m_startMessageRenderer = m_startMessage.GetComponent<SpriteRenderer>();
 
-            m_filter = GameObject.Find("SP_Filter");
             m_filterRenderer = m_filter.GetComponent<SpriteRenderer>();
 
-            sound = (AudioClip)Resources.Load("Sounds/SE/SE_TitleTouch");
+            m_sound = (AudioClip)Resources.Load("Sounds/SE/SE_TitleTouch");
 
             m_filterRenderer.color = new Color(1, 1, 1, 0);
-            next = false;
 
-            gear1 = GameObject.Find("SP_Logo/SP_LogoGear1").GetComponent<GearRotate>();
-            gear1.Init(1);
-            gear2 = GameObject.Find("SP_Logo/SP_LogoGear2").GetComponent<GearRotate>();
-            gear2.Init(-0.5f);
-            gear3 = GameObject.Find("SP_Logo/SP_LogoGear3").GetComponent<GearRotate>();
-            gear3.Init(2.5f);
+            m_gear1Script = m_gear1.GetComponent<GearRotate>();
+            m_gear1Script.Init(1);
+            m_gear2Script = m_gear2.GetComponent<GearRotate>();
+            m_gear2Script.Init(-0.5f);
+            m_gear3Script = m_gear3.GetComponent<GearRotate>();
+            m_gear3Script.Init(2.5f);
 
             //yield return null ;
             AppManager.Instance.m_fade.StartFade(new FadeIn(), Color.black, 0.5f);
@@ -70,34 +53,20 @@ namespace ToyBox.Title {
             while (true)
             {
 
-                gear1.OnUpdate();
-                gear2.OnUpdate();
-                gear3.OnUpdate();
+                m_gear1Script.OnUpdate();
+                m_gear2Script.OnUpdate();
+                m_gear3Script.OnUpdate();
 
                 //タッチでスタート！！の点滅
                 m_startMessageRenderer.color = new Color(1, 1, 1, Mathf.PingPong(Time.time, 1));
 
-                if (next) m_filterRenderer.color += new Color(0, 0, 0, alphaAdd);
-
-                if (m_filterRenderer.color.a > 1)
-                {
-                    Application.LoadLevel(1);
-                }
-
+                //if (Input.GetTouch(0).phase == TouchPhase.Began)
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    AudioSource.PlayClipAtPoint(sound, Camera.main.gameObject.transform.position);
-                    next = true;
+                    AudioSource.PlayClipAtPoint(m_sound, Camera.main.gameObject.transform.position);
                     break;
                 }
 
-                //if (Input.GetTouch(0).phase == TouchPhase.Began && next == false)
-                //{
-                //    //シーン移動したい
-                //    AudioSource.PlayClipAtPoint(sound, Camera.main.gameObject.transform.position);
-                //    next = true;
-                //    Debug.Log("in");
-                //}
                 yield return null;
             }
 

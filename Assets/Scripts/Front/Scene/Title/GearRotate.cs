@@ -7,15 +7,12 @@ namespace ToyBox.Title
     public class GearRotate : MonoBehaviour
     {
 
-
         float m_addRotate;
-
 
         //初期化関数
         public void Init(float arg_addRotate)
         {
             m_addRotate = arg_addRotate;
-
         }
 
         // Update is called once per frame

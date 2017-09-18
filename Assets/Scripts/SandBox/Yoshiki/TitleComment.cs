@@ -6,27 +6,26 @@ namespace ToyBox.Title
 {
     public class TitleComment : MonoBehaviour {
 
-        SpriteRenderer renderer;
-
-        public void Initialize()
-        {
-            renderer = this.GetComponent<SpriteRenderer>();
-        }
+        Vector3 STARTSIZE = new Vector3();
+        SpriteRenderer m_renderer;
+        Color m_color;
 
         public void Spawn()
         {
-
-            //Color color = renderer.color;
-            //color.a = 1;
-            //renderer.color = color;
+            m_renderer = GetComponent<SpriteRenderer>();
+            
+            m_color = m_renderer.color;
+            m_color.a = 1;
+            m_renderer.color = m_color;
 
 
         }
         public void Delete()
         {
-            //Color color = renderer.color;
-            //color.a = 0;
-            //renderer.color = color;
+            m_renderer = GetComponent<SpriteRenderer>();
+            m_color = m_renderer.color;
+            m_color.a = 0;
+            m_renderer.color = m_color;
 
         }
     }
