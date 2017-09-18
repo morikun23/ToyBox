@@ -24,8 +24,11 @@ namespace ToyBox {
 
 		public void Initialize() {
 			m_player = FindObjectOfType<Player>();
+			m_arm = FindObjectOfType<Arm>();
+
 			if (!m_player) { PlayerGenerate(); }
 			m_player.Initialize();
+			m_arm.Initialize(m_player);
 		}
 
 		public void UpdateByFrame() {
@@ -37,16 +40,41 @@ namespace ToyBox {
 				m_player.m_direction = ActorBase.Direction.RIGHT;
 			}
 
+			if (Input.GetMouseButtonDown(0)) {
+				Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+				//タッチをした位置にオブジェクトがあるかどうかを判定
+				RaycastHit2D hit = Physics2D.Raycast(worldPoint , Vector2.zero,0.1f,1 << LayerMask.NameToLayer("Item"));
+
+				if (hit) {
+					Item item = hit.collider.gameObject.GetComponent<Item>();
+					ItemGrab(item);
+				}
+			}
+
+
 			m_player.m_inputHandle.m_run = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow);
+
 			m_player.m_inputHandle.m_jump = Input.GetKey(KeyCode.Space);
+
+			if (!m_arm.lengthen) {
+				m_player.m_inputHandle.m_reach = false;
 			}
 
 			m_player.UpdateByFrame();
+			m_arm.UpdateByFrame(m_player);
 		}
 
 		private void PlayerGenerate() {
 			Instantiate(Resources.Load<Player>("Actor/Player/Player") , m_transform);
 		}
 
+		private void ItemGrab(Item arg_item) {
+			Debug.Log("S");
+			m_player.m_inputHandle.m_reach = true;
+			m_arm.SetTargetPosition(arg_item.m_transform.position);
+			m_arm.lengthen = true;
+			
+		}
 	}
 }

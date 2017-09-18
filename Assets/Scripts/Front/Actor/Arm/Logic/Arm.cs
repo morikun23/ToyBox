@@ -6,11 +6,7 @@ namespace ToyBox {
 	[System.Serializable]
 	public class Arm : ObjectBase {
 
-		public enum Phase {
-			Lengthen,
-			Freeze,
-			Shorten
-		}
+		public bool lengthen;
 
 		//---------------------------
 		// UnityComponent
@@ -20,28 +16,24 @@ namespace ToyBox {
 		// メンバー
 		//---------------------------
 
-		//ハンド
 		public Hand m_hand { get; private set; }
-
-		//最大の射程
-		private const float MAX_RANGE = 10f;
-
-		//現在の射程
-		public float m_currentRange { get; private set; }
+		
+		public IArmState m_currentState { get; private set; }
 
 		//ターゲット座標（タップされた座標）
 		public Vector2 m_targetPosition { get; private set; }
+
+		public float m_targetLength { get; private set; }
 
 		public float m_currentAngle { get; set; }
 
 		//現在の射出距離
 		public float m_currentLength;
 
-		//アームの状態
-		public Stack<IArmCommand> m_task { get; private set; }
+		//アームの長さのバッファ
+		public Stack<float> m_lengthBuf { get; private set; }
 
-		//現在のフェーズ
-		public Phase m_currentPhase { get; private set; }
+		ArmViewer m_viewer;
 
 		/// <summary>
 		/// 初期化
@@ -49,15 +41,16 @@ namespace ToyBox {
 		/// <param name="arg_player"></param>
 		public void Initialize(Player arg_player) {
 
-			m_task = new Stack<IArmCommand>();
-
-			m_hand = GetComponentInChildren<Hand>();
-
+			m_hand = FindObjectOfType<Hand>();
 			m_hand.Initialize(this);
-			m_currentRange = 5f;
-			m_currentLength = 0f;
-			m_currentPhase = Phase.Freeze;
 
+			m_currentState = new ArmStandByState();
+			m_lengthBuf = new Stack<float>();
+			m_currentLength = 0f;
+			
+			m_viewer = GetComponentInChildren<ArmViewer>();
+			m_viewer.Initialize(this);
+			
 		}
 
 		/// <summary>
@@ -69,39 +62,23 @@ namespace ToyBox {
 			//プレイヤーの座標に依存する
 			m_transform.position = arg_player.transform.position;
 
-			switch (m_currentPhase) {
-				case Phase.Lengthen:
-				if (IsLengthened()) {
-					//TODO:Handが所持しているものによって処理を変更する
-					m_currentPhase = Phase.Shorten;
-					break;
-				}
-
-				m_task.Push(new ArmLengthenCommand(this , 2.0f));
-				m_task.Peek().Execute(this);
-
-				break;
-
-				case Phase.Shorten:
-				if (IsShotened()) {
-					m_currentPhase = Phase.Freeze;
-					break;
-				}
-				m_task.Pop().Undo(this);
-				break;
-
-				case Phase.Freeze:
-				break;
+			IArmState nextState = m_currentState.GetNextState(this);
+			if(nextState != null) {
+				StateTransition(nextState);
 			}
-			
-		}
+			m_currentState.OnUpdate(this);
+			m_hand.UpdateByFrame(this);
 
+			m_viewer.UpdateByFrame(this);
+		}
+		
 		/// <summary>
 		/// タップされた座標をアームに伝える
 		/// </summary>
 		/// <param name="arg_position"></param>
 		public void SetTargetPosition(Vector2 arg_position) {
 			m_targetPosition = arg_position;
+			m_targetLength = (m_targetPosition - (Vector2)m_transform.position).magnitude;
 		}
 
 		/// <summary>
@@ -122,20 +99,10 @@ namespace ToyBox {
 			return m_transform.position;
 		}
 
-		/// <summary>
-		/// すでに伸びきっているかどうか
-		/// </summary>
-		/// <returns></returns>
-		public bool IsLengthened() {
-			return m_currentLength >= (m_targetPosition - GetBottomPosition()).magnitude;
-		}
-
-		/// <summary>
-		/// すでに縮みきっているかどうか
-		/// </summary>
-		/// <returns></returns>
-		public bool IsShotened() {
-			return m_currentLength <= 0;
+		private void StateTransition(IArmState arg_nextState) {
+			m_currentState.OnExit(this);
+			m_currentState = arg_nextState;
+			m_currentState.OnEnter(this);
 		}
 	}
 }
