@@ -3,22 +3,81 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox.Title {
-	public class TitleScene : Scene {
+	public class TitleScene : ToyBox.Scene {
 
-		public TitleScene() : base("Scene/TitleScene") {
+        //「タッチでスタート！！」
+        [SerializeField]
+        GameObject m_startMessage;
+        public SpriteRenderer m_startMessageRenderer;
 
-		}
+        //フェード用
+        [SerializeField]
+        GameObject m_filter;
+        public SpriteRenderer m_filterRenderer;
 
-		public override void OnEnter() {
-			base.OnEnter();
-		}
+        float m_alphaAdd = 0.015f;
 
-		public override void OnUpdate() {
-			base.OnUpdate();
-		}
+        public AudioClip m_sound;
 
-		public override void OnExit() {
-			base.OnExit();
-		}
+        [SerializeField]
+        GameObject m_gear1, m_gear2, m_gear3;
+
+        GearRotate m_gear1Script, m_gear2Script, m_gear3Script;
+
+		public override IEnumerator OnEnter() {
+            //base.OnEnter();
+
+            m_startMessageRenderer = m_startMessage.GetComponent<SpriteRenderer>();
+
+            m_filterRenderer = m_filter.GetComponent<SpriteRenderer>();
+
+            m_sound = (AudioClip)Resources.Load("Sounds/SE/SE_TitleTouch");
+
+            m_filterRenderer.color = new Color(1, 1, 1, 0);
+
+            m_gear1Script = m_gear1.GetComponent<GearRotate>();
+            m_gear1Script.Init(1);
+            m_gear2Script = m_gear2.GetComponent<GearRotate>();
+            m_gear2Script.Init(-0.5f);
+            m_gear3Script = m_gear3.GetComponent<GearRotate>();
+            m_gear3Script.Init(2.5f);
+
+            //yield return null ;
+            AppManager.Instance.m_fade.StartFade(new FadeIn(), Color.black, 0.5f);
+            yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
+
+        }
+
+		public override IEnumerator OnUpdate() {
+            //base.OnUpdate();
+            while (true)
+            {
+
+                m_gear1Script.OnUpdate();
+                m_gear2Script.OnUpdate();
+                m_gear3Script.OnUpdate();
+
+                //タッチでスタート！！の点滅
+                m_startMessageRenderer.color = new Color(1, 1, 1, Mathf.PingPong(Time.time, 1));
+
+                //if (Input.GetTouch(0).phase == TouchPhase.Began)
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    AudioSource.PlayClipAtPoint(m_sound, Camera.main.gameObject.transform.position);
+                    break;
+                }
+
+                yield return null;
+            }
+
+        }
+
+		public override IEnumerator OnExit() {
+            //base.OnExit();
+            AppManager.Instance.m_fade.StartFade(new FadeOut(), Color.black, 0.5f);
+            yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
+            UnityEngine.SceneManagement.SceneManager.LoadScene("StartUp");
+            yield return null;
+        }
 	}
 }
