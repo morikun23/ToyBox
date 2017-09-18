@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public class FixedItem : MonoBehaviour {
+	public class FixedItem : Item {
 
 		public void Initialize() {
 

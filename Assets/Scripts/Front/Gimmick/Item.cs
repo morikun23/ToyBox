@@ -7,7 +7,7 @@ namespace ToyBox {
 
 		public enum State {
 			GRABBED,
-			PULLEDs,
+			PULLED,
 			CARRIED
 		}
 
