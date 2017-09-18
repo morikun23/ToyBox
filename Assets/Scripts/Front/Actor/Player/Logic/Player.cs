@@ -6,6 +6,14 @@ namespace ToyBox {
 	[System.Serializable]
 	public class Player : ActorBase {
 
+		public class InputHandle {
+			public bool m_run;
+			public bool m_jump;
+			public bool m_reach;
+		}
+
+		public InputHandle m_inputHandle;
+
 		//--------------------------
 		//UnityComponent
 		//--------------------------
@@ -22,16 +30,15 @@ namespace ToyBox {
 
 		//自身の状態（Stateパターンでの実装）
 		public IPlayerState m_currentState { get; private set; }
-		//自身の状態（並行している状態）
-		public IPlayerState m_subState { get; private set; }
-
+		
 		//地面に接しているか
 		public bool m_isGrounded { get; private set; }
 
 		private PlayerViewer m_viewer { get; set; }
 
 		public void Initialize() {
-			m_currentState = new PlayerIdleState();
+			m_inputHandle = new InputHandle();
+			m_currentState = new OnPlayerGroundedState();
 			m_currentState.OnEnter(this);
 			m_rigidbody = GetComponent<Rigidbody2D>();
 			m_collider = GetComponent<BoxCollider2D>();
@@ -42,12 +49,18 @@ namespace ToyBox {
 
 		public void UpdateByFrame() {
 
-			Debug.Log(m_currentState);
-
 			m_isGrounded = IsGrounded();
-			m_currentState.OnUpdate(this);
+			
+			IPlayerState nextState = m_currentState.GetNextState(this);
 
-			m_viewer.UpdateByFrame(this);
+			if (nextState != null) {
+				StateTransition(nextState);
+			}
+			Debug.Log(m_currentState);
+			
+			m_currentState.OnUpdate(this);
+			m_viewer.FlipByDirection(m_direction);
+
 		}
 		
 		/// <summary>
@@ -62,7 +75,7 @@ namespace ToyBox {
 		/// ステートを遷移させる
 		/// </summary>
 		/// <param name="arg_nextState">次の状態</param>
-		public void StateTransition(IPlayerState arg_nextState) {
+		private void StateTransition(IPlayerState arg_nextState) {
 			m_currentState.OnExit(this);
 			m_currentState = arg_nextState;
 			m_currentState.OnEnter(this);

@@ -14,6 +14,14 @@ namespace ToyBox {
 		[SerializeField]
 		private Hand m_hand;
 
+		void Start() {
+			Initialize();
+		}
+
+		void Update() {
+			UpdateByFrame();
+		}
+
 		public void Initialize() {
 			m_player = FindObjectOfType<Player>();
 			if (!m_player) { PlayerGenerate(); }
@@ -23,14 +31,14 @@ namespace ToyBox {
 		public void UpdateByFrame() {
 
 			if (Input.GetKey(KeyCode.LeftArrow)) {
-				m_player.StateTransition(new PlayerRunState(ActorBase.Direction.LEFT));
+				m_player.m_direction = ActorBase.Direction.LEFT;
 			}
 			if (Input.GetKey(KeyCode.RightArrow)) {
-				m_player.StateTransition(new PlayerRunState(ActorBase.Direction.RIGHT));
+				m_player.m_direction = ActorBase.Direction.RIGHT;
 			}
 
-			if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) {
-				m_player.StateTransition(new PlayerIdleState());
+			m_player.m_inputHandle.m_run = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow);
+			m_player.m_inputHandle.m_jump = Input.GetKey(KeyCode.Space);
 			}
 
 			m_player.UpdateByFrame();

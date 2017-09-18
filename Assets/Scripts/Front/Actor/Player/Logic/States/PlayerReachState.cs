@@ -7,20 +7,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public class PlayerReachState : PlayerStateBase , IPlayerState {
+	public class PlayerReachState : IPlayerState {
 
-		public int Priority { get { return 3; } }
+		private IPlayerState m_stateBuf;
 
-		protected override bool AbleRun { get { return false; } }
+		private Vector2 m_velocityBuf;
 
-		protected override bool AbleJump { get { return false; } }
+		public PlayerReachState(IPlayerState arg_state) {
+			m_stateBuf = arg_state;
+		}
 
 		/// <summary>
 		/// ステート開始時
 		/// </summary>
 		/// <param name="arg_player"></param>
 		public void OnEnter(Player arg_player) {
+			m_velocityBuf = arg_player.m_rigidbody.velocity;
 			arg_player.m_rigidbody.isKinematic = true;
+			arg_player.m_rigidbody.velocity = Vector2.zero;
 		}
 
 		/// <summary>
@@ -37,6 +41,17 @@ namespace ToyBox {
 		/// <param name="arg_player"></param>
 		public void OnExit(Player arg_player) {
 			arg_player.m_rigidbody.isKinematic = false;
+
+			if(m_velocityBuf.y > 0) { m_velocityBuf.y = 0; }
+
+			arg_player.m_rigidbody.velocity = m_velocityBuf;
+		}
+
+		public virtual IPlayerState GetNextState(Player arg_player) {
+			if (!arg_player.m_inputHandle.m_reach) {
+				return m_stateBuf;
+			}
+			return null;
 		}
 	}
 }

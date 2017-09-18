@@ -1,14 +1,10 @@
-﻿//担当：森田　勝
-//概要：プレイヤーの死亡状態
-//参考：なし
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public class PlayerDeadState : IPlayerState {
-		
+	public class OnPlayerAirState : IPlayerState {
+
 		/// <summary>
 		/// ステート開始時
 		/// </summary>
@@ -34,8 +30,11 @@ namespace ToyBox {
 		}
 
 		public virtual IPlayerState GetNextState(Player arg_player) {
-			return this;
+			
+			if (arg_player.m_inputHandle.m_run) {
+				return new PlayerAirRunState(arg_player.m_direction);
+			}
+			return new PlayerAirIdleState();
 		}
-
 	}
 }
