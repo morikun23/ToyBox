@@ -7,36 +7,43 @@ namespace ToyBox {
 
 		public enum State {
 			GRABBED,
-			PULLED,
 			CARRIED
 		}
 
 		public State m_currentState;
-
-		protected Hand m_owner;
-
-		public void SetOwner(Hand arg_hand) {
-			m_owner = arg_hand;
-		}
-
-		//
-		public virtual void OnGrabbed() {
-			//TODO:掴まれたときの処理
-			//Armを縮めるのか、固定なのか、自分もついていくのか
-			//また、持ち運ばれるのか
-		}
-
-		public virtual void OnPulled() {
-			//TODO:引っ張られたときの処理
-			//持ち運ばれるのか、否か
+		
+		/// <summary>
+		/// 掴まれたときの処理
+		/// 最初の一度だけ呼ばせること
+		/// </summary>
+		/// <param name="arg_player"></param>
+		public virtual void OnGraspedEnter(PlayerComponent arg_player) {
+			
 		}
 
 		/// <summary>
-		/// 持ち運びされているときの処理
+		/// 掴まれているときの処理
+		/// ここでは掴まれている間常に呼ばれる
 		/// </summary>
-		public virtual void OnCarried() {
+		/// <param name="arg_player"></param>
+		public virtual void OnGraspedStay(PlayerComponent arg_player) {
+			//TODO:掴まれているの処理
+			//Armを縮めるのか、固定なのか、自分もついていくのか
+			//また、持ち運ばれるのか
 
 		}
-		
+
+		/// <summary>
+		/// 掴まれていた状態から離された時の処理
+		/// ここでは一度だけ呼ばせること
+		/// </summary>
+		/// <param name="arg_player"></param>
+		public virtual void OnGraspedExit(PlayerComponent arg_player) {
+			//TODO:掴まれているの処理
+			//Armを縮めるのか、固定なのか、自分もついていくのか
+			//また、持ち運ばれるのか
+
+		}
+
 	}
 }

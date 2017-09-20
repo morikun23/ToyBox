@@ -5,12 +5,16 @@ using UnityEngine;
 namespace ToyBox {
 	public class FixedItem : Item {
 
-		public void Initialize() {
-
+		public override void OnGraspedEnter(PlayerComponent arg_player) {
+			
 		}
 
-		public void UpdateByFrame() {
+		public override void OnGraspedStay(PlayerComponent arg_player) {
+			
+		}
 
+		public override void OnGraspedExit(PlayerComponent arg_player) {
+			
 		}
 	}
 }
