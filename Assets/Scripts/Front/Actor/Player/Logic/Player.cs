@@ -8,6 +8,11 @@ namespace ToyBox {
 
 		private Arm m_arm;
 
+		public override ArmComponent Arm {
+			get {
+				return m_arm;
+			}
+		}
 
 		private Hand m_hand;
 

@@ -5,12 +5,12 @@ using UnityEngine;
 namespace ToyBox {
 	public interface IArmState {
 
-		void OnEnter(Arm arg_arm);
+		void OnEnter(ArmComponent arg_arm);
 
-		void OnUpdate(Arm arg_arm);
+		void OnUpdate(ArmComponent arg_arm);
 
-		void OnExit(Arm arg_arm);
+		void OnExit(ArmComponent arg_arm);
 
-		IArmState GetNextState(Arm arg_arm);
+		IArmState GetNextState(ArmComponent arg_arm);
 	}
 }

@@ -8,11 +8,11 @@ namespace ToyBox {
 		//伸ばしきった
 		private bool m_finished;
 
-		public void OnEnter(Arm arg_arm) {
+		public void OnEnter(ArmComponent arg_arm) {
 			m_finished = false;
 		}
 
-		public void OnUpdate(Arm arg_arm) {
+		public void OnUpdate(ArmComponent arg_arm) {
 			arg_arm.m_currentLength = arg_arm.m_lengthBuf.Pop();
 
 			if(arg_arm.m_lengthBuf.Count <= 0) {
@@ -20,13 +20,13 @@ namespace ToyBox {
 			}
 		}
 
-		public void OnExit(Arm arg_arm) {
+		public void OnExit(ArmComponent arg_arm) {
 
 		}
 
-		public IArmState GetNextState(Arm arg_arm) {
+		public IArmState GetNextState(ArmComponent arg_arm) {
 			if (m_finished) {
-				arg_arm.lengthen = false;
+				arg_arm.m_isActive = false;
 				return new ArmStandByState();
 			}
 			return null;
