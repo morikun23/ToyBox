@@ -13,6 +13,7 @@ namespace ToyBox {
 
 		private Vector2 m_velocityBuf;
 
+		private ActorBase.Direction m_directionBuf;
 		public PlayerReachState(IPlayerState arg_state) {
 			m_stateBuf = arg_state;
 		}
@@ -25,6 +26,7 @@ namespace ToyBox {
 			m_velocityBuf = arg_player.m_rigidbody.velocity;
 			arg_player.m_rigidbody.isKinematic = true;
 			arg_player.m_rigidbody.velocity = Vector2.zero;
+			m_directionBuf = arg_player.m_direction;
 		}
 
 		/// <summary>
@@ -33,6 +35,7 @@ namespace ToyBox {
 		/// <param name="arg_player"></param>
 		public void OnUpdate(Player arg_player) {
 			
+			arg_player.m_direction = m_directionBuf;
 		}
 
 		/// <summary>
