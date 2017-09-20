@@ -16,6 +16,11 @@ namespace ToyBox {
 
 		private Hand m_hand;
 
+		public override HandComponent Hand {
+			get {
+				return m_hand;
+			}
+		}
 
 		public void Initialize() {
 			m_inputHandle = new InputHandle();

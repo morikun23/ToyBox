@@ -8,16 +8,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	[System.Serializable]
-	public class Hand : ObjectBase {
-
-		private HandViewer m_viewer;
+	public class Hand : HandComponent {
 
 		/// <summary>
 		/// 初期化
 		/// </summary>
-		/// <param name="arg_arm"></param>
-		public void Initialize(Arm arg_arm) {
+		public void Initialize() {
 			m_viewer = GetComponentInChildren<HandViewer>();
 			m_viewer.Initialize(this);
 		}
@@ -25,17 +21,17 @@ namespace ToyBox {
 		/// <summary>
 		/// 更新
 		/// </summary>
-		/// <param name="arg_arm"></param>
-		public void UpdateByFrame(Arm arg_arm) {
+		public void UpdateByFrame() {
 
-			m_transform.position = arg_arm.GetTopPosition();
+			m_transform.position = m_owner.Arm.GetTopPosition();
+
+			if (m_graspingItem) {
+				m_graspingItem.OnGraspedStay(m_owner);
+			}
 
 			m_viewer.UpdateByFrame(this);
-			m_viewer.SetRotation(arg_arm.m_currentAngle);
+			m_viewer.SetRotation(m_owner.Arm.m_currentAngle);
 		}
-		
-		public void SetGrabbable() {
 
-		}
 	}
 }
