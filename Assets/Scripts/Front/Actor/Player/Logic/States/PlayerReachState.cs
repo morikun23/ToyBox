@@ -22,35 +22,45 @@ namespace ToyBox {
 		/// ステート開始時
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public void OnEnter(Player arg_player) {
+		public void OnEnter(PlayerComponent arg_player) {
 			m_velocityBuf = arg_player.m_rigidbody.velocity;
 			arg_player.m_rigidbody.isKinematic = true;
 			arg_player.m_rigidbody.velocity = Vector2.zero;
 			m_directionBuf = arg_player.m_direction;
+			
+			arg_player.Arm.StartLengthen();
 		}
 
 		/// <summary>
 		/// ステート中の更新
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public void OnUpdate(Player arg_player) {
-			
+		public void OnUpdate(PlayerComponent arg_player) {
+
+			arg_player.m_transform.position = arg_player.Arm.GetBottomPosition();
 			arg_player.m_direction = m_directionBuf;
+
+			if (!arg_player.Arm.m_isActive) {
+				arg_player.m_inputHandle.m_reach = false;
+				return;
+			}
+
 		}
 
 		/// <summary>
 		/// ステート終了時
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public void OnExit(Player arg_player) {
-			arg_player.m_rigidbody.isKinematic = false;
-
+		public void OnExit(PlayerComponent arg_player) {
+			if (!arg_player.Hand.m_graspingItem) {
+				arg_player.m_rigidbody.isKinematic = false;
+			}
 			if(m_velocityBuf.y > 0) { m_velocityBuf.y = 0; }
 
 			arg_player.m_rigidbody.velocity = m_velocityBuf;
 		}
 
-		public virtual IPlayerState GetNextState(Player arg_player) {
+		public virtual IPlayerState GetNextState(PlayerComponent arg_player) {
 			if (!arg_player.m_inputHandle.m_reach) {
 				return m_stateBuf;
 			}

@@ -8,7 +8,7 @@ namespace ToyBox {
 		//横のスケールのバッファ
 		private float m_xScaleBuf;
 
-		public void Initialize(Player arg_player) {
+		public void Initialize(PlayerComponent arg_player) {
 			m_xScaleBuf = m_transform.localScale.x;
 		}
 
