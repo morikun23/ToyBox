@@ -7,12 +7,14 @@ namespace ToyBox {
 
 		[SerializeField]
 		private Player m_player;
+		
+		private Playable m_playable;
 
 		[SerializeField]
-		private Arm m_arm;
+		private PlayableArm m_arm;
 
 		[SerializeField]
-		private Hand m_hand;
+		private IPlayableHand m_hand;
 
 		void Start() {
 			Initialize();
@@ -24,11 +26,12 @@ namespace ToyBox {
 
 		public void Initialize() {
 			m_player = FindObjectOfType<Player>();
-			m_arm = FindObjectOfType<Arm>();
-
 			if (!m_player) { PlayerGenerate(); }
 			m_player.Initialize();
-			m_arm.Initialize(m_player);
+
+			m_playable = m_player;
+			m_arm = m_player.Arm;
+			m_hand = m_player.Hand;
 		}
 
 		public void UpdateByFrame() {
@@ -48,33 +51,27 @@ namespace ToyBox {
 
 				if (hit) {
 					Item item = hit.collider.gameObject.GetComponent<Item>();
-					ItemGrab(item);
+					#region アイテムに向けて手を伸ばすための処理（ほぼテンプレ）
+					m_hand.SetItemBuffer(item);
+					m_arm.SetTargetPosition(item.m_transform.position);
+					m_player.m_inputHandle.m_reach = true;
+					#endregion
+				}
+				else {
+					m_hand.Release();
 				}
 			}
 
+			m_playable.m_inputHandle.m_run = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow);
 
-			m_player.m_inputHandle.m_run = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow);
-
-			m_player.m_inputHandle.m_jump = Input.GetKey(KeyCode.Space);
-
-			if (!m_arm.lengthen) {
-				m_player.m_inputHandle.m_reach = false;
-			}
+			m_playable.m_inputHandle.m_jump = Input.GetKey(KeyCode.Space);
 
 			m_player.UpdateByFrame();
-			m_arm.UpdateByFrame(m_player);
 		}
 
 		private void PlayerGenerate() {
 			Instantiate(Resources.Load<Player>("Actor/Player/Player") , m_transform);
 		}
 
-		private void ItemGrab(Item arg_item) {
-			Debug.Log("S");
-			m_player.m_inputHandle.m_reach = true;
-			m_arm.SetTargetPosition(arg_item.m_transform.position);
-			m_arm.lengthen = true;
-			
-		}
 	}
 }
