@@ -14,12 +14,12 @@ namespace ToyBox {
 
 		protected HandViewer m_viewer;
 
-		protected Item m_itemBuffer;
+		public Item m_itemBuffer { get; protected set; }
 
 		public Item m_graspingItem;
 
 		public PlayerComponent m_owner { get; protected set; }
-		
+
 		public void SetItemBuffer(Item arg_item) {
 			m_itemBuffer = arg_item;
 		}
@@ -37,11 +37,17 @@ namespace ToyBox {
 				m_graspingItem.OnGraspedExit(m_owner);
 				m_graspingItem = null;
 			}
+			m_itemBuffer = null;
 			m_IsGrasping = false;
 		}
 
 		public void SetOwner(PlayerComponent arg_player) {
 			m_owner = arg_player;
 		}
+
+		public bool IsGrasping() {
+			return m_IsGrasping;
+		}
+
 	}
 }

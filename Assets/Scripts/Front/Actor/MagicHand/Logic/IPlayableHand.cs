@@ -18,5 +18,11 @@ namespace ToyBox {
 		/// 所持しているアイテムを離す
 		/// </summary>
 		void Release();
+
+		/// <summary>
+		/// 現在アイテムを掴んでいる状態か調べる
+		/// </summary>
+		/// <returns></returns>
+		bool IsGrasping();
 	}
 }

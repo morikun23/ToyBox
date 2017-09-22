@@ -56,5 +56,19 @@ namespace ToyBox {
 
 			m_viewer.FlipByDirection(m_direction);
 		}
+
+		public override bool CallWhenWishItem() {
+
+			if (Hand.m_itemBuffer) {
+				return false;
+			}
+
+			if (m_currentState.GetType() == typeof(PlayerReachState)) {
+				return false;
+			}
+
+
+			return true;
+		}
 	}
 }

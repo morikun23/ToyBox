@@ -19,5 +19,13 @@ namespace ToyBox {
 
 		//ハンドへの操作インターフェイス
 		public IPlayableHand m_playableHand { get; protected set; }
+
+		/// <summary>
+		/// アイテム（ギミック）を取得しようとしたときに
+		/// コールする関数
+		/// アイテムを掴める状態かチェックする
+		/// </summary>
+		/// <returns>結果</returns>
+		public abstract bool CallWhenWishItem();
 	}
 }

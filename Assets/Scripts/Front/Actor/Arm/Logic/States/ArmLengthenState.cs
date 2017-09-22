@@ -12,7 +12,7 @@ namespace ToyBox {
 		private bool m_isFinished;
 
 		//衝突した（中止します）
-		private bool m_isCollided;
+		private bool m_isCancelled;
 
 		public ArmLengthenState(float arg_increase) {
 			m_increase = arg_increase;
@@ -20,14 +20,21 @@ namespace ToyBox {
 
 		public void OnEnter(ArmComponent arg_arm) {
 			m_isFinished = false;
-			m_isCollided = false;
+			m_isCancelled = false;
 		}
 
 		public void OnUpdate(ArmComponent arg_arm) {
 
-			m_isCollided = IsCollided(arg_arm);
+			if (!arg_arm.m_owner.Hand.m_itemBuffer) {
+				//掴むもうとしているターゲットが何らかの理由で消えた場合はすぐに中止
+				m_isCancelled = true;
+			}
 
-			if (m_isCollided) return;
+			if (IsCollided(arg_arm)) {
+				m_isCancelled = true;
+			}
+
+			if (m_isCancelled) return;
 
 			arg_arm.m_lengthBuf.Push(arg_arm.m_currentLength);
 			
@@ -46,7 +53,9 @@ namespace ToyBox {
 		}
 
 		public IArmState GetNextState(ArmComponent arg_arm) {
-			if (m_isCollided) {
+			
+
+			if (m_isCancelled) {
 				return new ArmShortenState();
 			}
 			if (m_isFinished) {
