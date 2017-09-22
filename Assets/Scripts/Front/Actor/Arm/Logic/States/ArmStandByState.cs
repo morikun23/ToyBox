@@ -6,7 +6,7 @@ namespace ToyBox {
 	public class ArmStandByState : IArmState {
 
 		public void OnEnter(ArmComponent arg_arm) {
-
+			arg_arm.m_shorten = false;
 		}
 
 		public void OnUpdate(ArmComponent arg_arm) {

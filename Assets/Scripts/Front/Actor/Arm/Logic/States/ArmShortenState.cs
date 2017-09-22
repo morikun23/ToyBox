@@ -21,7 +21,7 @@ namespace ToyBox {
 		}
 
 		public void OnExit(ArmComponent arg_arm) {
-
+			arg_arm.m_owner.m_inputHandle.m_reach = false;
 		}
 
 		public IArmState GetNextState(ArmComponent arg_arm) {
