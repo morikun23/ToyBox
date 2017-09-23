@@ -5,15 +5,10 @@ using UnityEngine;
 namespace ToyBox {
 	public class PlayerController : ObjectBase {
 
-		[SerializeField]
-		private Player m_player;
-		
 		private Playable m_playable;
 
-		[SerializeField]
 		private PlayableArm m_arm;
 
-		[SerializeField]
 		private IPlayableHand m_hand;
 
 		void Start() {
@@ -25,22 +20,18 @@ namespace ToyBox {
 		}
 
 		public void Initialize() {
-			m_player = FindObjectOfType<Player>();
-			if (!m_player) { PlayerGenerate(); }
-			m_player.Initialize();
-
-			m_playable = m_player;
-			m_arm = m_player.Arm;
-			m_hand = m_player.Hand;
+			m_playable = FindObjectOfType<Playable>();
+			m_arm = m_playable.m_playableArm;
+			m_hand = m_playable.m_playableHand;
 		}
 
 		public void UpdateByFrame() {
 
 			if (Input.GetKey(KeyCode.LeftArrow)) {
-				m_player.m_direction = ActorBase.Direction.LEFT;
+				m_playable.m_direction = ActorBase.Direction.LEFT;
 			}
 			if (Input.GetKey(KeyCode.RightArrow)) {
-				m_player.m_direction = ActorBase.Direction.RIGHT;
+				m_playable.m_direction = ActorBase.Direction.RIGHT;
 			}
 
 			if (Input.GetMouseButtonDown(0)) {
@@ -52,12 +43,12 @@ namespace ToyBox {
 				if (m_hand.IsGrasping()) {
 					m_hand.Release();
 				}
-				else if (hit && m_player.CallWhenWishItem()) {
+				else if (hit && m_playable.CallWhenWishItem()) {
 					Item item = hit.collider.gameObject.GetComponent<Item>();
 					#region アイテムに向けて手を伸ばすための処理（ほぼテンプレ）
 					m_hand.SetItemBuffer(item);
 					m_arm.SetTargetPosition(item.m_transform.position);
-					m_player.m_inputHandle.m_reach = true;
+					m_playable.m_inputHandle.m_reach = true;
 					#endregion
 				}
 			}
@@ -65,13 +56,9 @@ namespace ToyBox {
 			m_playable.m_inputHandle.m_run = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow);
 
 			m_playable.m_inputHandle.m_jump = Input.GetKey(KeyCode.Space);
-
-			m_player.UpdateByFrame();
 		}
 
-		private void PlayerGenerate() {
-			Instantiate(Resources.Load<Player>("Actor/Player/Player") , m_transform);
-		}
+	
 
 	}
 }
