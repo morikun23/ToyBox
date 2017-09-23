@@ -49,6 +49,8 @@ namespace ToyBox {
 			
 			m_bgmList = new BgmList(1);
 			m_bgmList.Initialize();
+
+			StartCoroutine(OnUpdate());
 		}
 		
 		/// <summary>
@@ -72,13 +74,16 @@ namespace ToyBox {
 			freeAudioSource.clip = arg_audioClip;
 			return freeAudioSource;
 		}
-		
+
 		/// <summary>
 		/// アップデート処理
 		/// </summary>
-		public void UpdateByFrame() {
-			m_seList.SearchAndFree();
-			m_bgmList.SearchAndFree();
+		public IEnumerator OnUpdate() {
+			while (true) {
+				m_seList.SearchAndFree();
+				m_bgmList.SearchAndFree();
+				yield return null;
+			}
 		}
 
 	}
