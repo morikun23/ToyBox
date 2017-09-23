@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 namespace ToyBox {
 	public abstract class Scene : MonoBehaviour {
 
-		public virtual void Start() {
+		protected void Start() {
 			StartCoroutine(GameLoop());
 		}
 
