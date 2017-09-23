@@ -1,88 +1,74 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	[System.Serializable]
-	public class Player : ActorBase {
+	public class Player : PlayerComponent {
 
-		//--------------------------
-		//UnityComponent
-		//--------------------------
-		
-		//RigidBody
-		public Rigidbody2D m_rigidbody { get; private set; }
-		
-		//Collider
-		public BoxCollider2D m_collider { get; private set; }
+		private Arm m_arm;
 
-		//--------------------------
-		//パラメータ
-		//--------------------------
+		public override ArmComponent Arm {
+			get {
+				return m_arm;
+			}
+		}
 
-		//アーム
-		public Arm m_arm { get; private set; }
+		private Hand m_hand;
 
-		//自身の状態（Stateパターンでの実装）
-		public IPlayerState m_currentState { get; private set; }
-		
-		//タスク
-		public Queue<IPlayerCommand> m_task { get; private set; }
-
-		//地面に接しているか
-		public bool m_isGrounded { get; private set; }
-
-		private PlayerViewer m_viewer { get; set; }
+		public override HandComponent Hand {
+			get {
+				return m_hand;
+			}
+		}
 
 		public void Initialize() {
-			m_currentState = new PlayerIdleState();
+			m_inputHandle = new InputHandle();
+			m_currentState = new OnPlayerGroundedState();
 			m_currentState.OnEnter(this);
-			m_task = new Queue<IPlayerCommand>();
 			m_rigidbody = GetComponent<Rigidbody2D>();
 			m_collider = GetComponent<BoxCollider2D>();
-			m_arm = GetComponentInChildren<Arm>();
-			m_arm.Initialize(this);
 
 			m_viewer = GetComponentInChildren<PlayerViewer>();
 			m_viewer.Initialize(this);
+			m_arm = GetComponentInChildren<Arm>();
+			m_arm.SetOwner(this);
+			m_arm.Initialize();
+			m_hand = FindObjectOfType<Hand>();
+			m_playableHand = m_hand;
+			m_hand.SetOwner(this);
+			m_hand.Initialize();
 		}
 
 		public void UpdateByFrame() {
 
-			Debug.Log(m_currentState);
-
 			m_isGrounded = IsGrounded();
 
-			m_arm.UpdateByFrame(this);
+			IPlayerState nextState = m_currentState.GetNextState(this);
+
+			if (nextState != null) {
+				StateTransition(nextState);
+			}
+			
 			m_currentState.OnUpdate(this);
+			m_arm.UpdateByFrame();
+			m_hand.UpdateByFrame();
 
-			m_viewer.UpdateByFrame(this);
+			m_viewer.FlipByDirection(m_direction);
 		}
 
-		/// <summary>
-		/// タスクを追加する
-		/// </summary>
-		/// <param name="arg_command"></param>
-		public void AddTask(IPlayerCommand arg_command) {
-			m_currentState.AddTaskIfAble(this , arg_command);
-		}
+		public override bool CallWhenWishItem() {
 
-		/// <summary>
-		/// 地面に着いているかを調べる
-		/// </summary>
-		/// <returns>着地しているか</returns>
-		public bool IsGrounded() {
-			return Physics2D.BoxCast(transform.position , m_collider.bounds.size , 0f , Vector2.down , 0.1f , 1 << LayerMask.NameToLayer("Ground"));
-		}
+			if (Hand.m_itemBuffer) {
+				return false;
+			}
 
-		/// <summary>
-		/// ステートを遷移させる
-		/// </summary>
-		/// <param name="arg_nextState">次の状態</param>
-		public void StateTransition(IPlayerState arg_nextState) {
-			m_currentState.OnExit(this);
-			m_currentState = arg_nextState;
-			m_currentState.OnEnter(this);
+			if (m_currentState.GetType() == typeof(PlayerReachState)) {
+				return false;
+			}
+
+
+			return true;
 		}
 	}
 }

@@ -20,15 +20,15 @@ namespace ToyBox {
 
 		public void UpdateByFrame(Arm arg_arm) {
 
-			m_lineRenderer.sortingOrder = m_depth;
+			//m_lineRenderer.sortingOrder = m_depth;
 
-			if (arg_arm.IsShotened()) {
+			if (arg_arm.m_currentState.GetType() == typeof(ArmStandByState)) {
 				m_lineRenderer.numPositions = 0;
 			}
 			else {
 				m_lineRenderer.numPositions = 2;
-				m_lineRenderer.SetPosition(0 , (Vector3)arg_arm.GetBottomPosition() + (Vector3.forward * m_depth));
-				m_lineRenderer.SetPosition(1 , (Vector3)arg_arm.GetTopPosition() + (Vector3.forward * m_depth));
+				m_lineRenderer.SetPosition(0 , (Vector3)arg_arm.GetBottomPosition() + (Vector3.forward * -m_depth));
+				m_lineRenderer.SetPosition(1 , (Vector3)arg_arm.GetTopPosition() + (Vector3.forward * -m_depth));
 			}
 		}
 	}

@@ -9,10 +9,16 @@ using UnityEngine;
 namespace ToyBox {
 	public interface IPlayerState {
 
-		void OnEnter(Player arg_player);
-		void OnUpdate(Player arg_player);
-		void OnExit(Player arg_player);
+		void OnEnter(PlayerComponent arg_player);
+		void OnUpdate(PlayerComponent arg_player);
+		void OnExit(PlayerComponent arg_player);
 
-		void AddTaskIfAble(Player arg_player,IPlayerCommand arg_command);
+		/// <summary>
+		/// 次に遷移されるステートを返す
+		/// </summary>
+		/// <param name="arg_layer"></param>
+		/// <returns></returns>
+		IPlayerState GetNextState(PlayerComponent arg_player);
+
 	}
 }

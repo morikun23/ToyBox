@@ -8,37 +8,30 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	[System.Serializable]
-	public class Hand : ObjectBase {
-
-		public Queue<IHandCommand> m_task { get; private set; }
+	public class Hand : HandComponent {
 
 		/// <summary>
 		/// 初期化
 		/// </summary>
-		/// <param name="arg_arm"></param>
-		public void Initialize(Arm arg_arm) {
-			m_task = new Queue<IHandCommand>();
+		public void Initialize() {
+			m_viewer = GetComponentInChildren<HandViewer>();
+			m_viewer.Initialize(this);
 		}
 
 		/// <summary>
 		/// 更新
 		/// </summary>
-		/// <param name="arg_arm"></param>
-		public void UpdateByFrame(Arm arg_arm) {
-			
+		public void UpdateByFrame() {
+
+			m_transform.position = m_owner.Arm.GetTopPosition();
+
+			if (m_graspingItem) {
+				m_graspingItem.OnGraspedStay(m_owner);
+			}
+
+			m_viewer.UpdateByFrame(this);
+			m_viewer.SetRotation(m_owner.Arm.m_currentAngle);
 		}
 
-		/// <summary>
-		/// アームの向きに合わせて角度を調整する
-		/// </summary>
-		/// <param name="arg_angle">角度</param>
-		public void SetRotation(float arg_angle) {
-			m_transform.eulerAngles = Vector3.forward * arg_angle;
-		}
-
-		public void SetGrabbable() {
-
-		}
 	}
 }
