@@ -35,6 +35,7 @@ namespace ToyBox {
 			m_arm.SetOwner(this);
 			m_arm.Initialize();
 			m_hand = FindObjectOfType<Hand>();
+			m_playableArm = m_arm;
 			m_playableHand = m_hand;
 			m_hand.SetOwner(this);
 			m_hand.Initialize();
