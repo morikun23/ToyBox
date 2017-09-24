@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public class StartPoint : MonoBehaviour {
+	public class StartPoint : CheckPoint {
 
 		public virtual void Initialize(PlayerComponent arg_player) {
 
