@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public class CheckPoint : StartPoint {
+	public class CheckPoint : MonoBehaviour {
 
-		public override void Initialize(PlayerComponent arg_player) {
-			base.Initialize(arg_player);
-		}
+		//チェックポイントを区別するための個別番号
+		public int m_id;
 
-		public override void Generate(PlayerComponent arg_player) {
-			base.Generate(arg_player);
-		}
+		//チェックポイントが機能されているか
+		public bool m_isActive;
+				
 	}
 }
