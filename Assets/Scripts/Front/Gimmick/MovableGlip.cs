@@ -8,13 +8,21 @@ namespace ToyBox {
 		private Vector3 m_direction;
 
 		public override void OnGraspedEnter(PlayerComponent arg_player) {
+#if DEVELOP
+			Debug.Log("Grasped : Enter");
+#endif
 			base.OnGraspedEnter(arg_player);
 			arg_player.Arm.m_shorten = true;
 			m_direction = ((Vector2)arg_player.Arm.m_transform.position - arg_player.Arm.m_targetPosition).normalized;
-
+			arg_player.m_rigidbody.isKinematic = true;
 		}
 
 		public override void OnGraspedStay(PlayerComponent arg_player) {
+
+#if DEVELOP
+			Debug.Log("Grasped : Update");
+#endif
+
 			ArmComponent arm = arg_player.Arm;
 
 			if (arm.m_lengthBuf.Count > 0) {
@@ -23,9 +31,15 @@ namespace ToyBox {
 			else {
 				arm.m_transform.position = m_transform.position;
 			}
+			arg_player.m_rigidbody.velocity = Vector2.zero;
 		}
 
 		public override void OnGraspedExit(PlayerComponent arg_player) {
+
+#if DEVELOP
+			Debug.Log("Grasped : Exit");
+#endif
+
 			base.OnGraspedExit(arg_player);
 			arg_player.m_rigidbody.isKinematic = false;
 			arg_player.m_inputHandle.m_reach = false;

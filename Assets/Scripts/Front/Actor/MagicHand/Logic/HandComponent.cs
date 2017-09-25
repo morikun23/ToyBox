@@ -25,6 +25,9 @@ namespace ToyBox {
 		}
 
 		public void CallResultArmLengthend(bool arg_result) {
+#if DEVELOP
+			Debug.Log("CallLengthend: " + arg_result);
+#endif
 			if (arg_result) {
 				m_graspingItem = m_itemBuffer;
 				m_IsGrasping = true;

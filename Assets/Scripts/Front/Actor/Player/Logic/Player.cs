@@ -21,7 +21,10 @@ namespace ToyBox {
 				return m_hand;
 			}
 		}
-
+#if DEVELOP
+		[SerializeField]
+		string dev_state;
+#endif
 		public void Initialize() {
 			m_inputHandle = new InputHandle();
 			m_currentState = new OnPlayerGroundedState();
@@ -50,7 +53,10 @@ namespace ToyBox {
 			if (nextState != null) {
 				StateTransition(nextState);
 			}
-			
+
+#if DEVELOP
+			dev_state = m_currentState.ToString();
+#endif
 			m_currentState.OnUpdate(this);
 			m_arm.UpdateByFrame();
 			m_hand.UpdateByFrame();
