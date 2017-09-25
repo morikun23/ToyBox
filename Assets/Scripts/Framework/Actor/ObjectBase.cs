@@ -40,5 +40,13 @@ namespace ToyBox {
 				return m_transformBuf;
 			}
 		}
+
+		/// <summary>
+		/// 手動でTransformを設定できます
+		/// </summary>
+		/// <param name="arg_transform"></param>
+		public void SetTransform(Transform arg_transform) {
+			m_transformBuf = arg_transform;
+		}
 	}
 }
