@@ -14,6 +14,7 @@ namespace ToyBox {
 			base.OnGraspedEnter(arg_player);
 			arg_player.Arm.m_shorten = true;
 			m_direction = ((Vector2)arg_player.Arm.m_transform.position - arg_player.Arm.m_targetPosition).normalized;
+			arg_player.m_rigidbody.isKinematic = true;
 		}
 
 		public override void OnGraspedStay(PlayerComponent arg_player) {
@@ -30,6 +31,7 @@ namespace ToyBox {
 			else {
 				arm.m_transform.position = m_transform.position;
 			}
+			arg_player.m_rigidbody.velocity = Vector2.zero;
 		}
 
 		public override void OnGraspedExit(PlayerComponent arg_player) {
