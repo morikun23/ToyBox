@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public class OnPlayerAirState : IPlayerState {
+	public class PlayerIdleState : IPlayerState {
 
 		/// <summary>
 		/// ステート開始時
@@ -30,11 +30,10 @@ namespace ToyBox {
 		}
 
 		public virtual IPlayerState GetNextState(PlayerComponent arg_player) {
-			
-			if (arg_player.m_inputHandle.m_run) {
-				return new PlayerAirRunState(arg_player.m_direction);
-			}
-			return new PlayerAirIdleState();
+			if (arg_player.m_inputHandle.m_reach) { return new PlayerReachState(this); }
+			if (arg_player.m_inputHandle.m_run) { return new PlayerRunState(arg_player.m_direction); }
+			if (arg_player.m_inputHandle.m_jump) { return new PlayerJumpState(); }
+			return null;
 		}
 	}
 }

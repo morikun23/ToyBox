@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public class OnPlayerGroundedState : IPlayerState {
+	public class OnPlayerAirState : IPlayerState {
 
 		/// <summary>
 		/// ステート開始時
@@ -18,7 +18,7 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_player"></param>
 		public virtual void OnUpdate(PlayerComponent arg_player) {
-			
+
 		}
 
 		/// <summary>
@@ -30,8 +30,8 @@ namespace ToyBox {
 		}
 
 		public virtual IPlayerState GetNextState(PlayerComponent arg_player) {
-			return new PlayerGroundedIdleState();
+			if (arg_player.m_isGrounded) { return new OnPlayerGroundedState(); }
+			return null;
 		}
-
 	}
 }

@@ -21,6 +21,8 @@ namespace ToyBox {
 
 		//自身の状態（Stateパターンでの実装）
 		public IPlayerState m_currentState { get; protected set; }
+		//自身の設置状態
+		public IPlayerState m_groundedState { get; protected set; }
 
 		//地面に接しているか
 		public bool m_isGrounded { get; protected set; }
@@ -31,6 +33,9 @@ namespace ToyBox {
 
 		public abstract HandComponent Hand { get; }
 		
+		[HideInInspector]
+		public bool m_ableJump;
+
 		/// <summary>
 		/// 地面に着いているかを調べる
 		/// </summary>
@@ -48,5 +53,6 @@ namespace ToyBox {
 			m_currentState = arg_nextState;
 			m_currentState.OnEnter(this);
 		}
+
 	}
 }

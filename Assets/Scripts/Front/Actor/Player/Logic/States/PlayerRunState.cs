@@ -7,27 +7,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public class PlayerGroundedRunState : OnPlayerGroundedState {
-		
-		private ActorBase.Direction m_directionBuf;
+	public class PlayerRunState : IPlayerState {
 
-		public PlayerGroundedRunState(ActorBase.Direction m_direction) {
-			this.m_directionBuf = m_direction;
+		public PlayerRunState(ActorBase.Direction m_direction) {
+			
 		}
 
 		/// <summary>
 		/// ステート開始時
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public override void OnEnter(PlayerComponent arg_player) {
-			arg_player.m_direction = m_directionBuf;
+		public virtual void OnEnter(PlayerComponent arg_player) {
+
 		}
 
 		/// <summary>
 		/// ステート中の更新
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public override void OnUpdate(PlayerComponent arg_player) {
+		public virtual void OnUpdate(PlayerComponent arg_player) {
 
 			if (Physics2D.BoxCast(arg_player.m_transform.position ,
 				arg_player.m_collider.size , 0 ,
@@ -47,25 +45,14 @@ namespace ToyBox {
 		/// ステート終了時
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public override void OnExit(PlayerComponent arg_player) {
-			
+		public virtual void OnExit(PlayerComponent arg_player) {
+
 		}
 
-		public override IPlayerState GetNextState(PlayerComponent arg_player) {
+		public virtual IPlayerState GetNextState(PlayerComponent arg_player) {
 			if (arg_player.m_inputHandle.m_reach) { return new PlayerReachState(this); }
-			if (arg_player.m_inputHandle.m_jump) {
-				return new PlayerGroundedJumpState();
-			}
-
-			if (arg_player.m_inputHandle.m_run) {
-				if (m_directionBuf != arg_player.m_direction) {
-					return new PlayerGroundedRunState(arg_player.m_direction);
-				}
-			}
-			else {
-				return new PlayerGroundedIdleState();
-			}
-
+			if (arg_player.m_inputHandle.m_jump) { return new PlayerJumpState(); }
+			if(!arg_player.m_inputHandle.m_run) { return new PlayerIdleState(); }
 			return null;
 		}
 

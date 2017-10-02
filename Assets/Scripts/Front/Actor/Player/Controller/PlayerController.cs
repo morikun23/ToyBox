@@ -55,7 +55,7 @@ namespace ToyBox {
 
 			m_playable.m_inputHandle.m_run = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow);
 
-			m_playable.m_inputHandle.m_jump = Input.GetKey(KeyCode.Space);
+			m_playable.m_inputHandle.m_jump = Input.GetKeyDown(KeyCode.Space);
 		}
 
 	

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public class PlayerGroundedJumpState : OnPlayerGroundedState {
+	public class PlayerJumpState : IPlayerState {
 
 		private const float JUMP_POWER = 250f;
 
@@ -15,15 +15,16 @@ namespace ToyBox {
 		/// ステート開始時
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public override void OnEnter(PlayerComponent arg_player) {
+		public virtual void OnEnter(PlayerComponent arg_player) {
 			arg_player.m_rigidbody.AddForce(Vector2.up * JUMP_POWER);
+
 		}
 
 		/// <summary>
 		/// ステート中の更新
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public override void OnUpdate(PlayerComponent arg_player) {
+		public virtual void OnUpdate(PlayerComponent arg_player) {
 			
 		}
 
@@ -31,12 +32,12 @@ namespace ToyBox {
 		/// ステート終了時
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public override void OnExit(PlayerComponent arg_player) {
+		public virtual void OnExit(PlayerComponent arg_player) {
 			
 		}
 
-		public override IPlayerState GetNextState(PlayerComponent arg_player) {
-			return new OnPlayerAirState().GetNextState(arg_player);
+		public virtual IPlayerState GetNextState(PlayerComponent arg_player) {
+			return new PlayerIdleState();
 		}
 	}
 }
