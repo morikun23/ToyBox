@@ -43,13 +43,13 @@ namespace ToyBox {
 				if (m_hand.IsGrasping()) {
 					m_hand.Release();
 				}
-				else if (hit && m_playable.CallWhenWishItem()) {
-					Item item = hit.collider.gameObject.GetComponent<Item>();
-					#region アイテムに向けて手を伸ばすための処理（ほぼテンプレ）
-					m_hand.SetItemBuffer(item);
-					m_arm.SetTargetPosition(item.m_transform.position);
-					m_playable.m_inputHandle.m_reach = true;
-					#endregion
+				else if(m_playable.CallWhenWishItem()){
+					if (hit) {
+						Item item = hit.collider.GetComponent<Item>();
+						m_hand.SetItemBuffer(item);
+						m_arm.SetTargetPosition(item.m_transform.position);
+						m_playable.m_inputHandle.m_reach = true;
+					}
 				}
 			}
 
