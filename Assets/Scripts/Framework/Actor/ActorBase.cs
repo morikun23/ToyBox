@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public abstract class ActorBase : AnimationObject {
+	public abstract class ActorBase : ObjectBase {
 		
 		//移動速度
 		public float m_speed;
