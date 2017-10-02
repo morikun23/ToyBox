@@ -42,6 +42,8 @@ namespace ToyBox{
 		// Update is called once per frame
 		public void Update () {
 
+			#if UNITY_ANDROID && DEVICE_ANDROID
+
 			int baf_i = 0;
 			foreach (Touch t in Input.touches) {
 
@@ -61,13 +63,11 @@ namespace ToyBox{
 					Started ();
 					m_pos_init[baf_i] = m_pos_input[baf_i];
 					flg_start[baf_i] = true;
-					//Debug.Log ("START");
 					break;
 
 				case TouchPhase.Moved:
 					if (!flg_start [baf_i])
 						continue;
-					//Debug.Log ("FINGER MOVEING");
 					Moving (t.deltaPosition);
 					CheckRotate (baf_i);
 					flg_move [baf_i] = true;
@@ -79,10 +79,8 @@ namespace ToyBox{
 
 					if (!CheckMove (baf_i)) {
 						SwipeEnd ();
-						//Debug.Log ("SWIPE END");
 					} else {
 						TouchEnd ();
-						//Debug.Log ("TOUCH END");
 					}
 					flg_start [baf_i] = false;
 					flg_move [baf_i] = false;
@@ -102,6 +100,47 @@ namespace ToyBox{
 					break;
 				}
 			}
+			#endif
+
+			#if UNITY_STANDALONE_WIN || DEVELOP
+			if(Input.GetMouseButtonDown(0)){
+				//タッチ位置を取得
+				//１フレーム前のタッチ座標を格納
+				m_pos_inputBefore[0] = m_pos_input[0];
+				m_pos_inputScreenBefore [0] = m_pos_inputScreen [0];
+				m_pos_inputScreen[0] = Input.mousePosition;
+				m_pos_input[0] = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+				if(Input.GetMouseButtonDown(0)){
+					if (!CheckHitPoint (m_pos_input[0]))
+						return;
+					Started ();
+					m_pos_init[0] = m_pos_input[0];
+					flg_start[0] = true;
+				}else if(Input.GetMouseButtonUp(0)){
+					if (!flg_start [0])
+						return;
+					Moving (Input.mouseScrollDelta);
+					CheckRotate (0);
+					flg_move [0] = true;
+				}else{
+					if (!flg_start [0])
+						return;
+					Moving (Input.mouseScrollDelta);
+					CheckRotate (0);
+					flg_move [0] = true;
+					//return;
+				}
+
+				if (flg_move[0] && flg_start[0]) {
+					if(num_rotateDirection[0] == 1){
+						RightRotate (1);
+					}else if(num_rotateDirection[0] == -1){
+						LeftRotate (-1);
+					}
+					//return;
+				}
+			}
+			#endif
 		}
 
 		/// <summary>
