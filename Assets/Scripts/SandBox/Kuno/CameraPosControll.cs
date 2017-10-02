@@ -157,19 +157,10 @@ namespace ToyBox.Kuno{
 
 		/// <summary>
 		/// SetTargetID関数で設定したIDのカメラムーブを再生します。
-		/// IsHomingModeの値がtrueなら、強制的にID0が再生されます。
 		/// </summary>
 		public void StartTargetMove(){
 			StartCoroutine (MoveToTarget());
 		}
-			
-		/// <summary>
-		/// モードを追従モードか座標指定モードにするかを設定します。
-		/// true:追従モード。SetTargetObject及びInspector内で指定したObjを追従する。
-		/// false:座標指定モード。SetTargetIDで指定された座標にカメラを固定する。
-		/// </summary>
-		public void IsHomingMode(bool IsHoming){
-			m_flg_isHomingMode = IsHoming;
-		}
+
 	}
 }

@@ -23,6 +23,7 @@ namespace ToyBox.Kuno{
 		// Use this for initialization
 		void Start () {
 			m_sRend_ = GetComponent<SpriteRenderer> ();
+
 		}
 		
 		// Update is called once per frame
