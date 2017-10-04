@@ -48,6 +48,8 @@ namespace ToyBox.Kuno{
 			public Transform pos_target;
 			//カメラの指定スケール(デフォルトで5)
 			public float num_scale;
+			//このカメラidを使用中、プレーヤーは操作可能か？
+			public bool flg_isPlayerActive;
 		}
 		[SerializeField]
 		CameraStatus[] m_str_cameraStatus = new CameraStatus[1];
@@ -85,6 +87,7 @@ namespace ToyBox.Kuno{
 				flg_hoge = false;
 				StartTargetMove ();
 			}
+				
 		}
 
 
@@ -124,12 +127,11 @@ namespace ToyBox.Kuno{
 				yield return null;
 			}
 
-
-
 			if(m_flg_isHomingMode)
 				m_flg_isComplate = true;
 
 			yield break;
+
 		}
 
 
@@ -160,6 +162,15 @@ namespace ToyBox.Kuno{
 		/// </summary>
 		public void StartTargetMove(){
 			StartCoroutine (MoveToTarget());
+		}
+
+		/// <summary>
+		/// 現在使用中のカメラIDで、プレーヤーが操作可能かどうかを返します。
+		/// true :プレーヤーは操作可能です。
+		/// false:プレーヤーは操作されるべきではありません。
+		/// </summary>
+		public bool CheckPlayerActive(){
+			return m_str_cameraStatus [num_id].flg_isPlayerActive;
 		}
 
 	}
