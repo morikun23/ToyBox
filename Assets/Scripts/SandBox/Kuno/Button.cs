@@ -8,7 +8,7 @@ namespace ToyBox.Kuno{
 
 		//このボタンで開くシャッター
 		[SerializeField]
-		GameObject m_obj_shutter;
+		Shutter m_scr_shutter;
 
 		//通常時と押されている時、それぞれのスプライト
 		[SerializeField]
@@ -20,21 +20,21 @@ namespace ToyBox.Kuno{
 		SpriteRenderer m_sRend_;
 
 
-		// Use this for initialization
-		void Start () {
+		void Start(){
 			m_sRend_ = GetComponent<SpriteRenderer> ();
-
 		}
-		
+
 		// Update is called once per frame
 		void Update () {
 		}
 
 		void OnTriggerEnter2D(Collider2D arg_col){
 			m_sRend_.sprite = m_spr_pushed;
+			StartCoroutine (m_scr_shutter.OpenMoveCamera());
 		}
 		void OnTriggerExit2D(Collider2D arg_col){
 			m_sRend_.sprite = m_spr_newtoral;
+			StartCoroutine (m_scr_shutter.CloseMoveCamera());
 		}
 
 
