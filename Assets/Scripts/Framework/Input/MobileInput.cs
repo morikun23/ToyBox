@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox{
-	public class MobileInput : MonoBehaviour {
+	public class MobileInput : MonoBehaviour {                      
 
 		Vector3[] m_pos_input = new Vector3[10];
 		Vector3[] m_pos_inputScreen = new Vector3[10];
