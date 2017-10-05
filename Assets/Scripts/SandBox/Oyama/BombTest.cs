@@ -77,7 +77,6 @@ namespace ToyBox.Oyama
                 //再生中のアニメ「Bomb」の再生時間を読み取って、その時間後に爆破エフェクト&接触判定を取って壁を壊したい
                 Invoke("Explosion", m_anime.GetCurrentAnimatorStateInfo(0).length);
 
-
                 m_startExplosionFlag = true;
                 
             }
@@ -113,18 +112,20 @@ namespace ToyBox.Oyama
                 }
                 else if(hit[i].transform.gameObject.layer == LayerMask.NameToLayer("BrokenWall"))
                 {
-                    Instantiate(m_breakEffect, hit[i].transform.position, hit[i].transform.rotation);
+                    GameObject eff_breakwall = Instantiate(m_breakEffect, hit[i].transform.position, hit[i].transform.rotation);
                     Destroy(hit[i].transform.gameObject);
+
+                    Destroy(eff_breakwall,eff_breakwall.GetComponent<ParticleSystem>().duration);
                 }
             }
 
             //リジッドボデェを切る
             m_rigid.Sleep();
 
-            GameObject eff = Instantiate(m_brastEffect, transform.position, Quaternion.identity);
-            eff.transform.parent = transform;
+            GameObject eff_brast = Instantiate(m_brastEffect, transform.position, Quaternion.identity);
+            eff_brast.transform.parent = transform;
 
-            Destroy(transform.gameObject, eff.GetComponent<ParticleSystem>().duration);
+            Destroy(transform.gameObject, eff_brast.GetComponent<ParticleSystem>().duration);
 
         }
         
