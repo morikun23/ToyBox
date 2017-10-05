@@ -27,7 +27,15 @@ namespace ToyBox {
 		/// ※バッファと違って目に見えて掴んでいるとき
 		/// </summary>
 		public Item m_graspingItem { get; protected set; }
-		
+
+#if DEVELOP
+		[SerializeField]
+		protected Item dev_graspingItem;
+
+		[SerializeField]
+		protected bool dev_isGrasping;
+#endif
+
 		//持ち主
 		public PlayerComponent m_owner { get; protected set; }
 
