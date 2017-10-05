@@ -10,10 +10,14 @@ namespace ToyBox {
 		//--------------------------
 
 		//RigidBody
-		public Rigidbody2D m_rigidbody { get; protected set; }
+		public abstract Rigidbody2D m_rigidbody { get; }
 
 		//Collider
-		public BoxCollider2D m_collider { get; protected set; }
+		public abstract BoxCollider2D m_body { get; }
+
+		//Collider
+		public abstract BoxCollider2D m_foot { get; }
+
 
 		//--------------------------
 		//パラメータ
@@ -26,10 +30,7 @@ namespace ToyBox {
 		//自身のギミック効果状態
 		public IPlayerGimmickInfo m_currentGimmickInfo { get; protected set; }
 
-		//地面に接しているか
-		public bool m_isGrounded { get; protected set; }
-
-		protected PlayerViewer m_viewer { get; set; }
+		public PlayerViewer m_viewer { get; protected set; }
 
 		public abstract ArmComponent Arm { get; }
 
@@ -43,7 +44,9 @@ namespace ToyBox {
 		/// </summary>
 		/// <returns>着地しているか</returns>
 		public bool IsGrounded() {
-			return Physics2D.BoxCast(transform.position , m_collider.bounds.size , 0f , Vector2.down , 0.1f , 1 << LayerMask.NameToLayer("Ground"));
+			return Physics2D.BoxCast(m_foot.bounds.center , m_foot.bounds.size ,
+				0f , Vector2.down , m_foot.bounds.size.y / 2 ,
+				1 << LayerMask.NameToLayer("Ground"));
 		}
 
 		/// <summary>

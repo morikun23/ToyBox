@@ -21,6 +21,9 @@ namespace ToyBox {
 		//ハンドへの操作インターフェイス
 		public IPlayableHand m_playableHand { get; protected set; }
 
+		//地面に接しているか
+		public bool m_isGrounded { get; protected set; }
+
 		/// <summary>
 		/// アイテム（ギミック）を取得しようとしたときに
 		/// コールする関数

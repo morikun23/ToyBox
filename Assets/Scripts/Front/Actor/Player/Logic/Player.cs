@@ -21,6 +21,38 @@ namespace ToyBox {
 				return m_hand;
 			}
 		}
+
+		private Rigidbody2D m_rigidbodyBuf;
+
+		public override Rigidbody2D m_rigidbody {
+			get {
+				if(m_rigidbodyBuf == null) {
+					m_rigidbodyBuf = GetComponent<Rigidbody2D>();
+				}
+				return m_rigidbodyBuf;
+			}
+		}
+
+		[SerializeField]
+		private BoxCollider2D m_bodyColliderBuf;
+
+		public override BoxCollider2D m_body {
+			get {
+				//一応Find関数を使用しているが、なるべく使用したくない
+				return m_bodyColliderBuf ?? transform.FindChild("Body").GetComponent<BoxCollider2D>();
+			}
+		}
+
+		[SerializeField]
+		private BoxCollider2D m_footBuf;
+
+		public override BoxCollider2D m_foot {
+			get {
+				//一応Find関数を使用しているが、なるべく使用したくない
+				return m_bodyColliderBuf ?? transform.FindChild("Foot").GetComponent<BoxCollider2D>();
+			}
+		}
+
 #if DEVELOP
 		[SerializeField]
 		string dev_state;
@@ -33,9 +65,6 @@ namespace ToyBox {
 		/// </summary>
 		public void Initialize() {
 			m_inputHandle = new InputHandle();
-			m_rigidbody = GetComponent<Rigidbody2D>();
-			m_collider = GetComponent<BoxCollider2D>();
-
 			m_viewer = GetComponentInChildren<PlayerViewer>();
 			m_viewer.Initialize(this);
 
