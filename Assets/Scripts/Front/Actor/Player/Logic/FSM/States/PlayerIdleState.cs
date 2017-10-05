@@ -30,9 +30,16 @@ namespace ToyBox {
 		}
 
 		public virtual IPlayerState GetNextState(PlayerComponent arg_player) {
+			if (arg_player.Hand.IsGrasping()) {
+			
+				if(arg_player.Hand.m_graspingItem.GetType().IsSubclassOf(typeof(FixedItem))) {
+					//動けないアイテムをつかんでいるときは静止状態から遷移しない
+					return null;
+				}
+			}
 			if (arg_player.m_inputHandle.m_reach) { return new PlayerReachState(this); }
-			if (arg_player.m_inputHandle.m_run) { return new PlayerRunState(arg_player.m_direction); }
-			if (arg_player.m_inputHandle.m_jump) { return new PlayerJumpState(); }
+			if (arg_player.m_inputHandle.m_run) { return new PlayerRunState(); }
+			if (arg_player.m_inputHandle.m_jump && arg_player.m_ableJump) { return new PlayerJumpState(); }
 			return null;
 		}
 	}

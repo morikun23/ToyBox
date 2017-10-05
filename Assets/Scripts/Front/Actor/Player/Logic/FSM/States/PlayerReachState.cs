@@ -11,8 +11,6 @@ namespace ToyBox {
 
 		private IPlayerState m_stateBuf;
 
-		private Vector2 m_velocityBuf;
-
 		private ActorBase.Direction m_directionBuf;
 		public PlayerReachState(IPlayerState arg_state) {
 			m_stateBuf = arg_state;
@@ -23,7 +21,9 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_player"></param>
 		public void OnEnter(PlayerComponent arg_player) {
-			m_velocityBuf = arg_player.m_rigidbody.velocity;
+
+			arg_player.m_viewer.m_animator.SetBool("Reach" , true);
+			
 			arg_player.m_rigidbody.isKinematic = true;
 			arg_player.m_rigidbody.velocity = Vector2.zero;
 			m_directionBuf = arg_player.m_direction;
@@ -52,12 +52,14 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_player"></param>
 		public void OnExit(PlayerComponent arg_player) {
+
+			arg_player.m_viewer.m_animator.SetBool("Reach" , false);
+
 			if (!arg_player.Hand.m_graspingItem) {
 				arg_player.m_rigidbody.isKinematic = false;
 			}
-			if(m_velocityBuf.y > 0) { m_velocityBuf.y = 0; }
 
-			arg_player.m_rigidbody.velocity = m_velocityBuf;
+			arg_player.m_rigidbody.velocity = Vector2.zero;
 		}
 
 		public virtual IPlayerState GetNextState(PlayerComponent arg_player) {

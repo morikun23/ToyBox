@@ -8,17 +8,13 @@ using UnityEngine;
 
 namespace ToyBox {
 	public class PlayerRunState : IPlayerState {
-
-		public PlayerRunState(ActorBase.Direction m_direction) {
-			
-		}
-
+		
 		/// <summary>
 		/// ステート開始時
 		/// </summary>
 		/// <param name="arg_player"></param>
 		public virtual void OnEnter(PlayerComponent arg_player) {
-
+			arg_player.m_viewer.m_animator.SetBool("Run" , true);
 		}
 
 		/// <summary>
@@ -27,10 +23,8 @@ namespace ToyBox {
 		/// <param name="arg_player"></param>
 		public virtual void OnUpdate(PlayerComponent arg_player) {
 
-			if (Physics2D.BoxCast(arg_player.m_transform.position ,
-				arg_player.m_collider.size , 0 ,
-				new Vector2((int)arg_player.m_direction , 0) ,
-				0.1f , 1 << LayerMask.NameToLayer("Ground"))) {
+			//行き止まりである
+			if (IsDeadEnd(arg_player)) {
 				return;
 			}
 
@@ -46,14 +40,24 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_player"></param>
 		public virtual void OnExit(PlayerComponent arg_player) {
-
+			arg_player.m_viewer.m_animator.SetBool("Run" , false);
 		}
 
 		public virtual IPlayerState GetNextState(PlayerComponent arg_player) {
 			if (arg_player.m_inputHandle.m_reach) { return new PlayerReachState(this); }
-			if (arg_player.m_inputHandle.m_jump) { return new PlayerJumpState(); }
+			if (arg_player.m_inputHandle.m_jump && arg_player.m_ableJump) { return new PlayerJumpState(); }
 			if(!arg_player.m_inputHandle.m_run) { return new PlayerIdleState(); }
 			return null;
+		}
+
+		private bool IsDeadEnd(PlayerComponent arg_player) {
+			if (Physics2D.BoxCast(arg_player.m_transform.position ,
+				new Vector2(arg_player.m_body.bounds.size.x , 1) ,
+				0 ,new Vector2((int)arg_player.m_direction , 0) ,
+				0.1f , 1 << LayerMask.NameToLayer("Ground"))) {
+				return true;
+			}
+			return false;
 		}
 
 	}
