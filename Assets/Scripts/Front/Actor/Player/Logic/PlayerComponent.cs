@@ -21,8 +21,8 @@ namespace ToyBox {
 
 		//自身の状態（Stateパターンでの実装）
 		public IPlayerState m_currentState { get; protected set; }
-		//自身の設置状態
-		public IPlayerState m_groundedState { get; protected set; }
+		//自身の地形状態
+		public IPlayerGroundInfo m_currentGroundInfo { get; protected set; }
 
 		//地面に接しているか
 		public bool m_isGrounded { get; protected set; }
@@ -54,5 +54,14 @@ namespace ToyBox {
 			m_currentState.OnEnter(this);
 		}
 
+		/// <summary>
+		/// 地形情報を遷移させる
+		/// </summary>
+		/// <param name="arg_nextInfo">次の状態</param>
+		protected void GroundInfoTransition(IPlayerGroundInfo arg_nextInfo) {
+			m_currentGroundInfo.OnExit(this);
+			m_currentGroundInfo = arg_nextInfo;
+			m_currentGroundInfo.OnEnter(this);
+		}
 	}
 }
