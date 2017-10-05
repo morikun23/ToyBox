@@ -63,6 +63,8 @@ namespace ToyBox {
 			//地形FSM更新
 			UpdateByGround();
 
+			//ギミックFSM更新
+			UpdateByGimmick();
 
 			//行動FSM更新
 			UpdateByState();
@@ -104,6 +106,8 @@ namespace ToyBox {
 			m_currentState.OnEnter(this);
 			m_currentGroundInfo = new OnPlayerGroundedState();
 			m_currentGroundInfo.OnEnter(this);
+			m_currentGimmickInfo = new PlayerFreeState();
+			m_currentGimmickInfo.OnEnter(this);
 		}
 
 		/// <summary>
@@ -130,6 +134,15 @@ namespace ToyBox {
 			m_currentState.OnUpdate(this);
 		}
 
+		/// <summary>
+		/// ギミックによる状態処理を更新
+		/// </summary>
+		private void UpdateByGimmick() {
+			IPlayerGimmickInfo nextInfo = m_currentGimmickInfo.GetNextState(this);
+			if (nextInfo != null) {
+				GimmickInfoTransition(nextInfo);
+			}
+			m_currentGroundInfo.OnUpdate(this);
 		}
 	}
 }
