@@ -58,10 +58,10 @@ namespace ToyBox{
 		public int num_id = 0;
 		//モード。true=追従、false=座標固定
 		[SerializeField]
-		bool m_flg_isHomingMode = true;
+		bool m_flg_homingMode = true;
 
 		//Homing専用。移動が完了したらtrueになる
-		bool m_flg_isComplate = false;
+		bool m_flg_complate = false;
 
 		public bool flg_hoge;
 
@@ -76,7 +76,7 @@ namespace ToyBox{
 		// Update is called once per frame
 		void Update () {
 			//isHomingModeとisComplateがtrueなら、カメラをターゲットの位置に固定する
-			if(m_flg_isHomingMode && m_flg_isComplate){
+			if(m_flg_homingMode && m_flg_complate){
 				m_obj_camera.transform.position = new Vector3 (
 					m_obj_cameraTarget.transform.position.x,
 					m_obj_cameraTarget.transform.position.y,
@@ -100,14 +100,14 @@ namespace ToyBox{
 
 			//0番は追従専用のモードなので、指定されたらHomingModeをOnにする
 			if (num_id == 0) {
-				m_flg_isHomingMode = true;
+				m_flg_homingMode = true;
 			} else {
 				//その他はfalseにする
-				m_flg_isHomingMode = false;
+				m_flg_homingMode = false;
 			}
 
 			//HomingModeによって対象を分岐する
-			if (!m_flg_isHomingMode) {
+			if (!m_flg_homingMode) {
 				baf_status = m_str_cameraStatus [num_id];
 			} else {
 				baf_status = m_str_cameraStatus [0];
@@ -127,8 +127,8 @@ namespace ToyBox{
 				yield return null;
 			}
 
-			if(m_flg_isHomingMode)
-				m_flg_isComplate = true;
+			if(m_flg_homingMode)
+				m_flg_complate = true;
 
 			yield break;
 
@@ -143,7 +143,7 @@ namespace ToyBox{
 		/// <param name="id">再生するカメラムーブのID</param>
 		public void SetTargetID(int id){
 			num_id = id;
-			m_flg_isComplate = false;
+			m_flg_complate = false;
 		}
 
 		/// <summary>
@@ -152,7 +152,7 @@ namespace ToyBox{
 		/// </summary>
 		public void StartTargetAndStart(int id){
 			num_id = id;
-			m_flg_isComplate = false;
+			m_flg_complate = false;
 			StartCoroutine (MoveToTarget());
 		}
 
@@ -164,7 +164,7 @@ namespace ToyBox{
 		public void SetTargetObject(GameObject obj){
 			m_obj_cameraTarget = obj;
 			m_str_cameraStatus [0].pos_target = obj.transform;
-			m_flg_isComplate = false;
+			m_flg_complate = false;
 		}
 
 		/// <summary>
