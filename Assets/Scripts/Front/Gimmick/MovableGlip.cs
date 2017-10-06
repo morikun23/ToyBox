@@ -30,6 +30,7 @@ namespace ToyBox {
 			}
 			else {
 				arm.m_transform.position = m_transform.position;
+				arg_player.gameObject.transform.position = arm.m_transform.position = transform.position;
 			}
 			arg_player.m_rigidbody.velocity = Vector2.zero;
 		}
