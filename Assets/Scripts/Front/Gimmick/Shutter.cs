@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ToyBox;
 
-namespace ToyBox.Kuno{
+namespace ToyBox{
 	public class Shutter : MonoBehaviour {
 
 		//このシャッターが開くのは初めてか？
@@ -75,8 +75,7 @@ namespace ToyBox.Kuno{
 			
 
 			if(m_flg_isInitOpen){
-				CameraPosControll.Instance.SetTargetID (m_num_cameraMoveId);
-				CameraPosControll.Instance.StartTargetMove ();
+				CameraPosController.Instance.SetTargetAndStart(m_num_cameraMoveId);
 			}
 
 			yield return new WaitForSeconds (m_num_attentionTime / 2);
@@ -85,8 +84,7 @@ namespace ToyBox.Kuno{
 			yield return new WaitForSeconds (m_num_attentionTime);
 
 			if (m_flg_isInitOpen) {
-				CameraPosControll.Instance.SetTargetID (0);
-				CameraPosControll.Instance.StartTargetMove ();
+				CameraPosController.Instance.SetTargetAndStart (0);
 				m_flg_isInitOpen = false;
 			}
 
@@ -99,8 +97,7 @@ namespace ToyBox.Kuno{
 				yield break;
 			
 			if (m_flg_isInitClose) {
-				CameraPosControll.Instance.SetTargetID (m_num_cameraMoveId);
-				CameraPosControll.Instance.StartTargetMove ();
+				CameraPosController.Instance.SetTargetAndStart(m_num_cameraMoveId);
 			}
 
 			yield return new WaitForSeconds (m_num_attentionTime / 2);
@@ -109,8 +106,7 @@ namespace ToyBox.Kuno{
 			yield return new WaitForSeconds (m_num_attentionTime);
 
 			if(m_flg_isInitClose){
-				CameraPosControll.Instance.SetTargetID (0);
-				CameraPosControll.Instance.StartTargetMove ();
+				CameraPosController.Instance.SetTargetAndStart (0);
 				m_flg_isInitClose = false;
 			}
 
