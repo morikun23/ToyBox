@@ -9,7 +9,7 @@ namespace ToyBox.Oyama
     {
 
         //端
-        Vector2 m_EndPoint1, m_EndPoint2;
+        Vector2 m_StartPoint, m_EndPoint;
 
         //動くバー
         GameObject m_Bar;
@@ -17,40 +17,43 @@ namespace ToyBox.Oyama
         //移動値
         [SerializeField]
         float m_moveNum;
+        
+        Vector2 nowPos,targetPos;
 
-        Vector2 unko,manko;
+        [SerializeField]
+        bool m_actionFlag = true;
 
         // Use this for initialization
         void Start()
         {
-            unko = manko = Vector2.zero;
+            nowPos = targetPos = Vector2.zero;
 
             //各種オブジェの参照
-            m_EndPoint1 = transform.FindChild("EndPoint1").transform.position;
-            m_EndPoint2 = transform.FindChild("EndPoint2").transform.position;
+            m_StartPoint = transform.FindChild("StartPoint").transform.position;
+            m_EndPoint = transform.FindChild("EndPoint").transform.position;
 
             m_Bar = transform.FindChild("Bar").gameObject;
-            m_Bar.transform.position = m_EndPoint1;
+            m_Bar.transform.position = m_StartPoint;
 
-            manko = m_EndPoint2;
+            targetPos = m_EndPoint;
         }
 
         // Update is called once per frame
         void Update()
         {
-            unko = Vector2.MoveTowards(m_Bar.transform.position, manko, m_moveNum);
+            if (!m_actionFlag) return;
 
-            Debug.Log(unko);
+            nowPos = Vector2.MoveTowards(m_Bar.transform.position, targetPos, m_moveNum);
 
-            if (unko == m_EndPoint1 || unko == m_EndPoint2)
+            if (nowPos == m_StartPoint || nowPos == m_EndPoint)
             {
-                if (manko == m_EndPoint1)
+                if (targetPos == m_StartPoint)
                 {
-                    manko = m_EndPoint2;
+                    targetPos = m_EndPoint;
                 }
                 else
                 {
-                    manko = m_EndPoint1;
+                    targetPos = m_StartPoint;
                 }
 
             }
@@ -58,9 +61,17 @@ namespace ToyBox.Oyama
             {
 
 
-                m_Bar.transform.position = unko;
+                m_Bar.transform.position = nowPos;
             }
         }
+
+
+        //外部(スイッチとか？)から作動を開始させたい場合に呼ぶやつ
+        void Action()
+        {
+            m_actionFlag = true;
+        }
+
     }
 
 }
