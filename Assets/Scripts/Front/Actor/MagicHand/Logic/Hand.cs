@@ -23,6 +23,11 @@ namespace ToyBox {
 		/// </summary>
 		public void UpdateByFrame() {
 
+#if DEVELOP
+			dev_graspingItem = m_graspingItem;
+			dev_isGrasping = m_IsGrasping;
+#endif
+
 			m_transform.position = m_owner.Arm.GetTopPosition();
 
 			if (m_graspingItem) {
@@ -30,7 +35,6 @@ namespace ToyBox {
 			}
 
 			m_viewer.UpdateByFrame(this);
-			m_viewer.SetRotation(m_owner.Arm.m_currentAngle);
 		}
 
 	}
