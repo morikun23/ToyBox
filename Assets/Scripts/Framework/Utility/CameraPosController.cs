@@ -147,6 +147,16 @@ namespace ToyBox{
 		}
 
 		/// <summary>
+		/// 引数で設定したIDのカメラムーブに設定して再生します。
+		/// IDは配列のNo.と同期しています。
+		/// </summary>
+		public void StartTargetAndStart(int id){
+			num_id = id;
+			m_flg_isComplate = false;
+			StartCoroutine (MoveToTarget());
+		}
+
+		/// <summary>
 		/// 追従モードの際、カメラが追従するオブジェクトを設定します。
 		/// この値はInspector内で初期設定を行う事もできます。
 		/// </summary>
