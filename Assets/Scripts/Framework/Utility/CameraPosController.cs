@@ -8,22 +8,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using ToyBox;
 
-namespace ToyBox.Kuno{
-	public class CameraPosControll : MonoBehaviour {
+namespace ToyBox{
+	public class CameraPosController : MonoBehaviour {
 
 		#region Singleton実装
-		private static CameraPosControll m_instance;
+		private static CameraPosController m_instance;
 
-		public static CameraPosControll Instance {
+		public static CameraPosController Instance {
 			get {
 				if (m_instance == null) {
-					m_instance = FindObjectOfType<CameraPosControll> ();
+					m_instance = FindObjectOfType<CameraPosController> ();
 				}
 				return m_instance;
 			}
 		}
 
-		private CameraPosControll() { }
+		private CameraPosController() { }
 		#endregion
 
 		//ターゲットになるカメラ
