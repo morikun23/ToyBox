@@ -150,7 +150,7 @@ namespace ToyBox{
 		/// 引数で設定したIDのカメラムーブに設定して再生します。
 		/// IDは配列のNo.と同期しています。
 		/// </summary>
-		public void StartTargetAndStart(int id){
+		public void SetTargetAndStart(int id){
 			num_id = id;
 			m_flg_complate = false;
 			StartCoroutine (MoveToTarget());
