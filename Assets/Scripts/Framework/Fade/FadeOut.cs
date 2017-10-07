@@ -23,7 +23,7 @@ namespace ToyBox {
 		/// フェードのアップデート処理
 		/// </summary>
 		/// <param name="arg_fadeInfo">フェード情報</param>
-		public void UpdateByFrame(Fade.FadeInfo arg_fadeInfo) {
+		public void OnUpdate(Fade.FadeInfo arg_fadeInfo) {
 			Color color = arg_fadeInfo.m_fadeObject.color;
 
 			color.a = arg_fadeInfo.m_currentAlpha + Time.deltaTime / arg_fadeInfo.m_duration;
