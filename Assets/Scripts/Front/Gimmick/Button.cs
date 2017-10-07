@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ToyBox;
 
-namespace ToyBox.Kuno{
+namespace ToyBox{
 	public class Button : MonoBehaviour {
 
 		//このボタンで開くシャッター
