@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public class OnPlayerAirState : IPlayerState {
+	public class OnPlayerAirState : IPlayerGroundInfo {
 
 		/// <summary>
 		/// ステート開始時
 		/// </summary>
 		/// <param name="arg_player"></param>
 		public virtual void OnEnter(PlayerComponent arg_player) {
-
+			arg_player.m_viewer.m_animator.SetBool("OnAir" , true);
 		}
 
 		/// <summary>
@@ -26,15 +26,12 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_player"></param>
 		public virtual void OnExit(PlayerComponent arg_player) {
-
+			arg_player.m_viewer.m_animator.SetBool("OnAir" , false);
 		}
 
-		public virtual IPlayerState GetNextState(PlayerComponent arg_player) {
-			
-			if (arg_player.m_inputHandle.m_run) {
-				return new PlayerAirRunState(arg_player.m_direction);
-			}
-			return new PlayerAirIdleState();
+		public virtual IPlayerGroundInfo GetNextState(PlayerComponent arg_player) {
+			if (arg_player.m_isGrounded) { return new OnPlayerGroundedState(); }
+			return null;
 		}
 	}
 }
