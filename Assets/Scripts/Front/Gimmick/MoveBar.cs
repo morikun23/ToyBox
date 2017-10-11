@@ -59,8 +59,7 @@ namespace ToyBox.Oyama
             }
             else
             {
-
-
+                
                 m_Bar.transform.position = nowPos;
             }
         }

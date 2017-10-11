@@ -8,22 +8,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using ToyBox;
 
-namespace ToyBox.Kuno{
-	public class CameraPosControll : MonoBehaviour {
+namespace ToyBox{
+	public class CameraPosController : MonoBehaviour {
 
 		#region Singleton実装
-		private static CameraPosControll m_instance;
+		private static CameraPosController m_instance;
 
-		public static CameraPosControll Instance {
+		public static CameraPosController Instance {
 			get {
 				if (m_instance == null) {
-					m_instance = FindObjectOfType<CameraPosControll> ();
+					m_instance = FindObjectOfType<CameraPosController> ();
 				}
 				return m_instance;
 			}
 		}
 
-		private CameraPosControll() { }
+		private CameraPosController() { }
 		#endregion
 
 		//ターゲットになるカメラ
@@ -48,6 +48,8 @@ namespace ToyBox.Kuno{
 			public Transform pos_target;
 			//カメラの指定スケール(デフォルトで5)
 			public float num_scale;
+			//このカメラidを使用中、プレーヤーは操作可能か？
+			public bool flg_isPlayerActive;
 		}
 		[SerializeField]
 		CameraStatus[] m_str_cameraStatus = new CameraStatus[1];
@@ -56,10 +58,10 @@ namespace ToyBox.Kuno{
 		public int num_id = 0;
 		//モード。true=追従、false=座標固定
 		[SerializeField]
-		bool m_flg_isHomingMode = true;
+		bool m_flg_homingMode = true;
 
 		//Homing専用。移動が完了したらtrueになる
-		bool m_flg_isComplate = false;
+		bool m_flg_complate = false;
 
 		public bool flg_hoge;
 
@@ -74,7 +76,7 @@ namespace ToyBox.Kuno{
 		// Update is called once per frame
 		void Update () {
 			//isHomingModeとisComplateがtrueなら、カメラをターゲットの位置に固定する
-			if(m_flg_isHomingMode && m_flg_isComplate){
+			if(m_flg_homingMode && m_flg_complate){
 				m_obj_camera.transform.position = new Vector3 (
 					m_obj_cameraTarget.transform.position.x,
 					m_obj_cameraTarget.transform.position.y,
@@ -85,6 +87,7 @@ namespace ToyBox.Kuno{
 				flg_hoge = false;
 				StartTargetMove ();
 			}
+				
 		}
 
 
@@ -97,14 +100,14 @@ namespace ToyBox.Kuno{
 
 			//0番は追従専用のモードなので、指定されたらHomingModeをOnにする
 			if (num_id == 0) {
-				m_flg_isHomingMode = true;
+				m_flg_homingMode = true;
 			} else {
 				//その他はfalseにする
-				m_flg_isHomingMode = false;
+				m_flg_homingMode = false;
 			}
 
 			//HomingModeによって対象を分岐する
-			if (!m_flg_isHomingMode) {
+			if (!m_flg_homingMode) {
 				baf_status = m_str_cameraStatus [num_id];
 			} else {
 				baf_status = m_str_cameraStatus [0];
@@ -124,12 +127,11 @@ namespace ToyBox.Kuno{
 				yield return null;
 			}
 
-
-
-			if(m_flg_isHomingMode)
-				m_flg_isComplate = true;
+			if(m_flg_homingMode)
+				m_flg_complate = true;
 
 			yield break;
+
 		}
 
 
@@ -141,7 +143,17 @@ namespace ToyBox.Kuno{
 		/// <param name="id">再生するカメラムーブのID</param>
 		public void SetTargetID(int id){
 			num_id = id;
-			m_flg_isComplate = false;
+			m_flg_complate = false;
+		}
+
+		/// <summary>
+		/// 引数で設定したIDのカメラムーブに設定して再生します。
+		/// IDは配列のNo.と同期しています。
+		/// </summary>
+		public void SetTargetAndStart(int id){
+			num_id = id;
+			m_flg_complate = false;
+			StartCoroutine (MoveToTarget());
 		}
 
 		/// <summary>
@@ -152,7 +164,7 @@ namespace ToyBox.Kuno{
 		public void SetTargetObject(GameObject obj){
 			m_obj_cameraTarget = obj;
 			m_str_cameraStatus [0].pos_target = obj.transform;
-			m_flg_isComplate = false;
+			m_flg_complate = false;
 		}
 
 		/// <summary>
@@ -160,6 +172,15 @@ namespace ToyBox.Kuno{
 		/// </summary>
 		public void StartTargetMove(){
 			StartCoroutine (MoveToTarget());
+		}
+
+		/// <summary>
+		/// 現在使用中のカメラIDで、プレーヤーが操作可能かどうかを返します。
+		/// true :プレーヤーは操作可能です。
+		/// false:プレーヤーは操作されるべきではありません。
+		/// </summary>
+		public bool CheckPlayerActive(){
+			return m_str_cameraStatus [num_id].flg_isPlayerActive;
 		}
 
 	}
