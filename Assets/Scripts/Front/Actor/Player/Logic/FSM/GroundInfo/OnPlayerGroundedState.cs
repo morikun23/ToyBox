@@ -17,7 +17,7 @@ namespace ToyBox {
 		public virtual void OnEnter(PlayerComponent arg_player) {
 			m_elapsedTime = 0;
 			arg_player.m_viewer.m_animator.SetBool("OnGround" , true);
-			arg_player.m_ableJump = true;
+			
 		}
 
 		/// <summary>
@@ -25,11 +25,7 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_player"></param>
 		public virtual void OnUpdate(PlayerComponent arg_player) {
-			m_elapsedTime += Time.deltaTime;
-			if(m_elapsedTime > m_jumpInterval) {
-				m_elapsedTime = 0;
-				
-			}
+			arg_player.m_ableJump = true;
 		}
 
 		/// <summary>
@@ -41,6 +37,7 @@ namespace ToyBox {
 		}
 
 		public virtual IPlayerGroundInfo GetNextState(PlayerComponent arg_player) {
+			if(arg_player.m_currentState.GetType() == typeof(PlayerJumpState)) { return new OnPlayerAirState(); }
 			if (!arg_player.m_isGrounded) { return new OnPlayerAirState(); }
 			return null;
 		}
