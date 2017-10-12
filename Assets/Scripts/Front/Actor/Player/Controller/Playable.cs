@@ -31,5 +31,31 @@ namespace ToyBox {
 		/// </summary>
 		/// <returns>結果</returns>
 		public abstract bool CallWhenWishItem();
+
+		public virtual void LookAtDirection(Direction arg_direction) {
+			m_direction = arg_direction;
+		}
+
+		/// <summary>
+		/// 引数で渡されるアイテムまで手を伸ばして掴む
+		/// もし既にアイテムをつかんでいたら手を離します
+		/// </summary>
+		/// <param name="arg_item"></param>
+		public virtual void ReachOutFor(Item arg_item) {
+			if (m_playableHand.IsGrasping()) {
+				//もし既にものをつかんでいるようであれば放す
+				m_playableHand.Release();
+				return;
+			}
+			
+			if(arg_item == null) { return; }
+
+			//自身がものをつかめる状況かをチェック
+			if (this.CallWhenWishItem()) {
+				m_playableHand.SetItemBuffer(arg_item);
+				m_playableArm.SetTargetPosition(arg_item.m_transform.position);
+				this.m_inputHandle.m_reach = true;
+			}
+		}
 	}
 }

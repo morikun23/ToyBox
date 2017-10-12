@@ -39,23 +39,16 @@ namespace ToyBox {
 
 				//タッチをした位置にオブジェクトがあるかどうかを判定
 				RaycastHit2D hit = Physics2D.Raycast(worldPoint , Vector2.zero,0.1f,1 << LayerMask.NameToLayer("Item"));
-
-				if (m_hand.IsGrasping()) {
-					m_hand.Release();
+				Item item = null;
+				if (hit) {
+					item = hit.collider.GetComponent<Item>();
 				}
-				else if(m_playable.CallWhenWishItem()){
-					if (hit) {
-						Item item = hit.collider.GetComponent<Item>();
-						m_hand.SetItemBuffer(item);
-						m_arm.SetTargetPosition(item.m_transform.position);
-						m_playable.m_inputHandle.m_reach = true;
-					}
-				}
+				m_playable.ReachOutFor(item);
 			}
 
 			m_playable.m_inputHandle.m_run = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow);
 
-			m_playable.m_inputHandle.m_jump = Input.GetKeyDown(KeyCode.Space);
+			m_playable.m_inputHandle.m_jump = Input.GetKey(KeyCode.Space);
 		}
 
 	
