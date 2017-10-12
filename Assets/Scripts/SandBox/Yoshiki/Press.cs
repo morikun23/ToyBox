@@ -14,7 +14,7 @@ namespace ToyBox
         Vector2 m_startCollider;
         Vector3 m_startSize;
         Vector3 m_startPosition;
-        Vector3 m_thornPosition = new Vector3 (0,-1.5f);
+        Vector3 m_thornPosition = new Vector3 (0,-1f);
 
         [SerializeField]
         float startTime;
@@ -91,7 +91,7 @@ namespace ToyBox
                     }
 
                 }
-                RaycastHit2D hitPlayer = Physics2D.BoxCast(transform.position + m_thornPosition, new Vector2(3f, 1f), 1f, Vector2.zero, 0.1f, 1 << LayerMask.NameToLayer("Player"));
+                RaycastHit2D hitPlayer = Physics2D.BoxCast(transform.position + m_thornPosition, new Vector2(3f, 1.5f), 1f, Vector2.zero, 0.1f, 1 << LayerMask.NameToLayer("Player"));
                 if(hitPlayer)
                 {
                     Hit();
@@ -103,12 +103,12 @@ namespace ToyBox
 
         //void OnDrawGizmos()
         //{
-        //    Gizmos.DrawWireCube(transform.position + m_thornPosition, new Vector2(3f, 1f));
+        //    Gizmos.DrawWireCube(transform.position + m_thornPosition, new Vector2(3f, 1.5f));
         //}
         public void Hit()
         {
             Debug.Log("hitPlayer");
-            //プレイヤーに当たった時の処理
+            //プレイヤーに当たった時の処理はここにお願いします
         }
         
     }
