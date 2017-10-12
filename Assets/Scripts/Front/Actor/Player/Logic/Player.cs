@@ -115,8 +115,12 @@ namespace ToyBox {
 		/// <returns></returns>
 		public override bool CallWhenWishItem() {
 
-			if (Hand.m_itemBuffer) {
+			if (m_arm.m_isActive) {
 				return false;
+			}
+
+			if (Hand.m_itemBuffer) {
+				//return false;
 			}
 
 			if (m_currentState.GetType() == typeof(PlayerReachState)) {
