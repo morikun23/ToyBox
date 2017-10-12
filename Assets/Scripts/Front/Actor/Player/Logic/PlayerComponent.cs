@@ -35,8 +35,7 @@ namespace ToyBox {
 		public abstract ArmComponent Arm { get; }
 
 		public abstract HandComponent Hand { get; }
-		
-		[HideInInspector]
+
 		public bool m_ableJump;
 
 		/// <summary>
