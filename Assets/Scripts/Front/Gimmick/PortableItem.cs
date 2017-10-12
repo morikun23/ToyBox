@@ -11,7 +11,7 @@ namespace ToyBox {
 
 		public override void OnGraspedStay(PlayerComponent arg_player) {
 			this.m_transform.position = arg_player.Arm.GetTopPosition();
-			if (arg_player.m_currentState.GetType() != typeof(PlayerReachState)) {
+			if (arg_player.GetCurrentState() != typeof(PlayerReachState)) {
 				arg_player.m_rigidbody.isKinematic = false;
 			}
 		}

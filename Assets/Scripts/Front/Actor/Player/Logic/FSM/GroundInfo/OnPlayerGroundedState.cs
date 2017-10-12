@@ -37,7 +37,7 @@ namespace ToyBox {
 		}
 
 		public virtual IPlayerGroundInfo GetNextState(PlayerComponent arg_player) {
-			if(arg_player.m_currentState.GetType() == typeof(PlayerJumpState)) { return new OnPlayerAirState(); }
+			if(arg_player.GetCurrentState() == typeof(PlayerJumpState)) { return new OnPlayerAirState(); }
 			if (!arg_player.m_isGrounded) { return new OnPlayerAirState(); }
 			return null;
 		}
