@@ -10,41 +10,38 @@ namespace ToyBox
 
         [SerializeField]
         GameObject [] m_number;
-        Number m_check;
 
-        int m_nowCount = 0;
-        int m_nextCount = 0;
+        bool [] m_check;
+
+        int m_nowCount;
+        int m_nextCount;
 
         void Start()
         {
             Initialize();
+            StartCoroutine("UpdateByFrame");
         }
-        void Update()
-        {
-            UpdateByFrame();
-        }
-        
+
+
         public void Initialize()
         {
-            m_check = m_number[m_nowCount].GetComponent<Number>();    
+            m_nowCount = 0;
+            m_nextCount = m_nowCount++;
+
+            for (int i = 0; i < m_number.Length; i++)
+            {
+                m_check[i] = m_number[i].GetComponent<Number>().hitNumber;
+
+            }
         }
 
         public void UpdateByFrame()
-        { 
-            if (m_number[m_nowCount] == null)
+        {
+            if (m_check[0])
             {
-                
+                                
             }
-            else
-            {
-                if (m_number[m_nowCount])
-                {
-
-                }
-            }
-
-
-
+         
         }
     }
 }
