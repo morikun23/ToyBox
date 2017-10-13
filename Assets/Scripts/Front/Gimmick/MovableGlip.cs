@@ -24,6 +24,9 @@ namespace ToyBox {
 			m_direction = ((Vector2)arg_player.Arm.m_transform.position - arg_player.Arm.m_targetPosition).normalized;
 			arg_player.m_rigidbody.isKinematic = true;
 			m_enu_state = GripState.ENTER;
+
+			SetAbleGrasp (false);
+			SetAbleRelease (false);
 		}
 
 		public override void OnGraspedStay(PlayerComponent arg_player) {
@@ -38,7 +41,10 @@ namespace ToyBox {
 				arm.m_transform.position = m_transform.position + (m_direction * arm.m_lengthBuf.Peek());
 			}
 			else {
-				m_enu_state = GripState.STAY;
+				if (m_enu_state == GripState.ENTER) {
+					m_enu_state = GripState.STAY;
+					SetAbleRelease (true);
+				}
 				arm.m_transform.position = m_transform.position;
 				arg_player.gameObject.transform.position = arm.m_transform.position = transform.position;
 			}
@@ -54,6 +60,9 @@ namespace ToyBox {
 			base.OnGraspedExit(arg_player);
 			arg_player.m_rigidbody.isKinematic = false;
 			arg_player.m_inputHandle.m_reach = false;
+
+			SetAbleGrasp (true);
+			SetAbleRelease (false);
 
 		}
 
