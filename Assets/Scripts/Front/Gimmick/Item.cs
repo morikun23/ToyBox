@@ -30,10 +30,7 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_player"></param>
 		public virtual void OnGraspedStay(PlayerComponent arg_player) {
-			//TODO:掴まれているの処理
-			//Armを縮めるのか、固定なのか、自分もついていくのか
-			//また、持ち運ばれるのか
-
+		
 		}
 
 		/// <summary>
@@ -42,9 +39,7 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_player"></param>
 		public virtual void OnGraspedExit(PlayerComponent arg_player) {
-			//TODO:掴まれているの処理
-			//Armを縮めるのか、固定なのか、自分もついていくのか
-			//また、持ち運ばれるのか
+			
 		}
 
 		/// <summary>
@@ -57,7 +52,6 @@ namespace ToyBox {
 		/// </summary>
 		public abstract bool IsAbleGrasp ();
 
-
 		public void SetAbleRelease(bool release){
 			m_flg_ableReleace = release;
 		}
@@ -65,6 +59,5 @@ namespace ToyBox {
 		public void SetAbleGrasp(bool grasp){
 			m_flg_ableGrasp = grasp;
 		}
-
 	}
 }
