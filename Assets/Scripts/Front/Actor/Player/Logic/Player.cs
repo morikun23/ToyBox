@@ -1,88 +1,177 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	[System.Serializable]
-	public class Player : ActorBase {
+	public class Player : PlayerComponent {
 
-		//--------------------------
-		//UnityComponent
-		//--------------------------
-		
-		//RigidBody
-		public Rigidbody2D m_rigidbody { get; private set; }
-		
-		//Collider
-		public BoxCollider2D m_collider { get; private set; }
+		private Arm m_arm;
 
-		//--------------------------
-		//パラメータ
-		//--------------------------
-
-		//アーム
-		public Arm m_arm { get; private set; }
-
-		//自身の状態（Stateパターンでの実装）
-		public IPlayerState m_currentState { get; private set; }
-		
-		//タスク
-		public Queue<IPlayerCommand> m_task { get; private set; }
-
-		//地面に接しているか
-		public bool m_isGrounded { get; private set; }
-
-		private PlayerViewer m_viewer { get; set; }
-
-		public void Initialize() {
-			m_currentState = new PlayerIdleState();
-			m_currentState.OnEnter(this);
-			m_task = new Queue<IPlayerCommand>();
-			m_rigidbody = GetComponent<Rigidbody2D>();
-			m_collider = GetComponent<BoxCollider2D>();
-			m_arm = GetComponentInChildren<Arm>();
-			m_arm.Initialize(this);
-
-			m_viewer = GetComponentInChildren<PlayerViewer>();
-			m_viewer.Initialize(this);
+		public override ArmComponent Arm {
+			get {
+				return m_arm;
+			}
 		}
 
-		public void UpdateByFrame() {
+		private Hand m_hand;
 
-			Debug.Log(m_currentState);
+		public override HandComponent Hand {
+			get {
+				return m_hand;
+			}
+		}
+
+		private Rigidbody2D m_rigidbodyBuf;
+
+		public override Rigidbody2D m_rigidbody {
+			get {
+				if(m_rigidbodyBuf == null) {
+					m_rigidbodyBuf = GetComponent<Rigidbody2D>();
+				}
+				return m_rigidbodyBuf;
+			}
+		}
+
+		[SerializeField]
+		private BoxCollider2D m_bodyColliderBuf;
+
+		public override BoxCollider2D m_body {
+			get {
+				//一応Find関数を使用しているが、なるべく使用したくない
+				return m_bodyColliderBuf ?? transform.FindChild("Body").GetComponent<BoxCollider2D>();
+			}
+		}
+
+		[SerializeField]
+		private BoxCollider2D m_footBuf;
+
+		public override BoxCollider2D m_foot {
+			get {
+				//一応Find関数を使用しているが、なるべく使用したくない
+				return m_bodyColliderBuf ?? transform.FindChild("Foot").GetComponent<BoxCollider2D>();
+			}
+		}
+
+#if DEVELOP
+		[SerializeField]
+		string dev_state;
+		[SerializeField]
+		string dev_ground;
+#endif
+
+		/// <summary>
+		/// 初期化
+		/// </summary>
+		public void Initialize() {
+			m_inputHandle = new InputHandle();
+			m_viewer = GetComponentInChildren<PlayerViewer>();
+			m_viewer.Initialize(this);
+
+			SetUpFSM();
+			
+			m_arm = GetComponentInChildren<Arm>();
+			m_arm.SetOwner(this);
+			m_arm.Initialize();
+			m_hand = FindObjectOfType<Hand>();
+			m_playableArm = m_arm;
+			m_playableHand = m_hand;
+			m_hand.SetOwner(this);
+			m_hand.Initialize();
+
+			m_ableJump = true;
+		}
+
+		/// <summary>
+		/// 更新
+		/// </summary>
+		public void UpdateByFrame() {
 
 			m_isGrounded = IsGrounded();
 
-			m_arm.UpdateByFrame(this);
-			m_currentState.OnUpdate(this);
+			//地形FSM更新
+			UpdateByGround();
 
-			m_viewer.UpdateByFrame(this);
+			//ギミックFSM更新
+			UpdateByGimmick();
+
+			//行動FSM更新
+			UpdateByState();
+
+			m_arm.UpdateByFrame();
+			m_hand.UpdateByFrame();
+
+#if DEVELOP
+			dev_state = m_currentState.ToString();
+			dev_ground = m_currentGroundInfo.ToString();
+#endif
+			
+			m_viewer.FlipByDirection(m_direction);
 		}
 
 		/// <summary>
-		/// タスクを追加する
+		/// 入力を受け取れるかのチェック
 		/// </summary>
-		/// <param name="arg_command"></param>
-		public void AddTask(IPlayerCommand arg_command) {
-			m_currentState.AddTaskIfAble(this , arg_command);
+		/// <returns></returns>
+		public override bool CallWhenWishItem() {
+
+			if (Hand.m_itemBuffer) {
+				return false;
+			}
+
+			if (m_currentState.GetType() == typeof(PlayerReachState)) {
+				return false;
+			}
+
+			
+			return true;
 		}
 
 		/// <summary>
-		/// 地面に着いているかを調べる
+		/// FSM系の初期化を行う
 		/// </summary>
-		/// <returns>着地しているか</returns>
-		public bool IsGrounded() {
-			return Physics2D.BoxCast(transform.position , m_collider.bounds.size , 0f , Vector2.down , 0.1f , 1 << LayerMask.NameToLayer("Ground"));
-		}
-
-		/// <summary>
-		/// ステートを遷移させる
-		/// </summary>
-		/// <param name="arg_nextState">次の状態</param>
-		public void StateTransition(IPlayerState arg_nextState) {
-			m_currentState.OnExit(this);
-			m_currentState = arg_nextState;
+		private void SetUpFSM() {
+			m_currentState = new PlayerIdleState();
 			m_currentState.OnEnter(this);
+			m_currentGroundInfo = new OnPlayerGroundedState();
+			m_currentGroundInfo.OnEnter(this);
+			m_currentGimmickInfo = new PlayerFreeState();
+			m_currentGimmickInfo.OnEnter(this);
+		}
+
+		/// <summary>
+		/// 地形による状態処理を更新
+		/// </summary>
+		private void UpdateByGround() {
+			IPlayerGroundInfo nextGround = m_currentGroundInfo.GetNextState(this);
+			if (nextGround != null) {
+				GroundInfoTransition(nextGround);
+			}
+			m_currentGroundInfo.OnUpdate(this);
+		}
+
+		/// <summary>
+		/// 基本状態を更新
+		/// </summary>
+		private void UpdateByState() {
+			IPlayerState nextState = m_currentState.GetNextState(this);
+			if (nextState != null) {
+				m_currentState.OnExit(this);
+				m_currentState = nextState;
+				m_currentState.OnEnter(this);
+			}
+			m_currentState.OnUpdate(this);
+		}
+
+		/// <summary>
+		/// ギミックによる状態処理を更新
+		/// </summary>
+		private void UpdateByGimmick() {
+			IPlayerGimmickInfo nextInfo = m_currentGimmickInfo.GetNextState(this);
+			if (nextInfo != null) {
+				GimmickInfoTransition(nextInfo);
+			}
+			m_currentGroundInfo.OnUpdate(this);
 		}
 	}
 }

@@ -42,6 +42,7 @@ namespace ToyBox {
 			}
 			m_fade.Initialize();
 			DontDestroyOnLoad(this.gameObject);
+			DontDestroyOnLoad(m_audioManager.gameObject);
 			DontDestroyOnLoad(m_fade.transform.parent.gameObject);
 		}
 
