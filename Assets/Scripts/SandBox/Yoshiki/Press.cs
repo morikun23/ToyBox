@@ -7,7 +7,6 @@ namespace ToyBox
 {
     public class Press : MonoBehaviour
     {
-        Rigidbody2D rigidbody2d;
         RectTransform m_rectTransform;
         BoxCollider2D m_collider;
 
@@ -17,18 +16,19 @@ namespace ToyBox
         Vector3 m_thornPosition = new Vector3 (0,-1f);
 
         [SerializeField]
-        float startTime;
+        float m_startTime;
 
         [SerializeField]
-        float speed;
+        float m_speed;
 
-        float accele;
-        float inertia = 1.15f;
+        float m_accele;
+        float INERTIA = 1.15f;
 
         [SerializeField]
-        float derayTime;
+        float m_derayTime;
 
-        bool reset = false;
+        bool m_hited = false;
+        bool m_reset = false;
 
         void Start()
         {
@@ -38,7 +38,6 @@ namespace ToyBox
 
         public void Initialize()
         {
-            rigidbody2d = GetComponent<Rigidbody2D>();
             m_rectTransform = GetComponent<RectTransform>();
             m_collider = GetComponent<BoxCollider2D>();
 
@@ -46,21 +45,21 @@ namespace ToyBox
             m_startSize = m_rectTransform.sizeDelta;
             m_startCollider = m_collider.size;
 
-            accele = speed;
+            m_accele = m_speed;
         }
 
         public IEnumerator UpdateByFrame()
         {
-            yield return new WaitForSeconds(startTime);
+            yield return new WaitForSeconds(m_startTime);
 
             while (true)
             {
-                if (reset)
+                if (m_reset)
                 {
-                    m_collider.size += new Vector2(0, -speed * inertia);
-                    m_rectTransform.position += new Vector3(0, speed * inertia/ 2);
-                    m_rectTransform.sizeDelta += new Vector2(0, -speed * inertia);
-                    m_thornPosition += new Vector3(0, speed * inertia/2);
+                    m_collider.size += new Vector2(0, -m_speed * INERTIA);
+                    m_rectTransform.position += new Vector3(0, m_speed * INERTIA/ 2);
+                    m_rectTransform.sizeDelta += new Vector2(0, -m_speed * INERTIA);
+                    m_thornPosition += new Vector3(0, m_speed * INERTIA/2);
 
 
 
@@ -69,32 +68,37 @@ namespace ToyBox
                         m_rectTransform.position = m_startPosition;
                         m_rectTransform.sizeDelta = m_startSize;
                         m_collider.size = m_startCollider;
-                        reset = false;
-                        yield return new WaitForSeconds(derayTime);
+                        m_reset = false;
+                        yield return new WaitForSeconds(m_derayTime);
                     }
 
                 }
                 else
                 {
-                    m_collider.size += new Vector2(0, accele);
-                    m_rectTransform.position += new Vector3(0, -accele / 2);
-                    m_rectTransform.sizeDelta += new Vector2(0, accele);
-                    m_thornPosition += new Vector3(0, -accele / 2);
-                    accele = accele * inertia;
+                    m_collider.size += new Vector2(0, m_accele);
+                    m_rectTransform.position += new Vector3(0, -m_accele / 2);
+                    m_rectTransform.sizeDelta += new Vector2(0, m_accele);
+                    m_thornPosition += new Vector3(0, -m_accele / 2);
+                    m_accele = m_accele * INERTIA;
                 
                     RaycastHit2D hitGround = Physics2D.BoxCast(transform.position + new Vector3(0f, -4f), new Vector2(1f, 3f), 1f, Vector2.zero, 0.1f, 1 << LayerMask.NameToLayer("Ground"));
                     if (hitGround)
                     {
-                        reset = true;
+                        m_reset = true;
                         yield return new WaitForSeconds(1f);
-                        accele = speed;
+                        m_accele = m_speed;
                     }
 
                 }
-                RaycastHit2D hitPlayer = Physics2D.BoxCast(transform.position + m_thornPosition, new Vector2(3f, 1.5f), 1f, Vector2.zero, 0.1f, 1 << LayerMask.NameToLayer("Player"));
-                if(hitPlayer)
+                if (!m_hited)
                 {
-                    Hit();
+                    RaycastHit2D hitPlayer = Physics2D.BoxCast(transform.position + m_thornPosition, new Vector2(3f, 1.5f), 1f, Vector2.zero, 0.1f, 1 << LayerMask.NameToLayer("Player"));
+
+                    if (hitPlayer)
+                    {
+                        Hit();
+
+                    }
                 }
                 yield return null;
             }
@@ -107,6 +111,7 @@ namespace ToyBox
         //}
         public void Hit()
         {
+            m_hited = true;
             Debug.Log("hitPlayer");
             //プレイヤーに当たった時の処理はここにお願いします
         }
