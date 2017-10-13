@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ToyBox
+namespace ToyBox.Kaihatsu
 {
     public class Signboard_Test : MonoBehaviour
     {

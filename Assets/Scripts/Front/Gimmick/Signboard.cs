@@ -19,8 +19,6 @@ namespace ToyBox
 
         //伸縮フラグ(参照渡し用)
         public bool m_ExtendFlg = true;
-
-        //
         
 
 
@@ -35,7 +33,6 @@ namespace ToyBox
         {
             //ダイアログ伸縮
             m_ExtendFlg = true;
-            //if ﾀﾞｲｱﾛｸﾞがちぢみきった{ arg_player.arm.shorten = true; }
         }
 
         
