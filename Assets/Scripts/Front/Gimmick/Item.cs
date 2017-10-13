@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public class Item : ObjectBase {
+	public abstract class Item : ObjectBase {
 
 		public enum State {
 			GRABBED,
@@ -42,8 +42,12 @@ namespace ToyBox {
 			//TODO:掴まれているの処理
 			//Armを縮めるのか、固定なのか、自分もついていくのか
 			//また、持ち運ばれるのか
-
 		}
+
+
+	//	public abstract bool IsAbleRelease ();
+
+	//	public abstract bool IsAbleGrasp ();
 
 	}
 }
