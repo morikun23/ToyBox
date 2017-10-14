@@ -4,7 +4,7 @@ using UnityEngine;
 using ToyBox;
 
 namespace ToyBox{
-	public class Button : MonoBehaviour {
+	public class Switch : MonoBehaviour {
 
 		//このボタンで開くシャッター
 		[SerializeField]

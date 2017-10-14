@@ -26,6 +26,7 @@ namespace ToyBox {
 #if DEVELOP
 			dev_graspingItem = m_graspingItem;
 			dev_isGrasping = m_IsGrasping;
+			dev_itemBuf = m_itemBuffer;
 #endif
 
 			m_transform.position = m_owner.Arm.GetTopPosition();
