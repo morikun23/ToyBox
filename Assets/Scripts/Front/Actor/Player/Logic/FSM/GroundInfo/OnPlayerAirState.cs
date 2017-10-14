@@ -11,6 +11,7 @@ namespace ToyBox {
 		/// <param name="arg_player"></param>
 		public virtual void OnEnter(PlayerComponent arg_player) {
 			arg_player.m_viewer.m_animator.SetBool("OnAir" , true);
+			arg_player.m_ableJump = false;
 		}
 
 		/// <summary>

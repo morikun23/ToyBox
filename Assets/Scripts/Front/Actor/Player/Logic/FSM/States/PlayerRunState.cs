@@ -8,13 +8,19 @@ using UnityEngine;
 
 namespace ToyBox {
 	public class PlayerRunState : IPlayerState {
-		
+
+		private ActorBase.Direction m_directionBuf;
+
 		/// <summary>
 		/// ステート開始時
 		/// </summary>
 		/// <param name="arg_player"></param>
 		public virtual void OnEnter(PlayerComponent arg_player) {
 			arg_player.m_viewer.m_animator.SetBool("Run" , true);
+
+			m_directionBuf = arg_player.m_direction;
+
+			
 		}
 
 		/// <summary>
@@ -27,12 +33,12 @@ namespace ToyBox {
 			if (IsDeadEnd(arg_player)) {
 				return;
 			}
-
-			arg_player.m_transform.position += new Vector3() {
+			arg_player.m_rigidbody.velocity = new Vector3() {
 				x = arg_player.m_speed * (int)arg_player.m_direction ,
-				y = 0 ,
+				y = arg_player.m_rigidbody.velocity.y ,
 				z = 0
 			};
+
 		}
 
 		/// <summary>
@@ -41,12 +47,20 @@ namespace ToyBox {
 		/// <param name="arg_player"></param>
 		public virtual void OnExit(PlayerComponent arg_player) {
 			arg_player.m_viewer.m_animator.SetBool("Run" , false);
+			arg_player.m_rigidbody.velocity = new Vector3() {
+				x = 0 ,
+				y = arg_player.m_rigidbody.velocity.y ,
+				z = 0
+			};
 		}
 
 		public virtual IPlayerState GetNextState(PlayerComponent arg_player) {
 			if (arg_player.m_inputHandle.m_reach) { return new PlayerReachState(this); }
 			if (arg_player.m_inputHandle.m_jump && arg_player.m_ableJump) { return new PlayerJumpState(); }
 			if(!arg_player.m_inputHandle.m_run) { return new PlayerIdleState(); }
+
+			if(arg_player.m_direction != m_directionBuf) { return new PlayerRunState(); }
+
 			return null;
 		}
 
