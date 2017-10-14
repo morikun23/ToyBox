@@ -113,14 +113,10 @@ namespace ToyBox {
 		/// 入力を受け取れるかのチェック
 		/// </summary>
 		/// <returns></returns>
-		public override bool CallWhenWishItem() {
+		public override bool IsAbleReach() {
 
 			if (m_arm.m_isActive) {
 				return false;
-			}
-
-			if (Hand.m_itemBuffer) {
-				//return false;
 			}
 
 			if (m_currentState.GetType() == typeof(PlayerReachState)) {

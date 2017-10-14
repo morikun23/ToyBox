@@ -38,6 +38,13 @@ namespace ToyBox {
 		[SerializeField]
 		protected Item dev_itemBuf;
 #endif
+		
+		/// <summary>
+		/// 現在掴んでいるものを主とする
+		/// </summary>
+		public Item GraspingItem {
+			get { return m_graspingItem; }
+		}
 
 		//持ち主
 		public PlayerComponent m_owner { get; protected set; }

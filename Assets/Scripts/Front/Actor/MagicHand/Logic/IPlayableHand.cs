@@ -8,6 +8,11 @@ namespace ToyBox {
 	public interface IPlayableHand {
 
 		/// <summary>
+		/// 現在掴んでいるアイテムを取得する
+		/// </summary>
+		Item GraspingItem { get; }
+
+		/// <summary>
 		/// タップしたアイテムをバッファとして持たせる
 		/// 伸ばす前にこれを実行してください
 		/// </summary>
