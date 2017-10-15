@@ -16,12 +16,10 @@ namespace ToyBox {
 		}
 
 		public override bool IsAbleGrasp (){
-			throw new System.NotImplementedException ();
 			return m_flg_ableGrasp;
 		}
 
 		public override bool IsAbleRelease (){
-			throw new System.NotImplementedException ();
 			return m_flg_ableReleace;
 		}
 	}
