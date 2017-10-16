@@ -45,7 +45,7 @@ namespace ToyBox {
 		public bool IsGrounded() {
 			return Physics2D.BoxCast(m_foot.bounds.center , m_foot.bounds.size ,
 				0f , Vector2.down , m_foot.bounds.size.y / 2 ,
-				1 << LayerMask.NameToLayer("Ground"));
+				1 << LayerMask.NameToLayer("Ground") | 1 << LayerMask.NameToLayer("Landable"));
 		}
 
 		/// <summary>
