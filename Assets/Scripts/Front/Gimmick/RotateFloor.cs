@@ -77,8 +77,14 @@ namespace ToyBox{
 				} else if (baf_rotationGrip <= 0) {
 					transform.eulerAngles = new Vector3 (0, 0,baf_rotationGrip * m_cur_rotateCurve.Evaluate((float)i/m_num_rotateComp) - (baf_rotationGrip - baf_rotationObj));
 				}
+
+				//回転中はグリップから手を離させない
+				m_scr_MovableGrip [arg_gripId].SetAbleRelease (false);
 				yield return null;
 			}
+
+			//回転が終わったら離してよいことにする
+			m_scr_MovableGrip[arg_gripId].SetAbleRelease(true);
 
 			//プレーヤーが手を離すのを待つ
 			while(m_scr_MovableGrip[arg_gripId].m_enu_state == MovableGlip.GripState.STAY){
