@@ -26,6 +26,25 @@ namespace ToyBox {
 
 		// Update is called once per frame
 		void Update() {
+
+			if (Input.GetMouseButtonDown(0)) {
+				Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+				//タッチをした位置にオブジェクトがあるかどうかを判定
+				RaycastHit2D hit = Physics2D.Raycast(worldPoint , Vector2.zero , 0.1f , 1 << LayerMask.NameToLayer("Item"));
+
+				if (m_playable.m_playableHand.IsGrasping()) {
+					m_playable.Release();
+				}
+				else {
+					if (hit) {
+						Item item = hit.collider.GetComponent<Item>();
+						m_playable.ReachOutFor(item);
+					}
+				}
+
+			}
+
 			foreach (Button button in m_buttons) {
 				button.UpdateByFrame();
 			}
