@@ -93,7 +93,7 @@ namespace ToyBox.Oyama
             //爆弾のコライダーの半径を取得し、爆風範囲とする
             float rad = GetComponent<CircleCollider2D>().radius;
             //爆風範囲はちょっと大きめで
-            rad += rad * 2;
+            rad += rad;
             
             List<RaycastHit2D> hit = new List<RaycastHit2D>();
             //hit = Physics2D.CircleCastAll(transform.position,rad, Vector3.forward, Mathf.Infinity);
