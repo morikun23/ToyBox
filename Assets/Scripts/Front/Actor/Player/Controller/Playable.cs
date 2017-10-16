@@ -25,11 +25,38 @@ namespace ToyBox {
 		public bool m_isGrounded { get; protected set; }
 
 		/// <summary>
-		/// アイテム（ギミック）を取得しようとしたときに
-		/// コールする関数
-		/// アイテムを掴める状態かチェックする
+		/// 自身が腕を伸ばせるか調べる
 		/// </summary>
 		/// <returns>結果</returns>
-		public abstract bool CallWhenWishItem();
+		public abstract bool IsAbleReach();
+
+		public virtual void LookAtDirection(Direction arg_direction) {
+			m_direction = arg_direction;
+		}
+
+		/// <summary>
+		/// 引数で渡されるアイテムまで手を伸ばして掴む
+		/// </summary>
+		/// <param name="arg_item"></param>
+		public virtual void ReachOutFor(Item arg_item) {
+			if (arg_item) {
+				if (arg_item.IsAbleGrasp() && this.IsAbleReach()) {
+					m_playableHand.SetItemBuffer(arg_item);
+					m_playableArm.SetTargetPosition(arg_item.m_transform.position);
+					this.m_inputHandle.m_reach = true;
+				}
+			}
+		}
+
+		/// <summary>
+		/// 持っているものを放す
+		/// </summary>
+		public virtual void Release() {
+			if (m_playableHand.GraspingItem != null) {
+				if (m_playableHand.GraspingItem.IsAbleRelease()) {
+					m_playableHand.Release();
+				}
+			}
+		}
 	}
 }

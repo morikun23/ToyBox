@@ -24,19 +24,18 @@ namespace ToyBox {
 		//--------------------------
 
 		//自身の状態（Stateパターンでの実装）
-		public IPlayerState m_currentState { get; protected set; }
+		protected IPlayerState m_currentState;
 		//自身の地形状態
-		public IPlayerGroundInfo m_currentGroundInfo { get; protected set; }
+		protected IPlayerGroundInfo m_currentGroundInfo;
 		//自身のギミック効果状態
-		public IPlayerGimmickInfo m_currentGimmickInfo { get; protected set; }
+		protected IPlayerGimmickInfo m_currentGimmickInfo;
 
 		public PlayerViewer m_viewer { get; protected set; }
 
 		public abstract ArmComponent Arm { get; }
 
 		public abstract HandComponent Hand { get; }
-		
-		[HideInInspector]
+
 		public bool m_ableJump;
 
 		/// <summary>
@@ -46,7 +45,7 @@ namespace ToyBox {
 		public bool IsGrounded() {
 			return Physics2D.BoxCast(m_foot.bounds.center , m_foot.bounds.size ,
 				0f , Vector2.down , m_foot.bounds.size.y / 2 ,
-				1 << LayerMask.NameToLayer("Ground"));
+				1 << LayerMask.NameToLayer("Ground") | 1 << LayerMask.NameToLayer("Landable"));
 		}
 
 		/// <summary>
@@ -77,6 +76,30 @@ namespace ToyBox {
 			m_currentGimmickInfo.OnExit(this);
 			m_currentGimmickInfo = arg_nextInfo;
 			m_currentGimmickInfo.OnEnter(this);
+		}
+
+		/// <summary>
+		/// 現在の状態を取得する
+		/// </summary>
+		/// <returns></returns>
+		public System.Type GetCurrentState() {
+			return m_currentState.GetType();
+		}
+
+		/// <summary>
+		/// 現在の地形情報を取得する
+		/// </summary>
+		/// <returns></returns>
+		public System.Type GetGroundInfo() {
+			return m_currentGroundInfo.GetType();
+		}
+
+		/// <summary>
+		/// 現在のギミック情報を取得する
+		/// </summary>
+		/// <returns></returns>
+		public System.Type GetGimmickInfo() {
+			return m_currentGimmickInfo.GetType();
 		}
 	}
 }

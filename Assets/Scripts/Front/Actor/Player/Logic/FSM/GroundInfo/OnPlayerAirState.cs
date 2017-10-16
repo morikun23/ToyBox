@@ -11,6 +11,7 @@ namespace ToyBox {
 		/// <param name="arg_player"></param>
 		public virtual void OnEnter(PlayerComponent arg_player) {
 			arg_player.m_viewer.m_animator.SetBool("OnAir" , true);
+			arg_player.m_ableJump = false;
 		}
 
 		/// <summary>
@@ -30,7 +31,8 @@ namespace ToyBox {
 		}
 
 		public virtual IPlayerGroundInfo GetNextState(PlayerComponent arg_player) {
-			if (arg_player.m_isGrounded) { return new OnPlayerGroundedState(); }
+
+			if (arg_player.m_rigidbody.velocity.y <= 0 && arg_player.m_isGrounded) { return new OnPlayerGroundedState(); }
 			return null;
 		}
 	}

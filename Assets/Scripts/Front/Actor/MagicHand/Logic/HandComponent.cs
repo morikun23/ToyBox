@@ -34,7 +34,17 @@ namespace ToyBox {
 
 		[SerializeField]
 		protected bool dev_isGrasping;
+
+		[SerializeField]
+		protected Item dev_itemBuf;
 #endif
+		
+		/// <summary>
+		/// 現在掴んでいるものを主とする
+		/// </summary>
+		public Item GraspingItem {
+			get { return m_graspingItem; }
+		}
 
 		//持ち主
 		public PlayerComponent m_owner { get; protected set; }
@@ -70,7 +80,7 @@ namespace ToyBox {
 				m_graspingItem.OnGraspedExit(m_owner);
 				m_graspingItem = null;
 			}
-			m_itemBuffer = null;
+			BufferClear();
 			m_IsGrasping = false;
 		}
 
@@ -89,6 +99,12 @@ namespace ToyBox {
 		public void SetOwner(PlayerComponent arg_player) {
 			m_owner = arg_player;
 		}
-
+		
+		/// <summary>
+		/// バッファをクリアする
+		/// </summary>
+		public void BufferClear() {
+			m_itemBuffer = null;
+		}
 	}
 }

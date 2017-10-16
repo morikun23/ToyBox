@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox
 {
 
-    public class Signboard : Item
+    public class Signboard : FixedItem
     {
 
         //生成するオブジェクト
@@ -26,13 +27,15 @@ namespace ToyBox
         {
             //ダイアログ生成
             m_Prefab = Instantiate(m_diaPrefab, m_formPos, Quaternion.identity);
-
+            m_flg_ableGrasp = false;
+            m_flg_ableReleace = false;
         }
 
         public override void OnGraspedStay(PlayerComponent arg_player)
         {
             //ダイアログ伸縮
             m_ExtendFlg = true;
+            m_flg_ableReleace = true;
         }
 
         
@@ -40,6 +43,9 @@ namespace ToyBox
         {
             m_ExtendFlg = false;
            arg_player.Arm.m_shorten = true;
-        } 
+            m_flg_ableGrasp = true;
+            m_flg_ableReleace = false;
+        }
+
     }
 }
