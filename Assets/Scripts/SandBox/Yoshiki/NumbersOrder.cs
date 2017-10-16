@@ -26,14 +26,17 @@ namespace ToyBox
 
         public void Reset()
         {
-            Debug.Log("out");
-            count = 0;
-            for(int i=0;i<m_objectCount.Length;i++)
+            if (count != 0)
             {
-                m_objectCount[i].GetComponent<Number>().hited = false;
-                m_objectCount[i].GetComponent<Animator>().SetBool("light", false);
-                m_objectCount[i].GetComponent<BoxCollider2D>().enabled = true;
+                Debug.Log("out");
+                count = 0;
+                for (int i = 0; i < m_objectCount.Length; i++)
+                {
+                    m_objectCount[i].GetComponent<Number>().hited = false;
+                    m_objectCount[i].GetComponent<Animator>().SetBool("light", false);
+                    m_objectCount[i].GetComponent<BoxCollider2D>().enabled = true;
 
+                }
             }
         }
 
