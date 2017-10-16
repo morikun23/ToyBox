@@ -7,41 +7,35 @@ namespace ToyBox
 {
     public class NumbersOrder : MonoBehaviour
     {
-
         [SerializeField]
-        GameObject [] m_number;
+        GameObject [] m_objectCount;
 
-        bool [] m_check;
+        public int count = 0;
 
-        int m_nowCount;
-        int m_nextCount;
-
-        void Start()
+        public void Match()
         {
-            Initialize();
-            StartCoroutine("UpdateByFrame");
+            Debug.Log("hit");
+            Debug.Log(count);
+            count++;
+            if (count == m_objectCount.Length) 
+            {
+                Debug.Log("クリア");
+                //クリアした際の処理
+            }
         }
 
-
-        public void Initialize()
+        public void Reset()
         {
-            m_nowCount = 0;
-            m_nextCount = m_nowCount++;
-
-            for (int i = 0; i < m_number.Length; i++)
+            Debug.Log("out");
+            count = 0;
+            for(int i=0;i<m_objectCount.Length;i++)
             {
-                m_check[i] = m_number[i].GetComponent<Number>().hitNumber;
+                m_objectCount[i].GetComponent<Number>().hited = false;
+                m_objectCount[i].GetComponent<Animator>().SetBool("light", false);
+                m_objectCount[i].GetComponent<BoxCollider2D>().enabled = true;
 
             }
         }
 
-        public void UpdateByFrame()
-        {
-            if (m_check[0])
-            {
-                                
-            }
-         
-        }
     }
 }

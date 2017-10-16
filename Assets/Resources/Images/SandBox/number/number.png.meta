@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 45de57e4bfa1ddb478a25657b33709de
-timeCreated: 1507788830
+timeCreated: 1508122350
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -91,9 +91,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 5
-        y: 440
-        width: 130
-        height: 150
+        y: 26
+        width: 61
+        height: 100
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -103,10 +103,10 @@ TextureImporter:
       name: number_1
       rect:
         serializedVersion: 2
-        x: 143
-        y: 440
-        width: 130
-        height: 150
+        x: 96
+        y: 27
+        width: 61
+        height: 99
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -116,10 +116,10 @@ TextureImporter:
       name: number_2
       rect:
         serializedVersion: 2
-        x: 297
-        y: 440
-        width: 130
-        height: 150
+        x: 202
+        y: 27
+        width: 61
+        height: 99
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -129,10 +129,10 @@ TextureImporter:
       name: number_3
       rect:
         serializedVersion: 2
-        x: 447
-        y: 440
-        width: 130
-        height: 150
+        x: 308
+        y: 27
+        width: 61
+        height: 100
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -142,62 +142,10 @@ TextureImporter:
       name: number_4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 222
-        width: 130
-        height: 150
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: number_5
-      rect:
-        serializedVersion: 2
-        x: 154
-        y: 222
-        width: 130
-        height: 150
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: number_6
-      rect:
-        serializedVersion: 2
-        x: 305
-        y: 222
-        width: 130
-        height: 150
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: number_7
-      rect:
-        serializedVersion: 2
-        x: 453
-        y: 222
-        width: 130
-        height: 150
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: number_8
-      rect:
-        serializedVersion: 2
-        x: 3
-        y: 5
-        width: 130
-        height: 150
+        x: 417
+        y: 26
+        width: 61
+        height: 99
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
