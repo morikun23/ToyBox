@@ -33,10 +33,24 @@ namespace ToyBox {
 		//フェード環境
 		public Fade m_fade { get; private set; }
 
+		//カメラ操作
+		public CameraPosController m_camera { get; private set; }
+
+		//時間環境
+		public TimeManager m_timeManager { get; private set; }
+
+		/// <summary>
+		/// 初期化
+		/// </summary>
 		void Initialize() {
-			m_audioManager = AudioManager.Instance;
+			m_audioManager = new GameObject("Audio").AddComponent<AudioManager>();
 			m_audioManager.Initialize();
 			m_fade = FindObjectOfType<Fade>();
+
+			m_camera = CameraPosController.Instance;
+			m_timeManager = new TimeManager();
+			m_timeManager.Initialize();
+
 			if (!m_fade) {
 				m_fade = Instantiate(Resources.Load<GameObject>("Effect/FadeCanvas")).GetComponentInChildren<Fade>();
 			}

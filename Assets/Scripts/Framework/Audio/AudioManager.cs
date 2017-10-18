@@ -12,27 +12,6 @@ using System.Linq;
 
 namespace ToyBox {
 	public class AudioManager : MonoBehaviour {
-		
-		/// <summary>
-		/// コンストラクタ
-		/// </summary>
-		private AudioManager() { }
-
-		// Singletonインスタンス
-		private static AudioManager m_instance;
-
-		/// <summary>
-		/// インスタンスの取得
-		/// nullだった場合、自動的に生成させる
-		/// </summary>
-		public static AudioManager Instance {
-			get {
-				if (m_instance == null) {
-					m_instance = new GameObject("AudioManager").AddComponent<AudioManager>();
-				}
-				return m_instance;
-			}
-		}
 
 		//Se管理クラス
 		private IAudioList m_seList;
