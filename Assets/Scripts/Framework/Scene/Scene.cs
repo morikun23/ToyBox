@@ -20,7 +20,7 @@ namespace ToyBox {
 
 		public abstract IEnumerator OnExit();
 
-		protected IEnumerator GameLoop() {
+		private IEnumerator GameLoop() {
 			
 				Debug.Log(SceneManager.GetActiveScene().name + "EnterStart");
 				//シーンを開始する

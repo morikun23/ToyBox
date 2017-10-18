@@ -53,6 +53,9 @@ namespace ToyBox {
 			}
 		}
 
+		void Start() { Initialize(); }
+		void Update() { UpdateByFrame(); }
+
 #if DEVELOP
 		[SerializeField]
 		string dev_state;
