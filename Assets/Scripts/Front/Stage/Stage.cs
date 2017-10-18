@@ -29,6 +29,11 @@ namespace ToyBox {
 			}
 		}
 
+		/// <summary>
+		/// プレイヤーの生成を行う
+		/// ここに生成時の演出を加えてもいい
+		/// </summary>
+		/// <param name="arg_player"></param>
 		public void PlayerGenerate(PlayerComponent arg_player) {
 			foreach (StartPoint point in m_startPoints) {
 				if (point.m_id == START_POINT_ID) {
@@ -38,6 +43,10 @@ namespace ToyBox {
 			}
 		}
 
+		/// <summary>
+		/// プレイヤーがゴールまで達したか
+		/// </summary>
+		/// <returns></returns>
 		public bool DoesPlayerReachGoal() {
 			return m_isGoal;
 		}
