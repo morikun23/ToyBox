@@ -81,7 +81,7 @@ namespace ToyBox
                     m_thornPosition += new Vector3(0, -m_accele / 2);
                     m_accele = m_accele * INERTIA;
                 
-                    RaycastHit2D hitGround = Physics2D.BoxCast(transform.position + new Vector3(0f, -4f), new Vector2(1f, 3f), 1f, Vector2.zero, 0.1f, 1 << LayerMask.NameToLayer("Ground"));
+                    RaycastHit2D hitGround = Physics2D.BoxCast(m_startPosition + new Vector3(0f, -m_collider.size.y), new Vector2(1.5f, 2), 1f, Vector2.zero, 0, 1 << LayerMask.NameToLayer("Ground"));
                     if (hitGround)
                     {
                         m_reset = true;
@@ -92,7 +92,7 @@ namespace ToyBox
                 }
                 if (!m_hited)
                 {
-                    RaycastHit2D hitPlayer = Physics2D.BoxCast(transform.position + m_thornPosition, new Vector2(3f, 1.5f), 1f, Vector2.zero, 0.1f, 1 << LayerMask.NameToLayer("Player"));
+                    RaycastHit2D hitPlayer = Physics2D.BoxCast(m_startPosition + new Vector3(0f, -m_collider.size.y), new Vector2(1.5f, 2), 1f, Vector2.zero, 0, 1 << LayerMask.NameToLayer("Player"));
 
                     if (hitPlayer)
                     {
@@ -107,7 +107,7 @@ namespace ToyBox
 
         //void OnDrawGizmos()
         //{
-        //    Gizmos.DrawWireCube(transform.position + m_thornPosition, new Vector2(3f, 1.5f));
+        //    Gizmos.DrawWireCube(m_startPosition + new Vector3(0f, -m_collider.size.y), new Vector2(1.5f, 2));
         //}
         public void Hit()
         {
