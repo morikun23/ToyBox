@@ -104,7 +104,11 @@ namespace ToyBox.Oyama
             {
                 CurrentRoom = arg_count;
 
-                SetCamera(CurrentRoom);
+                //スムーズなカメラ遷移、スクリプトの都合上部屋番号＋１が引数
+                CameraPosController.Instance.SetTargetAndStart(CurrentRoom+1);
+
+                //ToDo：SetCamera関数を使わなくなったことによるギミック作動方法の思案
+                //SetCamera(CurrentRoom);
             }
         }
     }
