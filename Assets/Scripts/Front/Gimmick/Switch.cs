@@ -18,10 +18,11 @@ namespace ToyBox{
 
 		//自身の必要なコンポーネント
 		SpriteRenderer m_sRend_;
-
+		BoxCollider2D col_;
 
 		void Start(){
 			m_sRend_ = GetComponent<SpriteRenderer> ();
+			col_ = GetComponent<BoxCollider2D> ();
 		}
 
 		// Update is called once per frame
@@ -33,6 +34,10 @@ namespace ToyBox{
 			StartCoroutine (m_scr_shutter.OpenMoveCamera());
 		}
 		void OnTriggerExit2D(Collider2D arg_col){
+
+			if(col_.IsTouchingLayers())
+				return;
+
 			m_sRend_.sprite = m_spr_newtoral;
 			StartCoroutine (m_scr_shutter.CloseMoveCamera());
 		}

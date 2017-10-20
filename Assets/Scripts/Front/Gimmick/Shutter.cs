@@ -76,9 +76,10 @@ namespace ToyBox{
 
 			if(m_flg_isInitOpen){
 				CameraPosController.Instance.SetTargetAndStart(m_num_cameraMoveId);
+				yield return new WaitForSeconds (m_num_attentionTime / 2);
 			}
 
-			yield return new WaitForSeconds (m_num_attentionTime / 2);
+
 			m_enu_status = Status.up;
 
 			yield return new WaitForSeconds (m_num_attentionTime);
@@ -98,9 +99,9 @@ namespace ToyBox{
 			
 			if (m_flg_isInitClose) {
 				CameraPosController.Instance.SetTargetAndStart(m_num_cameraMoveId);
+				yield return new WaitForSeconds (m_num_attentionTime / 2);
 			}
-
-			yield return new WaitForSeconds (m_num_attentionTime / 2);
+	
 			m_enu_status = Status.down;
 
 			yield return new WaitForSeconds (m_num_attentionTime);
