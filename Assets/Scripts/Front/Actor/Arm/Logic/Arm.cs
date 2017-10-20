@@ -8,7 +8,12 @@ using UnityEngine;
 
 namespace ToyBox {
 	public class Arm : ArmComponent {
-		
+
+		//自身のコンポーネント取得
+		[SerializeField]
+		GameObject obj_armCollider;
+		BoxCollider2D col_armCollider;
+
 		/// <summary>
 		/// 初期化
 		/// </summary>
@@ -21,7 +26,8 @@ namespace ToyBox {
 			
 			m_viewer = GetComponentInChildren<ArmViewer>();
 			m_viewer.Initialize(this);
-			
+
+			col_armCollider = obj_armCollider.GetComponent<BoxCollider2D> ();
 		}
 
 		/// <summary>
@@ -38,8 +44,18 @@ namespace ToyBox {
 				StateTransition(nextState);
 			}
 			m_currentState.OnUpdate(this);
-			
+
 			m_viewer.UpdateByFrame(this);
+
+
+			col_armCollider.size = new Vector2(
+				Mathf.Sqrt(Mathf.Pow((GetTopPosition ().x - GetBottomPosition ().x),2) + Mathf.Pow((GetTopPosition ().y - GetBottomPosition ().y),2)),0.1f);
+
+			col_armCollider.transform.eulerAngles = new Vector3 (0,0,
+				Mathf.Atan2(GetTopPosition().y - GetBottomPosition().y,GetTopPosition().x - GetBottomPosition().x) * Mathf.Rad2Deg);
+			obj_armCollider.transform.localPosition = new Vector3 (
+				(GetTopPosition().x - GetBottomPosition().x) / 2,
+				(GetTopPosition().y - GetBottomPosition().y) / 2,0);
 		}
 		
 	}
