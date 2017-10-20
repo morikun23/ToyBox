@@ -10,8 +10,6 @@ namespace ToyBox {
 		private LineRenderer m_lineRenderer { get; set; }
 
 		public void Initialize(Arm arg_arm) {
-			m_depth = -5;
-
 			m_lineRenderer = GetComponent<LineRenderer>();
 			m_lineRenderer.material.color = Color.black;
 			m_lineRenderer.startWidth = 0.1f;
