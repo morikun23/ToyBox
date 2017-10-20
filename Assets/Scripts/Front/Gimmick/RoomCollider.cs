@@ -5,15 +5,15 @@ using UnityEngine;
 namespace ToyBox.Oyama
 {
 
-    public class RoomColliderTest : MonoBehaviour
+    public class RoomCollider : MonoBehaviour
     {
         public int m_roomNumber;
 
-        PlayRoomManagerTest m_roomManager;
+        PlayRoomManager m_roomManager;
 
         void Start()
         {
-            m_roomManager = FindObjectOfType<PlayRoomManagerTest>();
+            m_roomManager = FindObjectOfType<PlayRoomManager>();
         }
 
         void OnTriggerEnter2D(Collider2D arg_col)
