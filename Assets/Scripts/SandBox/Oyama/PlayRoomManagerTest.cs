@@ -41,7 +41,7 @@ namespace ToyBox.Oyama
                             { 41, 39, 3.5f },
                             { 41, 47, 3.5f },
                             { 28, 47, 3.5f },
-                            { 18.5f, 43, 4 },
+                            { 18.5f, 43, 4.3f },
                             { 2.5f, 46, 4 },
                             { -14.5f, 43.5f, 4 }
                           };
@@ -104,7 +104,11 @@ namespace ToyBox.Oyama
             {
                 CurrentRoom = arg_count;
 
-                SetCamera(CurrentRoom);
+                //スムーズなカメラ遷移、スクリプトの都合上部屋番号＋１が引数
+                CameraPosController.Instance.SetTargetAndStart(CurrentRoom+1);
+
+                //ToDo：SetCamera関数を使わなくなったことによるギミック作動方法の思案
+                //SetCamera(CurrentRoom);
             }
         }
     }

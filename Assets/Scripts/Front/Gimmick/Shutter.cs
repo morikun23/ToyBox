@@ -32,7 +32,7 @@ namespace ToyBox{
 		}
 		Status m_enu_status;
 
-
+        public int m_num_returnID;
 
 		// Use this for initialization
 		void Start () {
@@ -84,7 +84,7 @@ namespace ToyBox{
 			yield return new WaitForSeconds (m_num_attentionTime);
 
 			if (m_flg_isInitOpen) {
-				CameraPosController.Instance.SetTargetAndStart (0);
+				CameraPosController.Instance.SetTargetAndStart (m_num_returnID);
 				m_flg_isInitOpen = false;
 			}
 
@@ -106,7 +106,7 @@ namespace ToyBox{
 			yield return new WaitForSeconds (m_num_attentionTime);
 
 			if(m_flg_isInitClose){
-				CameraPosController.Instance.SetTargetAndStart (0);
+				CameraPosController.Instance.SetTargetAndStart (m_num_returnID);
 				m_flg_isInitClose = false;
 			}
 

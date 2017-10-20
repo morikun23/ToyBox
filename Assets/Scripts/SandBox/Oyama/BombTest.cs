@@ -55,7 +55,7 @@ namespace ToyBox.Oyama
             if (m_startExplosionFlag) return;
             
             //動きが無くなった&爆破フラグが経っていないならタイム加算
-            if(m_rigid.velocity.x == 0 && m_rigid.velocity.y == 0 && m_startExplosionFlag == false)
+            if(Mathf.Abs(m_rigid.velocity.x) <= 1 && Mathf.Abs(m_rigid.velocity.y) <= 1 && m_startExplosionFlag == false)
             {
                 m_addTime += Time.deltaTime;
                 Debug.Log("加算中");
@@ -69,7 +69,8 @@ namespace ToyBox.Oyama
             //指定秒動きを止めていたら爆破フラグオン
             if(m_startExplosionTime < m_addTime && m_startExplosionFlag == false)
             {
-                Debug.Log("unko");
+                m_rigid.velocity = Vector2.zero;
+
                 m_anime.Play("Bomb");
                 m_anime.Update(0);
                 Debug.Log(m_anime.GetCurrentAnimatorStateInfo(0).length);
@@ -93,7 +94,7 @@ namespace ToyBox.Oyama
             //爆弾のコライダーの半径を取得し、爆風範囲とする
             float rad = GetComponent<CircleCollider2D>().radius;
             //爆風範囲はちょっと大きめで
-            rad += rad * 2;
+            rad += rad;
             
             List<RaycastHit2D> hit = new List<RaycastHit2D>();
             //hit = Physics2D.CircleCastAll(transform.position,rad, Vector3.forward, Mathf.Infinity);
