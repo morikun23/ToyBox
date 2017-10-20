@@ -50,57 +50,56 @@ namespace ToyBox{
 
 #if UNITY_ANDROID && DEVICE_ANDROID
 
-			int baf_i = 0;
+			//int t.fingerId = 0;
 			foreach (Touch t in Input.touches) {
 
-				baf_i++;
+				//t.fingerId++;
 				//タッチ位置を取得
 				//１フレーム前のタッチ座標を格納
-				m_pos_inputBefore[baf_i] = m_pos_input[baf_i];
-				m_pos_inputScreenBefore [baf_i] = m_pos_inputScreen [baf_i];
-				m_pos_inputScreen[baf_i] = t.position;
-				m_pos_input[baf_i] = m_usingCamera.ScreenToWorldPoint (t.position);
-
+				m_pos_inputBefore[t.fingerId] = m_pos_input[t.fingerId];
+				m_pos_inputScreenBefore [t.fingerId] = m_pos_inputScreen [t.fingerId];
+				m_pos_inputScreen[t.fingerId] = t.position;
+				m_pos_input[t.fingerId] = m_usingCamera.ScreenToWorldPoint (t.position);
 
 				switch(t.phase){
 				case TouchPhase.Began:
-					if (!CheckHitPoint (m_pos_input[baf_i]))
+					if (!CheckHitPoint (m_pos_input[t.fingerId]))
 						continue;
 					Started ();
-					m_pos_init[baf_i] = m_pos_input[baf_i];
-					flg_start[baf_i] = true;
+					m_pos_init[t.fingerId] = m_pos_input[t.fingerId];
+					flg_start[t.fingerId] = true;
 					break;
-
 				case TouchPhase.Moved:
-					if (!flg_start [baf_i])
+					if (!flg_start [t.fingerId])
 						continue;
 					Moving (t.deltaPosition);
-					CheckRotate (baf_i);
-					flg_move [baf_i] = true;
+					CheckRotate (t.fingerId);
+					flg_move [t.fingerId] = true;
 					break;
 
 				case TouchPhase.Ended:
-					if (!flg_start [baf_i])
+					if (!flg_start [t.fingerId])
 						continue;
 
-					if (!CheckMove (baf_i)) {
+					if (!CheckMove (t.fingerId)) {
 						SwipeEnd ();
 					} else {
 						TouchEnd ();
 					}
-					flg_start [baf_i] = false;
-					flg_move [baf_i] = false;
-					num_rotateDirection [baf_i] = 0;
+					flg_start [t.fingerId] = false;
+					flg_move [t.fingerId] = false;
+					num_rotateDirection [t.fingerId] = 0;
 
-					m_pos_input [baf_i] = Vector3.zero;
-					m_pos_inputBefore [baf_i] = Vector3.zero;
+					m_pos_input [t.fingerId] = Vector3.zero;
+					m_pos_inputBefore [t.fingerId] = Vector3.zero;
+
 					break;
 				}
 
-				if (flg_move[baf_i] && flg_start[baf_i]) {
-					if(num_rotateDirection[baf_i] == 1){
+				if (flg_move[t.fingerId] && flg_start[t.fingerId]) {
+					if(num_rotateDirection[t.fingerId] == 1){
 						RightRotate (1);
-					}else if(num_rotateDirection[baf_i] == -1){
+					}else if(num_rotateDirection[t.fingerId] == -1){
 						LeftRotate (-1);
 					}
 					break;
@@ -181,7 +180,7 @@ namespace ToyBox{
 			float baf_rotNew = Vector2.Angle(pos_rotatePoint.position,m_pos_input[arg_i] - pos_rotatePoint.position);
 
 			Debug.DrawRay (pos_rotatePoint.position,m_pos_input[arg_i] - pos_rotatePoint.position);
-			Debug.Log (baf_rotNew - baf_rotBef);
+			//Debug.Log (baf_rotNew - baf_rotBef);
 
 			if(baf_rotNew - baf_rotBef > 5 && ((baf_rotBef > 0 && baf_rotNew > 0) || (baf_rotBef < 0 && baf_rotNew < 0))){
 				num_rotateDirection[arg_i] = 1;
