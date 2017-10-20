@@ -10,6 +10,10 @@ namespace ToyBox
         [SerializeField]
         GameObject [] m_objectCount;
 
+        //このボタンで開くシャッター
+        [SerializeField]
+        Shutter m_scr_shutter;
+
         public int count = 0;
 
         public void Match()
@@ -21,6 +25,7 @@ namespace ToyBox
             {
                 Debug.Log("クリア");
                 //クリアした際の処理
+                StartCoroutine(m_scr_shutter.OpenMoveCamera());
             }
         }
 

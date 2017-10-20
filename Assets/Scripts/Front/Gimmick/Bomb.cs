@@ -55,7 +55,7 @@ namespace ToyBox
             if (m_startExplosionFlag) return;
 
             //動きが無くなった&爆破フラグが経っていないならタイム加算
-            if (m_rigid.velocity.x == 0 && m_rigid.velocity.y == 0 && m_startExplosionFlag == false)
+            if (Mathf.Abs(m_rigid.velocity.x) <= 1 && Mathf.Abs(m_rigid.velocity.y) <= 1 && m_startExplosionFlag == false)
             {
                 m_addTime += Time.deltaTime;
             }

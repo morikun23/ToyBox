@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ToyBox.Oyama
+namespace ToyBox
 {
 
-    public class PlayRoomManagerTest : MonoBehaviour
+    public class PlayRoomManager : MonoBehaviour
     {
 
         //ギミックのリスト予定
@@ -57,12 +57,12 @@ namespace ToyBox.Oyama
         int CurrentStage = 0;
 
         //カメラ
-        Camera camera;
+        Camera m_camera;
 
         // Use this for initialization
         void Start()
         {
-            camera = Camera.main;
+            m_camera = Camera.main;
 
             switch (CurrentStage)
             {
@@ -90,8 +90,8 @@ namespace ToyBox.Oyama
         //カメラをセット
         void SetCamera(int arg_roomNum)
         {
-            camera.transform.position = new Vector3(RoomData[arg_roomNum, 0], RoomData[arg_roomNum, 1], -10);
-            camera.orthographicSize = RoomData[arg_roomNum, 2];
+            m_camera.transform.position = new Vector3(RoomData[arg_roomNum, 0], RoomData[arg_roomNum, 1], -10);
+            m_camera.orthographicSize = RoomData[arg_roomNum, 2];
 
             //レイ飛ばしてギミック始動させたい
         }

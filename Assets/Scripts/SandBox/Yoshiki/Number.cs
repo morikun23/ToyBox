@@ -25,7 +25,7 @@ namespace ToyBox
 
         public void Initialize()
         {
-            m_numOrder = transform.root.gameObject;
+            m_numOrder = transform.parent.transform.gameObject;
             m_order = m_numOrder.GetComponent<NumbersOrder>();
             m_animetor = GetComponent<Animator>();
         }
