@@ -12,6 +12,10 @@ namespace ToyBox {
 		//操作キャラ
 		private Playable m_playable;
 
+		//カメラ
+		[SerializeField]
+		private Camera m_uiCamera;
+
 		// Use this for initialization
 		void Start() {
 
@@ -21,6 +25,7 @@ namespace ToyBox {
 			foreach(Button button in m_buttons) {
 				button.Initialize();
 				button.SetControlTarget(m_playable);
+				button.SwitchCamera(m_uiCamera);
 			}
 		}
 

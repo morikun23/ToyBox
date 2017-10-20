@@ -22,6 +22,8 @@ namespace ToyBox{
 		bool[] flg_move = new bool[10];
 		int[] num_rotateDirection = new int[10];
 
+		private Camera m_usingCamera;
+
 		// Use this for initialization
 		public void Start () {
 			//サイズの取得
@@ -42,7 +44,11 @@ namespace ToyBox{
 		// Update is called once per frame
 		public void Update () {
 
-			#if UNITY_ANDROID && DEVICE_ANDROID
+			if (m_usingCamera == null) {
+				m_usingCamera = Camera.main;
+			}
+
+#if UNITY_ANDROID && DEVICE_ANDROID
 
 			int baf_i = 0;
 			foreach (Touch t in Input.touches) {
@@ -53,7 +59,7 @@ namespace ToyBox{
 				m_pos_inputBefore[baf_i] = m_pos_input[baf_i];
 				m_pos_inputScreenBefore [baf_i] = m_pos_inputScreen [baf_i];
 				m_pos_inputScreen[baf_i] = t.position;
-				m_pos_input[baf_i] = Camera.main.ScreenToWorldPoint (t.position);
+				m_pos_input[baf_i] = m_usingCamera.ScreenToWorldPoint (t.position);
 
 
 				switch(t.phase){
@@ -100,16 +106,16 @@ namespace ToyBox{
 					break;
 				}
 			}
-			#endif
+#endif
 
-			#if UNITY_STANDALONE_WIN || DEVELOP
-			if(Input.GetMouseButtonDown(0)){
+#if UNITY_STANDALONE_WIN || DEVELOP
+			if (Input.GetMouseButtonDown(0)){
 				//タッチ位置を取得
 				//１フレーム前のタッチ座標を格納
 				m_pos_inputBefore[0] = m_pos_input[0];
 				m_pos_inputScreenBefore [0] = m_pos_inputScreen [0];
 				m_pos_inputScreen[0] = Input.mousePosition;
-				m_pos_input[0] = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+				m_pos_input[0] = m_usingCamera.ScreenToWorldPoint (Input.mousePosition);
 				if(Input.GetMouseButtonDown(0)){
 					if (!CheckHitPoint (m_pos_input[0]))
 						return;
@@ -199,7 +205,9 @@ namespace ToyBox{
 		//	左回転
 		public virtual void LeftRotate(float dist){}
 
-
+		public void SwitchCamera(Camera arg_camera) {
+			m_usingCamera = arg_camera;
+		}
 
 	}
 }

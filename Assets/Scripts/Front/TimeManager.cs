@@ -8,7 +8,7 @@ using UnityEngine;
 using System.Linq;
 
 namespace ToyBox {
-	public class TimeManager {
+	public class TimeManager : MonoBehaviour {
 
 		//固定FPS
 		public const int m_fps = 60;
@@ -44,16 +44,9 @@ namespace ToyBox {
 		/// </summary>
 		public void Initialize() {
 			m_currentState = State.Playing;
+			//StartCoroutine(UpdateClock());
 		}
-
-		/// <summary>
-		/// 時間を更新
-		/// もしかしたらコルーチンにしたほうがいい？
-		/// </summary>
-		public void UpdateByFrame() {
-			m_localPlayingTime += Time.deltaTime;
-		}
-
+		
 		/// <summary>
 		/// 総プレイ時間
 		/// </summary>
@@ -94,6 +87,13 @@ namespace ToyBox {
 			m_pauseObjects = GameObject.FindObjectsOfType<Pausable>().ToList();
 			foreach(Pausable pauseObject in m_pauseObjects) {
 				pauseObject.Pause();
+			}
+		}
+
+		public IEnumerator UpdateClock() {
+			while (true) {
+				m_localPlayingTime += 1.0f;
+				yield return new WaitForSeconds(1.0f);
 			}
 		}
 	}
