@@ -59,8 +59,8 @@ namespace ToyBox.Oyama
             }
             else
             {
-                
-                m_Bar.transform.position = nowPos;
+
+				m_Bar.GetComponent<Rigidbody2D>().MovePosition(nowPos);
             }
         }
 
