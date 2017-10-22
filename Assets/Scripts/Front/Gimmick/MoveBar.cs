@@ -23,6 +23,8 @@ namespace ToyBox.Oyama
         [SerializeField]
         bool m_actionFlag = true;
 
+		private Rigidbody2D m_rigidbodyOfBar;
+
         // Use this for initialization
         void Start()
         {
@@ -36,6 +38,14 @@ namespace ToyBox.Oyama
             m_Bar.transform.position = m_StartPoint;
 
             targetPos = m_EndPoint;
+
+			//TODO:プレハブへRigidbodyを追加させる
+			if (m_rigidbodyOfBar == null) {
+				//TryCatchだと重いため、NULLチェックを行う
+				m_rigidbodyOfBar = m_Bar.gameObject.AddComponent<Rigidbody2D>();
+				m_rigidbodyOfBar.isKinematic = true;
+				m_rigidbodyOfBar.freezeRotation = true;
+			}
         }
 
         // Update is called once per frame
@@ -60,7 +70,7 @@ namespace ToyBox.Oyama
             else
             {
 
-				m_Bar.GetComponent<Rigidbody2D>().MovePosition(nowPos);
+				m_rigidbodyOfBar.MovePosition(nowPos);
             }
         }
 
