@@ -16,8 +16,7 @@ namespace ToyBox {
 		[SerializeField]
 		private Camera m_uiCamera;
 
-		// Use this for initialization
-		void Start() {
+		public void Initialize() {
 
 			m_playable = FindObjectOfType<Playable>();
 
@@ -29,8 +28,7 @@ namespace ToyBox {
 			}
 		}
 
-		// Update is called once per frame
-		void Update() {
+		public void UpdateByFrame() {
 
 			if (Input.GetMouseButtonDown(0)) {
 				Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);

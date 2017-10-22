@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ToyBox {
+namespace ToyBox.Morita {
 	public class PlayerController : ObjectBase {
 
 		private Playable m_playable;

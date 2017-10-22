@@ -8,15 +8,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace ToyBox.Main {
+namespace ToyBox {
 	public class MainScene : ToyBox.Scene {
 
 		private Stage m_stage;
 
+		private Player m_player;
+
+		private InputManager m_inputManager;
+
 		public override IEnumerator OnEnter() {
-			//ステージの生成
+			//ステージの生成（どのステージなのかを区別させたい）
 			m_stage = FindObjectOfType<Stage>();
-			m_stage.Initialize();
+
+			//プレイヤーの生成
+			m_player = FindObjectOfType<Player>();
+			m_stage.SetPlayer(m_player);
+
+			//入力環境を初期化
+			m_inputManager = GetComponent<InputManager>();
+			m_inputManager.Initialize();
+
 			AppManager.Instance.m_fade.StartFade(new FadeIn() , Color.black , 0.5f);
 			yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
 			
@@ -24,7 +36,9 @@ namespace ToyBox.Main {
 
 		public override IEnumerator OnUpdate() {
 			while (true) {
-				m_stage.UpdateByFrame();
+				if(m_player.GetCurrentState() != typeof(PlayerDeadState)){
+					m_inputManager.UpdateByFrame();
+				}
 				if (m_stage.DoesPlayerReachGoal()) {
 					break;
 				}

@@ -101,5 +101,15 @@ namespace ToyBox {
 		public System.Type GetGimmickInfo() {
 			return m_currentGimmickInfo.GetType();
 		}
+
+		public void Dead() {
+			if(GetCurrentState() == typeof(PlayerDeadState)) { return; }
+			StateTransition(new PlayerDeadState());
+		}
+
+		public void Revive() {
+			if(GetCurrentState() != typeof(PlayerDeadState)) { return; }
+			StateTransition(new PlayerIdleState());
+		}
 	}
 }
