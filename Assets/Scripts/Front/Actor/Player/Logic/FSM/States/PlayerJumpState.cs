@@ -16,6 +16,7 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_player"></param>
 		public virtual void OnEnter(PlayerComponent arg_player) {
+			arg_player.m_rigidbody.velocity = Vector2.zero;
 			arg_player.m_viewer.m_animator.SetBool("Jump" , true);
 		}
 
