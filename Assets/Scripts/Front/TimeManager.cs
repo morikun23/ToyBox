@@ -33,7 +33,7 @@ namespace ToyBox {
 		private List<Pausable> m_pauseObjects;
 
 		public TimeManager() {
-			Application.targetFrameRate = m_fps;
+			
 		}
 		~TimeManager() {
 			//TODO:最終プレイ時間を保存
@@ -43,8 +43,9 @@ namespace ToyBox {
 		/// 初期化
 		/// </summary>
 		public void Initialize() {
+			Application.targetFrameRate = m_fps;
 			m_currentState = State.Playing;
-			//StartCoroutine(UpdateClock());
+			StartCoroutine(this.UpdateClock());
 		}
 		
 		/// <summary>
@@ -95,6 +96,7 @@ namespace ToyBox {
 				m_localPlayingTime += 1.0f;
 				yield return new WaitForSeconds(1.0f);
 			}
+			yield return null;
 		}
 	}
 }

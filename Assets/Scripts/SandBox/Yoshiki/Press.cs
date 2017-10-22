@@ -94,9 +94,9 @@ namespace ToyBox
                 {
                     RaycastHit2D hitPlayer = Physics2D.BoxCast(m_startPosition + new Vector3(0f, -m_collider.size.y), new Vector2(1.5f, 2), 1f, Vector2.zero, 0, 1 << LayerMask.NameToLayer("Player"));
 
-                    if (hitPlayer)
+					if (hitPlayer)
                     {
-                        Hit();
+                        Hit(hitPlayer.collider.transform.root.GetComponent<PlayerComponent>());
 
                     }
                 }
@@ -109,11 +109,15 @@ namespace ToyBox
         //{
         //    Gizmos.DrawWireCube(m_startPosition + new Vector3(0f, -m_collider.size.y), new Vector2(1.5f, 2));
         //}
-        public void Hit()
+        public void Hit(PlayerComponent arg_player)
         {
-            m_hited = true;
+			if(arg_player == null) { return; }
+
+			m_hited = true;
             Debug.Log("hitPlayer");
             //プレイヤーに当たった時の処理はここにお願いします
+
+			arg_player.Dead();
         }
         
     }

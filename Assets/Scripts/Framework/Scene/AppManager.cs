@@ -48,7 +48,7 @@ namespace ToyBox {
 			m_fade = FindObjectOfType<Fade>();
 
 			m_camera = CameraPosController.Instance;
-			m_timeManager = new TimeManager();
+			m_timeManager = new GameObject("TimeManager").AddComponent<TimeManager>();
 			m_timeManager.Initialize();
 
 			if (!m_fade) {
@@ -58,6 +58,7 @@ namespace ToyBox {
 			DontDestroyOnLoad(this.gameObject);
 			DontDestroyOnLoad(m_audioManager.gameObject);
 			DontDestroyOnLoad(m_fade.transform.parent.gameObject);
+			DontDestroyOnLoad(m_timeManager.gameObject);
 		}
 
 	}

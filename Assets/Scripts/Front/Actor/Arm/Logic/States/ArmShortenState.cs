@@ -10,6 +10,7 @@ namespace ToyBox {
 
 		public void OnEnter(ArmComponent arg_arm) {
 			m_finished = false;
+			AppManager.Instance.m_timeManager.Pause();
 		}
 
 		public void OnUpdate(ArmComponent arg_arm) {
@@ -22,6 +23,7 @@ namespace ToyBox {
 
 		public void OnExit(ArmComponent arg_arm) {
 			arg_arm.m_owner.m_inputHandle.m_reach = false;
+			AppManager.Instance.m_timeManager.Resume();
 		}
 
 		public IArmState GetNextState(ArmComponent arg_arm) {
