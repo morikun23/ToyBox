@@ -31,7 +31,7 @@ namespace ToyBox.Title {
 
             m_filterRenderer = m_filter.GetComponent<SpriteRenderer>();
 
-            m_sound = (AudioClip)Resources.Load("Sounds/SE/SE_TitleTouch");
+            m_sound = (AudioClip)Resources.Load("Audio/SE/SE_TitleTouch");
 
             m_filterRenderer.color = new Color(1, 1, 1, 0);
 
@@ -61,7 +61,7 @@ namespace ToyBox.Title {
                 m_startMessageRenderer.color = new Color(1, 1, 1, Mathf.PingPong(Time.time, 1));
 
                 //if (Input.GetTouch(0).phase == TouchPhase.Began)
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (Input.GetMouseButtonDown(0))
                 {
                     AudioSource.PlayClipAtPoint(m_sound, Camera.main.gameObject.transform.position);
                     break;
@@ -76,7 +76,7 @@ namespace ToyBox.Title {
             //base.OnExit();
             AppManager.Instance.m_fade.StartFade(new FadeOut(), Color.black, 0.5f);
             yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
-            UnityEngine.SceneManagement.SceneManager.LoadScene("StartUp");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Main");
             yield return null;
         }
 	}

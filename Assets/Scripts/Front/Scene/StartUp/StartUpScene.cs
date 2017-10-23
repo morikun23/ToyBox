@@ -15,7 +15,7 @@ namespace ToyBox {
 		}
 
 		public override IEnumerator OnExit() {
-			UnityEngine.SceneManagement.SceneManager.LoadScene("Main");
+			UnityEngine.SceneManagement.SceneManager.LoadScene("Title");
 			yield return null;
 
 		}
