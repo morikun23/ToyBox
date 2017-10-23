@@ -32,7 +32,7 @@ namespace ToyBox
 
 
         // Use this for initialization
-        void Initialize()
+        void Start()
         {
             m_mainObj = transform.FindChild("Bomb").gameObject;
 
@@ -48,7 +48,7 @@ namespace ToyBox
         }
 
         // Update is called once per frame
-        void UpdateByFrame()
+        void Update()
         {
 
             //爆破開始したら処理しません
