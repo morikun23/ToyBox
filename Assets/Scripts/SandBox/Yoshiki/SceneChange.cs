@@ -35,6 +35,7 @@ namespace ToyBox
                 if (m_uiFilter.color.a >= 1)
                 {
                     m_chose.GetComponent<Chosies>().Create();
+                    break;
                 }
                 yield return null;
             }

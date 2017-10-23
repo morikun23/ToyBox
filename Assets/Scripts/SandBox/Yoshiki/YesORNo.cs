@@ -2,15 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class YesORNo : MonoBehaviour {
+namespace ToyBox {
+    public class YesORNo : Button{
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        public enum YorN
+        {
+            YES = 1,
+            NO = -1
+        }
+
+        [SerializeField]
+        private YorN m_type;
+
+        public override void OnDown()
+        {
+            base.OnDown();
+        }
+
+        public override void OnPress()
+        {
+            base.OnPress();
+        }
+
+        public override void OnUp()
+        {
+            base.OnUp();
+
+            //GetComponent<Chosies>().answer = m_type;
+
+        }
+
+    }
 }
