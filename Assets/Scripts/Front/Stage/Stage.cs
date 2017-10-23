@@ -9,8 +9,8 @@ namespace ToyBox {
 		//スタート地点だと判別するid
 		private const int START_POINT_ID = 0;
 
-		//リスタート地点（スタート地点も含む）
-		List<StartPoint> m_startPoints;
+		//現在のリスタート地点
+		private StartPoint m_currentStartPoint;
 
 		//ゴール地点（複数ゴールに対応）
 		List<GoalPoint> m_goalPoints;
@@ -22,7 +22,6 @@ namespace ToyBox {
 		private PlayerComponent m_player;
 
 		private void Start() {
-			m_startPoints = FindObjectsOfType<StartPoint>().ToList();
 			m_goalPoints = FindObjectsOfType<GoalPoint>().ToList();
 			m_isGoal = false;
 		}
@@ -31,7 +30,7 @@ namespace ToyBox {
 
 			if(m_player.GetCurrentState() == typeof(PlayerDeadState)) {
 				//プレイヤーが死亡状態である
-				PlayerGenerate(0);
+				PlayerGenerate(m_currentStartPoint);
 			}
 
 			foreach(GoalPoint goal in m_goalPoints) {
@@ -45,14 +44,13 @@ namespace ToyBox {
 		/// プレイヤーの生成を行う
 		/// ここに生成時の演出を加えてもいい
 		/// </summary>
-		/// <param name="arg_id">指定されたIDのスタート地点に生成します</param>
-		public void PlayerGenerate(int arg_id) {
-			StartPoint startPoint = m_startPoints.Find(_ => _.m_id == arg_id);
+		/// <param name="arg_startPoint">指定されたスタート地点に生成します</param>
+		public void PlayerGenerate(StartPoint arg_startPoint) {
+			if (arg_startPoint)	return;
 
-			if (startPoint) {
-				startPoint.Generate(m_player);
-				m_player.Revive();
-			}
+			arg_startPoint.Generate(m_player);
+			m_player.Revive();
+			
 		}
 
 		/// <summary>
@@ -68,6 +66,14 @@ namespace ToyBox {
 		/// </summary>
 		public void SetPlayer(PlayerComponent arg_player) {
 			m_player = arg_player;
+		}
+
+		/// <summary>
+		/// リスタート位置を設定する
+		/// </summary>
+		public void SetActiveStartPoint(StartPoint arg_startPoint) {
+			if(arg_startPoint == null) { return; }
+			m_currentStartPoint = arg_startPoint;
 		}
 	}
 }
