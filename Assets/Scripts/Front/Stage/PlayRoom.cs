@@ -13,7 +13,7 @@ namespace ToyBox
         int m_CurrentRoom;
 
         //子オブジェクトのギミック達　初期化時に入れ子？
-        List<GameObject> m_gimmicks = new List<GameObject>();
+        List<Transform> m_gimmicks = new List<Transform>();
         //List<MonoBehaviour> m_gimmicks = new List<MonoBehaviour>();
 
         //チェックポイント　ルーム内にあればインスペクターで設定
@@ -21,15 +21,15 @@ namespace ToyBox
         CheckPoint[] m_checkPoints;
 
         // Use this for initialization
-        void OnEnabled()
+        void OnEnable()
         {
 
             int i = 0;
             //ギミック(子オブジェの参照、作動)
-            foreach (GameObject gimmick in transform)
+            foreach (Transform gimmick in transform)
             {
                 m_gimmicks.Add(gimmick);
-                m_gimmicks[i].SetActive(true);
+                m_gimmicks[i].gameObject.SetActive(true);
                 i++;
             }
 
@@ -58,7 +58,7 @@ namespace ToyBox
             if (m_gimmicks.Count != 0){
                 for (int i = 0; i < m_gimmicks.Count; i++)
                 {
-                    m_gimmicks[i].SetActive(false);
+                    m_gimmicks[i].gameObject.SetActive(false);
                 }
             }
             this.gameObject.SetActive(false);
