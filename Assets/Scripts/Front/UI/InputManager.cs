@@ -32,15 +32,18 @@ namespace ToyBox {
 
 			if (Input.GetMouseButtonDown(0)) {
 				Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+				Vector2 worldPointUI = m_uiCamera.ScreenToWorldPoint (Input.mousePosition);
 
 				//タッチをした位置にオブジェクトがあるかどうかを判定
 				RaycastHit2D hit = Physics2D.Raycast(worldPoint , Vector2.zero , 0.1f , 1 << LayerMask.NameToLayer("Item") | 1 << LayerMask.NameToLayer("PotableItem_Ground"));
+				RaycastHit2D hitUI = Physics2D.Raycast (worldPointUI,Vector2.zero,0.1f,1 << LayerMask.NameToLayer("UI"));
 
-				if (m_playable.m_playableHand.IsGrasping()) {
+				Debug.Log (hitUI.collider);
+				if (m_playable.m_playableHand.IsGrasping() && !hitUI.collider) {
 					m_playable.Release();
 				}
 				else {
-					if (hit) {
+					if (hit && !hitUI.collider) {
 						Item item = hit.collider.GetComponent<Item>();
 						m_playable.ReachOutFor(item);
 					}
