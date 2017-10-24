@@ -15,12 +15,13 @@ namespace ToyBox
 
         Animator m_animetor;
 
+        BoxCollider2D m_collider;
+
         public bool hited = false;
 
         void Start()
         {
             Initialize();
-            
         }
 
         public void Initialize()
@@ -28,6 +29,7 @@ namespace ToyBox
             m_numOrder = transform.parent.transform.gameObject;
             m_order = m_numOrder.GetComponent<NumbersOrder>();
             m_animetor = GetComponent<Animator>();
+            m_collider = GetComponent<BoxCollider2D>();
         }
 
         void OnTriggerEnter2D(Collider2D other)
@@ -41,7 +43,7 @@ namespace ToyBox
                     m_order.Match();
                     m_animetor.SetBool("light",true);
                     hited = true;
-                    GetComponent<BoxCollider2D>().enabled = false;
+                    m_collider.enabled = false;
 
                 }
                 else
