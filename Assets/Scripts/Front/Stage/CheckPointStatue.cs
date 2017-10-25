@@ -21,11 +21,11 @@ namespace ToyBox {
 
 		}
 
-		private void OnTriggerEnter2D(Collider2D arg_collider) {
+		protected override void OnTriggerEnter2D(Collider2D arg_collider) {
 			if (arg_collider.gameObject.layer == LayerMask.NameToLayer("Player")) {
-				m_isActive = true;
 				m_animator.SetBool("Active" , true);
 			}
+			base.OnTriggerEnter2D(arg_collider);
 		}
 	}
 }
