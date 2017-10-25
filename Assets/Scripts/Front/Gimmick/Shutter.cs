@@ -34,12 +34,16 @@ namespace ToyBox{
 
         public int m_num_returnID;
 
-		// Use this for initialization
-		void Start () {
+
+        InputManager m_InputManager;
+
+        // Use this for initialization
+        void Start () {
 			m_pos_initY = transform.position.y;
 			m_pos_endY = m_pos_initY + 2;
 
-		}
+            m_InputManager = FindObjectOfType<InputManager>();
+        }
 		
 		// Update is called once per frame
 		void Update () {
@@ -55,8 +59,7 @@ namespace ToyBox{
 				}
 
 				break;
-
-				break;
+                    
 			case Status.up:
 				if (transform.position.y < m_pos_endY) {
 					transform.Translate (new Vector3 (0, 0.05f, 0));
@@ -72,11 +75,13 @@ namespace ToyBox{
 
 
 		public IEnumerator OpenMoveCamera(){
-			
 
-			if(m_flg_isInitOpen){
+
+            if (m_flg_isInitOpen){
 				CameraPosController.Instance.SetTargetAndStart(m_num_cameraMoveId);
-				yield return new WaitForSeconds (m_num_attentionTime / 2);
+
+                m_InputManager.InputStop();
+                yield return new WaitForSeconds (m_num_attentionTime / 2);
 			}
 
 
@@ -86,20 +91,24 @@ namespace ToyBox{
 
 			if (m_flg_isInitOpen) {
 				CameraPosController.Instance.SetTargetAndStart (m_num_returnID);
-				m_flg_isInitOpen = false;
+
+                m_InputManager.InputStart();
+                m_flg_isInitOpen = false;
 			}
 
-
-			yield break;
+            yield break;
 		}
 
 		public IEnumerator CloseMoveCamera(){
-			if (!isActiveAndEnabled)
+            
+
+            if (!isActiveAndEnabled)
 				yield break;
 			
 			if (m_flg_isInitClose) {
 				CameraPosController.Instance.SetTargetAndStart(m_num_cameraMoveId);
-				yield return new WaitForSeconds (m_num_attentionTime / 2);
+                m_InputManager.InputStop();
+                yield return new WaitForSeconds (m_num_attentionTime / 2);
 			}
 	
 			m_enu_status = Status.down;
@@ -108,10 +117,12 @@ namespace ToyBox{
 
 			if(m_flg_isInitClose){
 				CameraPosController.Instance.SetTargetAndStart (m_num_returnID);
-				m_flg_isInitClose = false;
+                m_InputManager.InputStart();
+                m_flg_isInitClose = false;
 			}
 
-			yield break;
+            
+            yield break;
 		}
 
 

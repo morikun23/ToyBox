@@ -73,6 +73,8 @@ namespace ToyBox
 
         public bool flg_hoge;
 
+        //InputManager　プレイヤーを動かさないために必要
+        InputManager m_InputManager;
 
         // Use this for initialization
         void Start()
@@ -88,6 +90,7 @@ namespace ToyBox
             SetTargetID(1);
             StartTargetMove();
 
+            m_InputManager = FindObjectOfType<InputManager>();
             
         }
 
@@ -114,6 +117,8 @@ namespace ToyBox
 
         IEnumerator MoveToTarget()
         {
+            
+
             if (!isActiveAndEnabled)
                 yield break;
 
@@ -142,7 +147,7 @@ namespace ToyBox
             Vector3 baf_pos = m_obj_camera.transform.position;
 
             //対象の座標に向かってAnimationCurveを使用して遷移する
-            for (int i = 1; i < baf_status.num_complateFrame; i++)
+            for (int i = 1; i <= baf_status.num_complateFrame; i++)
             {
                 if (baf_status.pos_target != null)
                 {
@@ -166,6 +171,7 @@ namespace ToyBox
 
             if (m_flg_homingMode)
                 m_flg_complate = true;
+            
 
             yield break;
 
