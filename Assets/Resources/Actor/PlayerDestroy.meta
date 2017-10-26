@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Scripts/SandBox/Oyama.meta
+guid: 46c8fa7e15513ed4da89fdf0b5156873
+folderAsset: yes
+timeCreated: 1508775570
+=======
+guid: 63e50006d39e50b4db02abd012e0a449
+folderAsset: yes
+timeCreated: 1508744429
+>>>>>>> origin/feature/front/player:Assets/Resources/Actor/PlayerDestroy.meta
+licenseType: Free
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
