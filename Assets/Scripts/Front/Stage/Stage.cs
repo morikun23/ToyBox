@@ -10,8 +10,8 @@ namespace ToyBox {
 		public const int GOAL_POINT_ID_MIN = 10;
 		public const int GOAL_POINT_ID_MAX = 99;
 		//スタート地点のID幅
-		public const int START_POINT_ID_MIN = 100;
-		public const int START_POINT_ID_MAX = 999;
+		public const int START_POINT_ID_MIN = 0100;
+		public const int START_POINT_ID_MAX = 9999;
 	}
 
 	public class Stage : MonoBehaviour {
@@ -26,7 +26,7 @@ namespace ToyBox {
 		private List<RoomCollider> m_roomColliders;
 
 		//初期スタート地点だと判別するid
-		private const int START_POINT_ID = 0;
+		private const int START_POINT_ID = 9999;
 
 		//現在のリスタート地点
 		private StartPoint m_currentStartPoint;
@@ -47,6 +47,12 @@ namespace ToyBox {
 
 			foreach(CheckPoint checkPoint in m_checkPoints) { checkPoint.Initialize(this.OnCheckPoint); }
 			foreach(RoomCollider roomCollider in m_roomColliders) { roomCollider.Initialize(this.OnRoomEnter); }
+
+			//初期リスタート地点を設定
+			m_currentStartPoint = m_checkPoints.Find(_ => _.m_id == START_POINT_ID) as StartPoint;
+			m_activePlayroom = m_playRooms.Find(_ => _.Id == 1);
+
+			SetRoomActive(m_activePlayroom.Id);
 		}
 
 		private void Update() {
@@ -64,11 +70,41 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_startPoint">指定されたスタート地点に生成します</param>
 		public void PlayerGenerate(StartPoint arg_startPoint) {
-			if (arg_startPoint)	return;
+			if (arg_startPoint == null)	return;
+			if (!arg_startPoint.m_isActive) return;
 
+			#region IDを識別するための処理（複雑なので隠蔽させます）
+			System.Func<int , int> RoomId = (id) => {
+				//IDの桁数を調べる(1の場合は0)
+				int digitCount = id / 10;
+
+				//調べる桁の位置(3桁なら3桁目のみ、4桁なら3桁目と4桁目、5桁なら3桁目~5桁目)
+				int digitPlace = 2 + (digitCount - 3);
+
+				string stId = string.Empty;
+
+				int i = digitCount;
+
+				while(i >= 2) {
+					//数値を結合させるため一旦文字列へ
+					int temp = (id / (int)Mathf.Pow(10 , i) % 10);
+					stId += temp.ToString();
+					i -= 1;
+				}
+				return int.Parse(stId);
+			};
+			#endregion
+
+			//スタート地点が配置されている部屋をアクティブ化
+			m_activePlayroom = m_playRooms.Find(_ => _.Id == RoomId(arg_startPoint.m_id));
+			SetRoomActive(m_activePlayroom.Id);
+			
+			//再生成
 			arg_startPoint.Generate(m_player);
 			m_player.Revive();
-			
+
+			//カメラを移動させる
+			CameraPosController.Instance.SetTargetAndStart(m_activePlayroom.Id);
 		}
 
 		/// <summary>
@@ -91,17 +127,35 @@ namespace ToyBox {
 		/// コライダーからのコールバック
 		/// </summary>
 		/// <param name="roomManager"></param>
-		private void OnRoomEnter(int arg_prevId,int arg_nextId) {
+		private void OnRoomEnter(int arg_prevId , int arg_nextId) {
+
+			int currentId = m_activePlayroom.Id;
+
+			if (arg_nextId == currentId) return;
+
 			//スムーズなカメラ遷移を開始させる
 			CameraPosController.Instance.SetTargetAndStart(arg_nextId);
-
-			PlayRoom prevRoom = m_playRooms.Find(_ => _.Id == arg_prevId);
 			PlayRoom nextRoom = m_playRooms.Find(_ => _.Id == arg_nextId);
 
-			prevRoom.gameObject.SetActive(false);
-			nextRoom.gameObject.SetActive(true);
-
+			if (nextRoom != null) {
+				this.SetRoomActive(nextRoom.Id);
+				m_activePlayroom = nextRoom;
+			}
 		}
+
+		/// <summary>
+		/// 指定された部屋番号の前後をアクティブ化させる
+		/// それ以外は非アクティブ状態にしておく
+		/// </summary>
+		private void SetRoomActive(int arg_id) {
+			foreach(PlayRoom playRoom in m_playRooms) {
+				if(arg_id - 1 <= playRoom.Id && playRoom.Id <= arg_id + 1) {
+					playRoom.gameObject.SetActive(true);
+				}
+				else { playRoom.gameObject.SetActive(false); }
+			}
+		}
+
 
 		/// <summary>
 		/// チェックポイントからのコールバックを受け取る
@@ -117,7 +171,9 @@ namespace ToyBox {
 			if (Between(arg_id , StageConfig.START_POINT_ID_MIN, StageConfig.START_POINT_ID_MAX)) {
 				//渡されたIDが中間地点であったら、中間地点を更新する
 				StartPoint startPoint = m_checkPoints.Find(_ => _.m_id == arg_id) as StartPoint;
-				if (startPoint) { m_currentStartPoint = startPoint; }
+				if (startPoint) {
+					if(!startPoint.m_isActive) m_currentStartPoint = startPoint;
+				}
 			}
 			else if (Between(arg_id,StageConfig.GOAL_POINT_ID_MIN,StageConfig.GOAL_POINT_ID_MAX)) {
 				//渡されたIDがゴール地点であったら、ゴールしたことを通知する

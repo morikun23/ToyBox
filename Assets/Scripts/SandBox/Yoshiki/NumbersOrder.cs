@@ -45,7 +45,7 @@ namespace ToyBox
             {
                 Debug.Log("クリア");
                 //クリアした際の処理
-                //StartCoroutine(m_scr_shutter.OpenMoveCamera());
+                StartCoroutine(m_scr_shutter.OpenMoveCamera());
             }
         }
 

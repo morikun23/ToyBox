@@ -33,8 +33,11 @@ namespace ToyBox
         void Start()
         {
             Initialize();
-            StartCoroutine("UpdateByFrame");
         }
+
+		void OnEnable() {
+			StartCoroutine(UpdateByFrame());
+		}
 
         public void Initialize()
         {
