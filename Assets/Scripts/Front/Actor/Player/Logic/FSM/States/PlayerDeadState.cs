@@ -14,7 +14,8 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_player"></param>
 		public virtual void OnEnter(PlayerComponent arg_player) {
-
+			arg_player.m_viewer.m_animator.Play("Dead" , 0);
+			arg_player.m_viewer.m_animator.SetBool("Dead" , true);
 		}
 
 		/// <summary>
@@ -30,7 +31,7 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_player"></param>
 		public virtual void OnExit(PlayerComponent arg_player) {
-
+			arg_player.m_viewer.m_animator.SetBool("Dead" , false);
 		}
 
 		public virtual IPlayerState GetNextState(PlayerComponent arg_player) {

@@ -26,7 +26,7 @@ namespace ToyBox {
 		private List<RoomCollider> m_roomColliders;
 
 		//初期スタート地点だと判別するid
-		private const int START_POINT_ID = 9999;
+		private const int START_POINT_ID = 101;
 
 		//現在のリスタート地点
 		private StartPoint m_currentStartPoint;
@@ -39,31 +39,54 @@ namespace ToyBox {
 
 		//現在プレイヤーが入っている部屋
 		private PlayRoom m_activePlayroom;
-		
+
 		private void Start() {
+			
+		}
+
+		public void Initialize(Player arg_player) {
+			if (arg_player == null) { return; }
+			m_player = arg_player;
+
 			m_checkPoints = transform.GetComponentsInChildren<CheckPoint>().ToList();
 			m_playRooms = transform.GetComponentsInChildren<PlayRoom>().ToList();
 			m_roomColliders = transform.GetComponentsInChildren<RoomCollider>().ToList();
 
-			foreach(CheckPoint checkPoint in m_checkPoints) { checkPoint.Initialize(this.OnCheckPoint); }
-			foreach(RoomCollider roomCollider in m_roomColliders) { roomCollider.Initialize(this.OnRoomEnter); }
+			foreach (CheckPoint checkPoint in m_checkPoints) { checkPoint.Initialize(this.OnCheckPoint); }
+			foreach (RoomCollider roomCollider in m_roomColliders) { roomCollider.Initialize(this.OnRoomEnter); }
 
 			//初期リスタート地点を設定
 			m_currentStartPoint = m_checkPoints.Find(_ => _.m_id == START_POINT_ID) as StartPoint;
 			m_activePlayroom = m_playRooms.Find(_ => _.Id == 1);
 
 			SetRoomActive(m_activePlayroom.Id);
+
+			PlayerGenerate(m_currentStartPoint);
+
+			StartCoroutine(OnUpdate());
 		}
 
-		private void Update() {
+		private IEnumerator OnUpdate() {
+			while (true) {
+				
+				yield return new WaitWhile(() => m_player.GetCurrentState() != typeof(PlayerDeadState));
 
-			if(m_player.GetCurrentState() == typeof(PlayerDeadState)) {
-				//プレイヤーが死亡状態である
+				#region プレイヤーが死んだときの演出
+				//死亡アニメーションが終了するまで待機
+				yield return new Tsubakit.WaitForAnimation(m_player.m_viewer.m_animator , 0);
+
+				Fade fade = AppManager.Instance.m_fade;
+				fade.StartFade(new FadeOut() , Color.black , 1.0f);
+				yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
+
 				PlayerGenerate(m_currentStartPoint);
-			}
-			
-		}
 
+				fade.StartFade(new FadeIn() , Color.black , 1.0f);
+				yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
+
+				#endregion
+			}
+		}
 		/// <summary>
 		/// プレイヤーの生成を行う
 		/// ここに生成時の演出を加えてもいい
@@ -113,14 +136,6 @@ namespace ToyBox {
 		/// <returns></returns>
 		public bool DoesPlayerReachGoal() {
 			return m_isGoal;
-		}
-
-		/// <summary>
-		/// 監視を行うプレイヤーを設定する
-		/// </summary>
-		public void SetPlayer(PlayerComponent arg_player) {
-			if(arg_player == null) { return; }
-			m_player = arg_player;
 		}
 
 		/// <summary>
@@ -182,6 +197,35 @@ namespace ToyBox {
 			}
 			else {
 				Debug.LogError("認識されていないIDを検出");
+			}
+		}
+	}
+}
+
+/// <summary>
+/// 以下、テラシュールブログから引用
+/// </summary>
+namespace Tsubakit {
+	public class WaitForAnimation : CustomYieldInstruction {
+		Animator m_animator;
+		int m_lastStateHash = 0;
+		int m_layerNo = 0;
+
+		public WaitForAnimation(Animator animator , int layerNo) {
+			Init(animator , layerNo , animator.GetCurrentAnimatorStateInfo(layerNo).fullPathHash);
+		}
+
+		void Init(Animator animator , int layerNo , int hash) {
+			m_layerNo = layerNo;
+			m_animator = animator;
+			m_lastStateHash = hash;
+		}
+
+		public override bool keepWaiting {
+			get {
+				var currentAnimatorState = m_animator.GetCurrentAnimatorStateInfo(m_layerNo);
+				return currentAnimatorState.fullPathHash == m_lastStateHash &&
+					(currentAnimatorState.normalizedTime < 1);
 			}
 		}
 	}

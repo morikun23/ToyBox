@@ -23,7 +23,8 @@ namespace ToyBox {
 
 			//プレイヤーの生成
 			m_player = FindObjectOfType<Player>();
-			m_stage.SetPlayer(m_player);
+
+			m_stage.Initialize(m_player);
 
 			//入力環境を初期化
 			m_inputManager = GetComponent<InputManager>();
