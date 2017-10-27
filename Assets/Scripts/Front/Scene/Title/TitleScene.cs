@@ -43,7 +43,7 @@ namespace ToyBox.Title {
             m_gear3Script.Init(2.5f);
 
             //yield return null ;
-            AppManager.Instance.m_fade.StartFade(new FadeIn(), Color.black, 0.5f);
+            AppManager.Instance.m_fade.StartFade(new FadeIn(), Color.black, 1.0f);
             yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
 
         }
@@ -74,7 +74,7 @@ namespace ToyBox.Title {
 
 		public override IEnumerator OnExit() {
             //base.OnExit();
-            AppManager.Instance.m_fade.StartFade(new FadeOut(), Color.black, 0.5f);
+            AppManager.Instance.m_fade.StartFade(new FadeOut(), Color.black, 1.0f);
             yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
             UnityEngine.SceneManagement.SceneManager.LoadScene("Main");
             yield return null;

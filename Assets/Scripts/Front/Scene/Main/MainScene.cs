@@ -39,7 +39,7 @@ namespace ToyBox {
 			m_inputManager = GetComponent<InputManager>();
 			m_inputManager.Initialize();
 
-			AppManager.Instance.m_fade.StartFade(new FadeIn() , Color.black , 0.5f);
+			AppManager.Instance.m_fade.StartFade(new FadeIn() , Color.black , 1.0f);
 			yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
 
 			yield return new WaitForSeconds(1.5f);
@@ -80,7 +80,7 @@ namespace ToyBox {
 
 		public override IEnumerator OnExit() {
 			
-			SceneManager.LoadScene("StartUp");
+			SceneManager.LoadScene("Result");
 			yield return null;
 
 		}
