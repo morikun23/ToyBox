@@ -39,7 +39,7 @@ namespace ToyBox
             if(m_bomb == null && m_addTime > m_nextWorkTime)
             {
                 m_bomb = Instantiate(m_PFbomb, transform.position, Quaternion.identity);
-                m_bomb.transform.parent = transform;
+                
             }
 
         }

@@ -9,20 +9,14 @@ namespace ToyBox
     {
         Signboard m_signboard;
 
-        GameObject m_signboard_obj;
-
         float m_openNum;
 
 
-        void Start()
+        public void Init(Signboard arg_sign)
         {
-            //タグ参照(※看板には"Singboard"タグをつける必要有)
-            m_signboard_obj = GameObject.FindWithTag("Signboard");
-
-            m_signboard = m_signboard_obj.GetComponent<Signboard>();
-            
-
+            m_signboard = arg_sign;
             m_openNum = 0;
+            
         }
 
         //ダイアログを一定値まで伸縮
@@ -30,7 +24,7 @@ namespace ToyBox
         {
             m_openNum += Time.deltaTime / 2;
 
-            if (transform.localScale.x < 0.4f)
+            if (transform.localScale.x < 0.3f)
             {
                 transform.localScale += new Vector3(m_openNum, 0, 0);
             }

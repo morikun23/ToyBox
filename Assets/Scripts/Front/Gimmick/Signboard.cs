@@ -20,13 +20,17 @@ namespace ToyBox
 
         //伸縮フラグ(参照渡し用)
         public bool m_ExtendFlg = true;
-        
 
+        [SerializeField]
+        Sprite m_picture;
 
         public override void OnGraspedEnter(PlayerComponent arg_player)
         {
             //ダイアログ生成
             m_Prefab = Instantiate(m_diaPrefab, m_formPos, Quaternion.identity);
+            m_Prefab.GetComponent<Dialog>().Init(this);
+            m_Prefab.transform.FindChild("Picture").GetComponent<SpriteRenderer>().sprite = m_picture;
+
             m_flg_ableGrasp = false;
             m_flg_ableReleace = false;
         }
