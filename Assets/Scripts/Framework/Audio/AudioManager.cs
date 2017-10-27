@@ -19,6 +19,11 @@ namespace ToyBox {
 		//Bgm管理クラス
 		private IAudioList m_bgmList;
 
+		//Audioフォルダの固定パス
+		private const string FOLDER = "Resources/Audio/";
+		private const string BGM = "BGM/";
+		private const string SE = "SE/";
+
 		/// <summary>
 		/// 初期化
 		/// </summary>
@@ -38,11 +43,29 @@ namespace ToyBox {
 		/// <param name="arg_audioClip">再生するオーディオ</param>
 		/// <returns>生成されたAudioSource</returns>
 		public AudioSource CreateBgm(AudioClip arg_audioClip) {
+			if (arg_audioClip == null) return null;
+
 			AudioSource freeAudioSource = m_bgmList.GetAudioSource();
+			if(freeAudioSource == null) { return null; }
 			freeAudioSource.clip = arg_audioClip;
 			return freeAudioSource;
 		}
-		
+
+		/// <summary>
+		/// BGMを追加する
+		/// ※Resources内の専用フォルダにファイルを入れてください
+		/// </summary>
+		/// <param name="arg_clipName">再生するオーディオのファイル名</param>
+		/// <returns></returns>
+		public AudioSource CreateBgm(string arg_clipName) {
+
+			if (string.IsNullOrEmpty(arg_clipName)) return null;
+
+			AudioClip clip = Resources.Load<AudioClip>(FOLDER + BGM + arg_clipName);
+			if(clip == null) return null; 
+			return this.CreateBgm(clip);
+		}
+
 		/// <summary>
 		/// SEを追加する
 		/// </summary>
@@ -52,6 +75,20 @@ namespace ToyBox {
 			AudioSource freeAudioSource = m_seList.GetAudioSource();
 			freeAudioSource.clip = arg_audioClip;
 			return freeAudioSource;
+		}
+
+		/// <summary>
+		/// SEを追加する
+		/// ※Resources内の専用フォルダにファイルを入れてください
+		/// </summary>
+		/// <param name="arg_clipName"></param>
+		/// <returns></returns>
+		public AudioSource CreateSe(string arg_clipName) {
+			if (string.IsNullOrEmpty(arg_clipName)) return null;
+
+			AudioClip clip = Resources.Load<AudioClip>(FOLDER + BGM + arg_clipName);
+			if (clip == null) return null;
+			return this.CreateSe(clip);
 		}
 
 		/// <summary>
