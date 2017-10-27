@@ -31,6 +31,10 @@ namespace ToyBox
             m_Prefab.GetComponent<Dialog>().Init(this);
             m_Prefab.transform.FindChild("Picture").GetComponent<SpriteRenderer>().sprite = m_picture;
 
+            //音じゃ
+            AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_Dialog_open");
+            source.Play();
+
             m_flg_ableGrasp = false;
             m_flg_ableReleace = false;
         }
@@ -46,7 +50,12 @@ namespace ToyBox
         public override void OnGraspedExit(PlayerComponent arg_player)
         {
             m_ExtendFlg = false;
-           arg_player.Arm.m_shorten = true;
+
+            //音じゃ
+            AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_Dialog_close");
+            source.Play();
+
+            arg_player.Arm.m_shorten = true;
             m_flg_ableGrasp = true;
             m_flg_ableReleace = false;
         }
