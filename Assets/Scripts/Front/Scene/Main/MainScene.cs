@@ -42,6 +42,8 @@ namespace ToyBox {
 			AppManager.Instance.m_fade.StartFade(new FadeIn() , Color.black , 0.5f);
 			yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
 
+			yield return new WaitForSeconds(1.5f);
+
 			#region 入場時の演出
 			m_doorAnimation.SetBool("Open",true);
 			yield return null;
