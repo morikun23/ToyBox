@@ -14,6 +14,8 @@ namespace ToyBox {
 		//衝突した（中止します）
 		private bool m_isCancelled;
 
+		AudioSource source = AppManager.Instance.m_audioManager.CreateBgm ("SE_PlayerHand_extend");
+
 		public ArmLengthenState(float arg_increase) {
 			m_increase = arg_increase;
 		}
@@ -21,7 +23,11 @@ namespace ToyBox {
 		public void OnEnter(ArmComponent arg_arm) {
 			m_isFinished = false;
 			m_isCancelled = false;
+
 			AppManager.Instance.m_timeManager.Pause();
+
+			source.Play ();
+			source.loop = true;
 		}
 
 		public void OnUpdate(ArmComponent arg_arm) {
@@ -43,10 +49,14 @@ namespace ToyBox {
 				arg_arm.m_currentLength = arg_arm.m_targetLength;
 				m_isFinished = true;
 				arg_arm.m_lengthBuf.Push(arg_arm.m_targetLength);
+
+				source.Stop ();
 			}
 			else {
 				arg_arm.m_currentLength += m_increase;
 			}
+
+
 		}
 
 		public void OnExit(ArmComponent arg_arm) {
