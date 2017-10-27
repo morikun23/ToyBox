@@ -20,7 +20,7 @@ namespace ToyBox {
 		private IAudioList m_bgmList;
 
 		//Audioフォルダの固定パス
-		private const string FOLDER = "Resources/Audio/";
+		private const string FOLDER = "Audio/";
 		private const string BGM = "BGM/";
 		private const string SE = "SE/";
 
@@ -43,10 +43,16 @@ namespace ToyBox {
 		/// <param name="arg_audioClip">再生するオーディオ</param>
 		/// <returns>生成されたAudioSource</returns>
 		public AudioSource CreateBgm(AudioClip arg_audioClip) {
-			if (arg_audioClip == null) return null;
+			if (arg_audioClip == null) {
+				Debug.LogError ("空のAudioClipが渡されました");
+				return null;
+			}
 
 			AudioSource freeAudioSource = m_bgmList.GetAudioSource();
-			if(freeAudioSource == null) { return null; }
+			if(freeAudioSource == null) {
+				Debug.LogError ("AudioSourceの容量不足です");
+				return null; 
+			}
 			freeAudioSource.clip = arg_audioClip;
 			return freeAudioSource;
 		}
@@ -59,10 +65,16 @@ namespace ToyBox {
 		/// <returns></returns>
 		public AudioSource CreateBgm(string arg_clipName) {
 
-			if (string.IsNullOrEmpty(arg_clipName)) return null;
+			if (string.IsNullOrEmpty (arg_clipName)) {
+				Debug.LogError ("文字列が空です");
+				return null;
+			}
 
 			AudioClip clip = Resources.Load<AudioClip>(FOLDER + BGM + arg_clipName);
-			if(clip == null) return null; 
+			if (clip == null) {
+				Debug.LogError ("ファイル取得失敗");
+				return null;
+			}
 			return this.CreateBgm(clip);
 		}
 
@@ -72,7 +84,17 @@ namespace ToyBox {
 		/// <param name="arg_audioClip">再生するオーディオ</param>
 		/// <returns>生成されたAudioSource</returns>
 		public AudioSource CreateSe(AudioClip arg_audioClip) {
+
+			if (arg_audioClip == null) {
+				Debug.LogError ("空のAudioClipが渡されました");
+				return null;
+			}
+
 			AudioSource freeAudioSource = m_seList.GetAudioSource();
+			if(freeAudioSource == null) {
+				Debug.LogError ("AudioSourceの容量不足です");
+				return null; 
+			}
 			freeAudioSource.clip = arg_audioClip;
 			return freeAudioSource;
 		}
@@ -84,10 +106,17 @@ namespace ToyBox {
 		/// <param name="arg_clipName"></param>
 		/// <returns></returns>
 		public AudioSource CreateSe(string arg_clipName) {
-			if (string.IsNullOrEmpty(arg_clipName)) return null;
+			if (string.IsNullOrEmpty (arg_clipName)) {
+				Debug.LogError ("文字列が空です");
+				return null;
+			}
+				
 
-			AudioClip clip = Resources.Load<AudioClip>(FOLDER + BGM + arg_clipName);
-			if (clip == null) return null;
+			AudioClip clip = Resources.Load<AudioClip>(FOLDER + SE + arg_clipName);
+			if (clip == null) {
+				Debug.LogError ("ファイル取得失敗");
+				return null;
+			}
 			return this.CreateSe(clip);
 		}
 
