@@ -1,9 +1,19 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
 	public class StartPoint : CheckPoint {
+
+		//初期リスタート地点であるか
+		[SerializeField]
+		protected bool m_isInitPosition;
+
+		public override void Initialize(Action<int> arg_callBack) {
+			if (m_isInitPosition) { m_isActive = true; }
+			base.Initialize(arg_callBack);
+		}
 
 		/// <summary>
 		/// プレイヤーの生成を行う

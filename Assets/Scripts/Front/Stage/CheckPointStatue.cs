@@ -24,6 +24,8 @@ namespace ToyBox {
 		protected override void OnTriggerEnter2D(Collider2D arg_collider) {
 			if (arg_collider.gameObject.layer == LayerMask.NameToLayer("Player")) {
 				m_animator.SetBool("Active" , true);
+				AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_SavePoint");
+				source.Play();
 			}
 			base.OnTriggerEnter2D(arg_collider);
 		}
