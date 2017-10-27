@@ -9,10 +9,11 @@ namespace ToyBox
 
         void OnTriggerEnter2D(Collider2D arg_col)
         {
+
             if (arg_col.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
-                Debug.Log("Dead");
                 //プレイヤーを殺す何か
+                arg_col.transform.root.GetComponent<PlayerComponent>().Dead();
             }
         }
 
