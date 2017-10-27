@@ -30,6 +30,8 @@ namespace ToyBox
         //爆破開始フラグ
         bool m_startExplosionFlag = false;
 
+        float m_ToExplosionTime = 0;
+        float m_EffectTotalTime = 0;
 
         // Use this for initialization
         void Start()
@@ -52,7 +54,7 @@ namespace ToyBox
         {
 
             //爆破開始したら処理しません
-            if (m_startExplosionFlag) return;
+            
 
             //動きが無くなった&爆破フラグが経っていないならタイム加算
             if (Mathf.Abs(m_rigid.velocity.x) <= 1 && Mathf.Abs(m_rigid.velocity.y) <= 1 && m_startExplosionFlag == false)
@@ -69,13 +71,26 @@ namespace ToyBox
             {
                 m_anime.Play("Bomb");
                 m_anime.Update(0);
-                Debug.Log(m_anime.GetCurrentAnimatorStateInfo(0).length);
 
                 //再生中のアニメ「Bomb」の再生時間を読み取って、その時間後に爆破エフェクト&接触判定を取って壁を壊したい
-                Invoke("Explosion", m_anime.GetCurrentAnimatorStateInfo(0).length);
+                //Invoke("Explosion", m_anime.GetCurrentAnimatorStateInfo(0).length);
+
+                m_EffectTotalTime = m_anime.GetCurrentAnimatorStateInfo(0).length;
 
                 m_startExplosionFlag = true;
 
+            }
+
+            if (m_startExplosionFlag)
+            {
+
+                m_ToExplosionTime += Time.deltaTime;
+
+                if (m_EffectTotalTime < m_ToExplosionTime)
+                {
+                    Explosion();
+                    m_EffectTotalTime = 200;
+                }
             }
 
         }
@@ -104,8 +119,9 @@ namespace ToyBox
                 if (hit[i].transform.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
                     //死亡判定
+                    hit[i].transform.gameObject.GetComponent<PlayerComponent>().Dead();
                 }
-                else if (hit[i].transform.gameObject.layer == LayerMask.NameToLayer("BrokenWall"))
+                else if (hit[i].transform.gameObject.tag == "BrokenWall")
                 {
                     GameObject eff_breakwall = Instantiate(m_breakEffect, hit[i].transform.position, hit[i].transform.rotation);
                     Destroy(hit[i].transform.gameObject);
