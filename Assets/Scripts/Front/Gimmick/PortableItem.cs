@@ -7,12 +7,15 @@ namespace ToyBox {
 
 		Rigidbody2D rig_;
 
+
 		public override void OnGraspedEnter(PlayerComponent arg_player) {
 			arg_player.Arm.m_shorten = true;
 			SetAbleRelease (false);
 			SetAbleGrasp (false);
 			rig_ = GetComponent<Rigidbody2D>();
 			rig_.simulated = false;
+			AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_PlayerHand_grab");
+			source.Play ();
 		}
 
 		public override void OnGraspedStay(PlayerComponent arg_player) {

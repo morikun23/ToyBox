@@ -10,6 +10,7 @@ namespace ToyBox {
 	public class PlayerRunState : IPlayerState {
 
 		private ActorBase.Direction m_directionBuf;
+		private int m_cnt_move = 0;
 
 		/// <summary>
 		/// ステート開始時
@@ -38,6 +39,12 @@ namespace ToyBox {
 				y = arg_player.m_rigidbody.velocity.y ,
 				z = 0
 			};
+			m_cnt_move += 1;
+			if(m_cnt_move % 10 == 0){
+				AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_Player_walk");
+				source.Play ();
+			}
+
 
 		}
 

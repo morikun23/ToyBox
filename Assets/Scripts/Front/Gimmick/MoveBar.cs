@@ -46,6 +46,10 @@ namespace ToyBox.Oyama
 				m_rigidbodyOfBar.isKinematic = true;
 				m_rigidbodyOfBar.freezeRotation = true;
 			}
+
+			//AudioSource source = AppManager.Instance.m_audioManager.CreateBgm ("SE_BeltConveyor_move");
+			//source.Play ();
+			//source.loop = true;
         }
 
         // Update is called once per frame
