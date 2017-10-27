@@ -28,7 +28,7 @@ namespace ToyBox {
 		/// 初期化
 		/// </summary>
 		public void Initialize() {
-			m_seList = new SeList(10);
+			m_seList = new SeList(30);
 			m_seList.Initialize();
 			
 			m_bgmList = new BgmList(1);
