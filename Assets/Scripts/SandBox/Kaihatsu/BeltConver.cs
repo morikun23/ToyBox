@@ -41,5 +41,10 @@ namespace ToyBox
         {
             UpdateByFrame();
         }
+
+        void OnDisable()
+        {
+            colFlg = false;
+        }
     }
 }
