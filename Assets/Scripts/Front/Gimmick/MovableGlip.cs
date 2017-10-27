@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ToyBox;
 
 namespace ToyBox {
 	public class MovableGlip : FixedItem {
@@ -27,6 +28,9 @@ namespace ToyBox {
 
 			SetAbleGrasp (false);
 			SetAbleRelease (false);
+
+			AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_PlayerHand_grab");
+			source.Play ();
 		}
 
 		public override void OnGraspedStay(PlayerComponent arg_player) {
