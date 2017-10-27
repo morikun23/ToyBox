@@ -76,7 +76,7 @@ namespace ToyBox.Title {
             //base.OnExit();
             AppManager.Instance.m_fade.StartFade(new FadeOut(), Color.black, 1.0f);
             yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Main");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Tutorial");
             yield return null;
         }
 	}
