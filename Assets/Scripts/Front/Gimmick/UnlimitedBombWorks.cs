@@ -23,11 +23,20 @@ namespace ToyBox
 
         float m_addTime = 0;
 
+        //どこから落とすか
+        [SerializeField]
+        GameObject m_generatePoint;
+
+        //カメラに写ってるかどうか判定
+        bool m_triggerFlag;
+
         // Use this for initialization
         void Start()
         {
             m_PFbomb = Resources.Load<GameObject>(m_bombPass);
-            
+            m_triggerFlag = false;
+
+
         }
 
         // Update is called once per frame
@@ -36,13 +45,26 @@ namespace ToyBox
 
             m_addTime += Time.deltaTime;
 
-            if(m_bomb == null && m_addTime > m_nextWorkTime)
+            if(m_bomb == null && m_addTime > m_nextWorkTime && m_triggerFlag)
             {
-                m_bomb = Instantiate(m_PFbomb, transform.position, Quaternion.identity);
+                m_bomb = Instantiate(m_PFbomb, m_generatePoint.transform.position, Quaternion.identity);
                 
             }
 
         }
+
+        void OnBecameVisible()
+        {
+            Debug.Log("in");
+            m_triggerFlag = true;
+        }
+
+        void OnBecameInvisible()
+        {
+            Debug.Log("inF");
+            m_triggerFlag = false;
+        }
+
     }
 
 }
