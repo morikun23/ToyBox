@@ -116,7 +116,7 @@ namespace ToyBox
         {
 			if(arg_player == null) { return; }
 
-			m_hited = true;
+			//m_hited = true;
             Debug.Log("hitPlayer");
             //プレイヤーに当たった時の処理はここにお願いします
 
