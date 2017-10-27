@@ -7,11 +7,13 @@ namespace ToyBox.Title
     public class TitleAnimation : MonoBehaviour
     {
         Vector3 Move = new Vector3(0.05f, 0, 0);
-        Vector3 Restart = new Vector3(-15f, -3.85f, 0);
+        Vector3 Restart = new Vector3(-15f, -3.35f, 0);
         Animator animator;
         SpriteRenderer renderer;
 
+        [SerializeField]
         GameObject sp_Comment;
+
         TitleComment titleComment;
 
 
@@ -22,16 +24,14 @@ namespace ToyBox.Title
         {
             animator = GetComponent<Animator>();
             renderer = GetComponent<SpriteRenderer>();
-            sp_Comment = GameObject.Find("SP_Comment");
-            //titleComment = sp_Comment.GetComponent<TitleComment>();
             StartCoroutine("Wait");
-            //titleComment.Initialize();
             
         }
 
         private IEnumerator Wait()
         {
-
+            titleComment = sp_Comment.GetComponent<TitleComment>();
+            titleComment.Initialize();
             while (true)
             {
 
@@ -40,9 +40,10 @@ namespace ToyBox.Title
                     renderer.flipX = false;
                     animator.SetBool("RunFlag", false);
                     animator.SetBool("IdleFlag", true);
-                    //titleComment.Spawn();
-                    yield return new WaitForSeconds(4.0f);
-                    //titleComment.Delete();
+                    yield return new WaitForSeconds(3.0f);
+                    titleComment.Spawn();
+                    yield return new WaitForSeconds(1.0f);
+                    titleComment.Delete();
 
                     stop = false;
                 }
