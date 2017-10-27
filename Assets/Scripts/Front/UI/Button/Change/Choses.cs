@@ -56,8 +56,6 @@ namespace ToyBox
                     Application.LoadLevel("Scenes/Main/Main");
                 }
 
-                Debug.Log(answer);
-
                 yield return null;
             }
         }

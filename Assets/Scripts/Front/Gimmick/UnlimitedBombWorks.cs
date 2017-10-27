@@ -55,13 +55,11 @@ namespace ToyBox
 
         void OnBecameVisible()
         {
-            Debug.Log("in");
             m_triggerFlag = true;
         }
 
         void OnBecameInvisible()
         {
-            Debug.Log("inF");
             m_triggerFlag = false;
         }
 

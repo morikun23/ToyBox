@@ -41,7 +41,6 @@ namespace ToyBox {
                 RaycastHit2D hit = Physics2D.CircleCast(worldPoint, 0.5f, Vector2.zero , 0.1f , 1 << LayerMask.NameToLayer("Item") | 1 << LayerMask.NameToLayer("PotableItem_Ground"));
 				RaycastHit2D hitUI = Physics2D.CircleCast (worldPointUI,0.5f,Vector2.zero,0.1f,1 << LayerMask.NameToLayer("UI"));
 
-				Debug.Log (hitUI.collider);
 				if (m_playable.m_playableHand.IsGrasping() && !hitUI.collider) {
 					m_playable.Release();
 				}

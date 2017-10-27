@@ -21,13 +21,11 @@ namespace ToyBox.Yoshiki
             {
                 
                 OnDown();
-                Debug.Log(m_pressFlg);
             }
             else if ( !Input.GetMouseButton(0))
             {
                 m_pressFlg = false;
                 OnUp();
-                Debug.Log(m_pressFlg);
             }
 
             if (m_pressFlg)
