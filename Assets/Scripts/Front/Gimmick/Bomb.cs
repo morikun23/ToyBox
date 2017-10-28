@@ -120,12 +120,12 @@ namespace ToyBox
 
             for (int i = 0; i < hit.Count; i++)
             {
-                if (hit[i].transform.gameObject.layer == LayerMask.NameToLayer("Player")
-                    && hit[i].transform.gameObject.name == "Body")
-                {
-                    //死亡判定
-                    hit[i].transform.gameObject.GetComponent<PlayerComponent>().Dead();
-                }
+				if (hit [i].transform.gameObject.layer == LayerMask.NameToLayer ("Player")) {
+					if (hit [i].collider.gameObject.name != "ArmCollider") {
+						//死亡判定
+						hit [i].transform.gameObject.GetComponent<PlayerComponent> ().Dead ();
+					}
+				}
                 else if (hit[i].transform.gameObject.tag == "BrokenWall")
                 {
                     GameObject eff_breakwall = Instantiate(m_breakEffect, hit[i].transform.position, hit[i].transform.rotation);
