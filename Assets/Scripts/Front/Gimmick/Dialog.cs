@@ -11,11 +11,15 @@ namespace ToyBox
 
         float m_openNum;
 
-        Vector3 endSize;
+		Vector3 endSize;
+
+		//開ききったかどうか
+		bool ExtendedFlag;
 
         public void Init(Signboard arg_sign)
         {
             m_signboard = arg_sign;
+			ExtendedFlag = false;
             m_openNum = 0;
 
             //画面の比率に合わせてスプライトの大きさを変える　ネットからパクリスペクト
@@ -42,13 +46,14 @@ namespace ToyBox
         {
             m_openNum += endSize.x / 100;
 
-            if (transform.localScale.x < endSize.x - (endSize.x / 10))
+			if (transform.localScale.x < endSize.x - (endSize.x / 10) && !ExtendedFlag)
             {
                 transform.localScale += new Vector3(m_openNum, 0, 0);
             }
             else
             {
                 m_openNum = 0;
+				ExtendedFlag = true;
                 transform.localScale = new Vector3(endSize.x - (endSize.x / 10), endSize.y - (endSize.y / 20), 1);
             }
         }
