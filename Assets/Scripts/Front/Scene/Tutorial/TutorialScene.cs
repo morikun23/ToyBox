@@ -41,7 +41,7 @@ namespace ToyBox {
 
 			
 
-			yield return new WaitForSeconds(2.0f);
+			yield return new WaitForSeconds(0.5f);
 		}
 
 		public override IEnumerator OnUpdate() {
