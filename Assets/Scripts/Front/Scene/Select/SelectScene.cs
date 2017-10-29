@@ -9,12 +9,13 @@ namespace ToyBox
     {
 
         [SerializeField]
-        Sprite NoButtonPress, YesButtonPress;
+		Sprite NoButtonPress, YesButtonPress,Stage1ButtonPress,Stage2ButtonPress;
 
-        int selectResult = 0;
+        int selectResult;
 
         public override IEnumerator OnEnter()
         {
+			selectResult = 0;
             AppManager.Instance.m_fade.StartFade(new FadeIn(), Color.white, 1.0f);
             yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
         }
@@ -50,6 +51,22 @@ namespace ToyBox
 
                             break;
                         }
+						else if(Hit.collider.gameObject.name == "SP_SelectStage1")
+						{
+							Hit.collider.GetComponent<SpriteRenderer>().sprite = Stage1ButtonPress;
+							AppManager.Instance.m_audioManager.CreateSe("SE_TitleTouch").Play();
+							selectResult = 3;
+
+							break;
+						}
+						else if (Hit.collider.gameObject.name == "SP_SelectStage2")
+						{
+							Hit.collider.GetComponent<SpriteRenderer>().sprite = Stage2ButtonPress;
+							AppManager.Instance.m_audioManager.CreateSe("SE_TitleTouch").Play();
+							selectResult = 4;
+
+							break;
+						}
                     }
 
                 }
@@ -72,6 +89,15 @@ namespace ToyBox
             else if (selectResult == 2) {
                 UnityEngine.SceneManagement.SceneManager.LoadScene("Result");
             }
+			//ステージ１をえらんだ
+			else if (selectResult == 3)
+			{
+				UnityEngine.SceneManagement.SceneManager.LoadScene("Tutorial");
+			}
+			//ステージ２を選んだ
+			else if (selectResult == 4) {
+				UnityEngine.SceneManagement.SceneManager.LoadScene("Main");
+			}
 
         }
     }
