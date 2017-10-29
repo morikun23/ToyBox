@@ -7,9 +7,9 @@ namespace ToyBox{
 	public class Shutter : MonoBehaviour {
 
 		//このシャッターが開くのは初めてか？
-		bool m_flg_isInitOpen = true;
+		bool m_flg_isInitOpen = false;
 		//このシャッターが閉じるのは初めてか？
-		bool m_flg_isInitClose = true;
+		bool m_flg_isInitClose = false;
 		//このボタンが押された時に再生するカメラムーブのID
 		[SerializeField]
 		int m_num_cameraMoveId;
