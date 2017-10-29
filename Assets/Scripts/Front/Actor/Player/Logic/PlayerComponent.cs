@@ -110,6 +110,7 @@ namespace ToyBox {
 		public void Revive() {
 			if(GetCurrentState() != typeof(PlayerDeadState)) { return; }
 			StateTransition(new PlayerIdleState());
+			m_viewer.transform.position = this.transform.position;
 		}
 	}
 }
