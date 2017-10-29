@@ -8,11 +8,20 @@ namespace ToyBox {
 		[SerializeField]
 		private ActorBase.Direction m_direction;
 
+		int m_cnt_pushBarrage = 0;
+		int m_cnt_live = 0;
+
 		public override void Initialize() {
 			base.Initialize();
 		}
 
 		public override void UpdateByFrame() {
+
+			m_cnt_live++;
+			if(m_cnt_pushBarrage > 0){
+				if (m_cnt_live % 15 == 0)
+					m_cnt_pushBarrage -= 1;
+			}
 
 			base.UpdateByFrame();
 
@@ -32,12 +41,21 @@ namespace ToyBox {
 
 		public override void OnDown() {
 			base.OnDown();
+
+			Debug.Log (m_cnt_pushBarrage);
+			m_cnt_pushBarrage += 1;
+			if(m_cnt_pushBarrage > 10){
+				PlayerComponent hoge = m_playable as PlayerComponent;
+				hoge.Dead ();
+				m_cnt_pushBarrage = 0;
+			}
 		}
 
 		public override void OnPress() {
 			base.OnPress();
 			m_playable.m_direction = m_direction;
 			m_playable.m_inputHandle.m_run = true;
+
 		}
 
 		public override void OnUp() {
