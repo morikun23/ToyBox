@@ -36,7 +36,7 @@ namespace ToyBox
         // Use this for initialization
         void Start()
         {
-            m_mainObj = transform.FindChild("Bomb").gameObject;
+            m_mainObj = transform.Find("Bomb").gameObject;
 
             m_anime = m_mainObj.GetComponent<Animator>();
 

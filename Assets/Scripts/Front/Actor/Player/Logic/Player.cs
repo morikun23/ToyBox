@@ -39,7 +39,7 @@ namespace ToyBox {
 		public override BoxCollider2D m_body {
 			get {
 				//一応Find関数を使用しているが、なるべく使用したくない
-				return m_bodyColliderBuf ?? transform.FindChild("Body").GetComponent<BoxCollider2D>();
+				return m_bodyColliderBuf ?? transform.Find("Body").GetComponent<BoxCollider2D>();
 			}
 		}
 
@@ -49,7 +49,7 @@ namespace ToyBox {
 		public override BoxCollider2D m_foot {
 			get {
 				//一応Find関数を使用しているが、なるべく使用したくない
-				return m_bodyColliderBuf ?? transform.FindChild("Foot").GetComponent<BoxCollider2D>();
+				return m_bodyColliderBuf ?? transform.Find("Foot").GetComponent<BoxCollider2D>();
 			}
 		}
 

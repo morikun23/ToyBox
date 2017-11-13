@@ -21,10 +21,10 @@ namespace ToyBox {
 			//m_lineRenderer.sortingOrder = m_depth;
 
 			if (arg_arm.m_currentState.GetType() == typeof(ArmStandByState)) {
-				m_lineRenderer.numPositions = 0;
+				m_lineRenderer.positionCount = 0;
 			}
 			else {
-				m_lineRenderer.numPositions = 2;
+				m_lineRenderer.positionCount = 2;
 				m_lineRenderer.SetPosition(0 , (Vector3)arg_arm.GetBottomPosition() + (Vector3.forward * -m_depth));
 				m_lineRenderer.SetPosition(1 , (Vector3)arg_arm.GetTopPosition() + (Vector3.forward * -m_depth));
 			}

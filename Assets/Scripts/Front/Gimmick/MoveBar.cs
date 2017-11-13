@@ -31,10 +31,10 @@ namespace ToyBox.Oyama
             nowPos = targetPos = Vector2.zero;
 
             //各種オブジェの参照
-            m_StartPoint = transform.FindChild("StartPoint").transform.position;
-            m_EndPoint = transform.FindChild("EndPoint").transform.position;
+            m_StartPoint = transform.Find("StartPoint").transform.position;
+            m_EndPoint = transform.Find("EndPoint").transform.position;
 
-            m_Bar = transform.FindChild("Bar").gameObject;
+            m_Bar = transform.Find("Bar").gameObject;
             m_Bar.transform.position = m_StartPoint;
 
             targetPos = m_EndPoint;
