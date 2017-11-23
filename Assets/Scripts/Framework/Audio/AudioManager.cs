@@ -271,6 +271,20 @@ namespace ToyBox {
 		}
 
 		/// <summary>
+		/// BGMの再生を一時停止させる
+		/// </summary>
+		public void PauseBGM() {
+			m_bgm.Pause();
+		}
+
+		/// <summary>
+		/// BGMの再生を再開する
+		/// </summary>
+		public void ResumeBGM() {
+			m_bgm.UnPause();
+		}
+
+		/// <summary>
 		/// BGMをフェードインさせる
 		/// </summary>
 		/// <param name="arg_duration">フェードにかける時間</param>
