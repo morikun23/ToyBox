@@ -119,7 +119,7 @@ namespace ToyBox {
 		/// <returns></returns>
 		private AudioSource GetAudioSourceFromPool() {
 			if (m_sePool.Count <= 0) {
-				Debug.LogWarning("[ToyBox]Audioが規定量を超えました");
+				Debug.LogWarning("[ToyBox]Audioの許容量を超えたためAudioSourceを追加しました");
 				CreateAndEnqueueAudioSource(1);
 			} 
 			return m_sePool.Dequeue();
