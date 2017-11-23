@@ -152,7 +152,8 @@ namespace ToyBox {
 		/// 登録されたSEを再生する
 		/// </summary>
 		/// <param name="arg_tag">登録名</param>
-		public void PlaySE(string arg_tag) {
+		/// <param name="arg_loop">ループするか</param>
+		public void PlaySE(string arg_tag,bool arg_loop = false) {
 			if (!m_activeAudioSources.ContainsKey(arg_tag)) {
 				Debug.LogError("[ToyBox]指定されたTagで登録されたSEが見つかりません:" + "<color=red>" + arg_tag + "</color>");
 				return;
@@ -160,6 +161,7 @@ namespace ToyBox {
 
 			AudioSource audioSource = m_activeAudioSources[arg_tag];
 			audioSource.volume = m_option.seVolume;
+			audioSource.loop = arg_loop;
 			audioSource.Play();
 		}
 
