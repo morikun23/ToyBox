@@ -183,6 +183,40 @@ namespace ToyBox {
 		}
 
 		/// <summary>
+		/// SEを登録せずに直接再生させる
+		/// ※登録せずに再生させる場合は管理を行わないので注意
+		/// </summary>
+		/// <param name="arg_clipName">再生するSEファイル名</param>
+		public void QuickPlaySE(string arg_clipName) {
+			if (!m_seBuffer.ContainsKey(arg_clipName)) {
+				Debug.LogError("[ToyBox]指定されたファイルが見つかりません:" + "<color=red>" + arg_clipName + "</color>");
+				return;
+			}
+
+			AudioSource audioSource = GetAudioSourceFromPool();
+			audioSource.enabled = true;
+			audioSource.clip = m_seBuffer[arg_clipName];
+			StartCoroutine(PlayAndRelease(audioSource));
+		}
+
+		/// <summary>
+		/// SEを再生させる
+		/// SEの再生が終了したらプールへ戻す
+		/// </summary>
+		/// <param name="arg_audioSource">再生させるAudioSource</param>
+		/// <returns></returns>
+		private IEnumerator PlayAndRelease(AudioSource arg_audioSource) {
+			arg_audioSource.volume = m_option.seVolume;
+			arg_audioSource.loop = false;
+			arg_audioSource.Play();
+
+			yield return new WaitWhile(() => arg_audioSource.isPlaying);
+
+			arg_audioSource.enabled = false;
+			m_sePool.Enqueue(arg_audioSource);
+		}
+
+		/// <summary>
 		/// BGMを登録する
 		/// </summary>
 		/// <param name="arg_clipName">登録するBGMファイル名</param>
