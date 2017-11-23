@@ -377,17 +377,6 @@ namespace ToyBox {
 				SetBGMVolume(value);
 			}
 		}
-		
-		/// <summary>
-		/// SEを追加する
-		/// 旧バージョン
-		/// ※今後、削除予定
-		/// </summary>
-		/// <param name="arg_clipName"></param>
-		/// <returns></returns>
-		public AudioSource CreateSe(string arg_clipName) {
-			return null;
-		}
 
 		#region Inspectorで音量調節を可能にするための処理
 #if UNITY_EDITOR

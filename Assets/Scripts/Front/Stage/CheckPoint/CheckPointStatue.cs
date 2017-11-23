@@ -25,8 +25,8 @@ namespace ToyBox {
 			if (arg_collider.gameObject.layer == LayerMask.NameToLayer("Player")) {
 				if (!m_isActive) {
 					m_animator.SetBool("Active" , true);
-					AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_SavePoint");
-					source.Play();
+					//AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_SavePoint");
+					//source.Play();
 				}
 			}
 			base.OnTriggerEnter2D(arg_collider);

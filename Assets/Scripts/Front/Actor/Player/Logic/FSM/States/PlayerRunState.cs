@@ -41,8 +41,8 @@ namespace ToyBox {
 			};
 			m_cnt_move += 1;
 			if(m_cnt_move % 10 == 0){
-				AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_Player_walk");
-				source.Play ();
+				//AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_Player_walk");
+				//source.Play ();
 			}
 
 

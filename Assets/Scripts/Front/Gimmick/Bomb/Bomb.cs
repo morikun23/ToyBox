@@ -108,8 +108,8 @@ namespace ToyBox
             rad += rad * 2;
 
             //音じゃ
-            AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_Bomb_expload");
-            source.Play();
+            //AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_Bomb_expload");
+            //source.Play();
 
             List<RaycastHit2D> hit = new List<RaycastHit2D>();
 

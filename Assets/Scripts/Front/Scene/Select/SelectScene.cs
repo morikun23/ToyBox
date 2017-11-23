@@ -37,7 +37,7 @@ namespace ToyBox
                         if(Hit.collider.gameObject.name == "UI_Button_YES")
                         {
                             Hit.collider.GetComponent<SpriteRenderer>().sprite = YesButtonPress;
-                            AppManager.Instance.m_audioManager.CreateSe("SE_TitleTouch").Play();
+                            //AppManager.Instance.m_audioManager.CreateSe("SE_TitleTouch").Play();
                             selectResult = 1;
 
                             break;
@@ -45,7 +45,7 @@ namespace ToyBox
                         else if (Hit.collider.gameObject.name == "UI_Button_NO")
                         {
                             Hit.collider.GetComponent<SpriteRenderer>().sprite = NoButtonPress;
-                            AppManager.Instance.m_audioManager.CreateSe("SE_TitleTouch").Play();
+                            //AppManager.Instance.m_audioManager.CreateSe("SE_TitleTouch").Play();
                             selectResult = 2;
 
                             break;

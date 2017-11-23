@@ -33,8 +33,8 @@ namespace ToyBox{
 			m_sRend_.sprite = m_spr_pushed;
 			StartCoroutine (m_scr_shutter.OpenMoveCamera());
 
-			AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_Switch_push");
-			source.Play ();
+			//AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_Switch_push");
+			//source.Play ();
 		}
 		void OnTriggerExit2D(Collider2D arg_col){
 
@@ -44,8 +44,8 @@ namespace ToyBox{
 			m_sRend_.sprite = m_spr_newtoral;
 			StartCoroutine (m_scr_shutter.CloseMoveCamera());
 
-			AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_Switch_cancel");
-			source.Play ();
+			//AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_Switch_cancel");
+			//source.Play ();
 		}
 
 
