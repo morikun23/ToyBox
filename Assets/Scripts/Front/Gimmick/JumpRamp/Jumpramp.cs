@@ -19,8 +19,8 @@ namespace ToyBox
         //プレイヤがジャンプ台に乗ったとき
         void OnCollisionEnter2D(Collision2D col)
         {
-            GameObject col_player;
-            col_player = col.gameObject;
+            GameObject m_playercol;
+            m_playercol = col.gameObject;
 
             ContactPoint2D contact = col.contacts[0];
 
@@ -31,7 +31,7 @@ namespace ToyBox
                 m_anim.SetTrigger("Jump");
 
                 //velocityでジャンプ量を制御
-                col_player.GetComponent<Rigidbody2D>().velocity = new Vector2(0, m_jumpPower);
+                m_playercol.GetComponent<Rigidbody2D>().velocity = new Vector2(0, m_jumpPower);
 
             }
         }
