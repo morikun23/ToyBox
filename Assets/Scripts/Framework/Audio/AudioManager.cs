@@ -208,12 +208,17 @@ namespace ToyBox {
 		private IEnumerator PlayAndRelease(AudioSource arg_audioSource) {
 			arg_audioSource.volume = m_option.seVolume;
 			arg_audioSource.loop = false;
+
+			//ユニーク（唯一）な名前にするために現在時刻で登録する
+			string seName = arg_audioSource.clip.name + System.DateTime.Now + System.DateTime.Now.Millisecond;
+			m_activeAudioSources.Add(seName , arg_audioSource);
 			arg_audioSource.Play();
 
 			yield return new WaitWhile(() => arg_audioSource.isPlaying);
 
 			arg_audioSource.enabled = false;
 			m_sePool.Enqueue(arg_audioSource);
+			m_activeAudioSources.Remove(seName);
 		}
 
 		/// <summary>
