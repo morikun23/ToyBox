@@ -55,7 +55,7 @@ namespace ToyBox {
 
 		//再生できるSEの量
 		[SerializeField,Tooltip("再生できるSEの量")]
-		private uint m_seSize = 10;
+		private uint m_seSize = 20;
 
 		//再生するAudioSourceの設定
 		[SerializeField]
