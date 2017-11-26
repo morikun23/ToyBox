@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ToyBox
 {
-    public class JumpRamp : MonoBehaviour
+    public class JumpStand : MonoBehaviour
     {
         [Range(5,12)]
         public float m_jumpPower;
