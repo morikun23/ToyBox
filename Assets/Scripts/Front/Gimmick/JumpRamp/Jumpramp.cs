@@ -4,12 +4,14 @@ using UnityEngine;
 
 namespace ToyBox
 {
-    public class Jumpramp : MonoBehaviour
+    public class JumpRamp : MonoBehaviour
     {
         [Range(5,12)]
         public float m_jumpPower;
 
-        Animator m_anim;
+        private Animator m_anim;
+
+        private GameObject m_colObject;   //衝突したゲームオブジェクト格納用
 
         void Start()
         {
@@ -19,21 +21,25 @@ namespace ToyBox
         //プレイヤがジャンプ台に乗ったとき
         void OnCollisionEnter2D(Collision2D col)
         {
-            GameObject m_playercol;
-            m_playercol = col.gameObject;
+
+            m_colObject = col.gameObject;
 
             ContactPoint2D contact = col.contacts[0];
 
-            //プレイヤが上から台にに乗ったとき大ジャンプ
+            //プレイヤが上から台に乗ったとき大ジャンプ
             if (contact.normal.y <= -1)
             {
-                //アニメーションを遷移
-                m_anim.SetTrigger("Jump");
-
-                //velocityでジャンプ量を制御
-                m_playercol.GetComponent<Rigidbody2D>().velocity = new Vector2(0, m_jumpPower);
-
+                HighJump();
             }
+        }
+
+        void HighJump()
+        {
+            //アニメーションを遷移
+            m_anim.SetTrigger("Jump");
+
+            //velocityでジャンプ量を制御
+            m_colObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, m_jumpPower);
         }
     }
 }
