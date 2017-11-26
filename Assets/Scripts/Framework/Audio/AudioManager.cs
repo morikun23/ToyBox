@@ -166,10 +166,24 @@ namespace ToyBox {
 		}
 
 		/// <summary>
-		/// SEを終了させ、登録を破棄する
+		/// SEの再生を停止させる
 		/// </summary>
 		/// <param name="arg_tag">登録名</param>
 		public void StopSE(string arg_tag) {
+			if (!m_activeAudioSources.ContainsKey(arg_tag)) {
+				Debug.LogError("[ToyBox]指定されたTagで登録されたSEが見つかりません:" + "<color=red>" + arg_tag + "</color>");
+				return;
+			}
+
+			AudioSource audioSource = m_activeAudioSources[arg_tag];
+			audioSource.Stop();
+		}
+
+		/// <summary>
+		/// SEを終了させ、登録を破棄する
+		/// </summary>
+		/// <param name="arg_tag">登録名</param>
+		public void ReleaseSE(string arg_tag) {
 			if (!m_activeAudioSources.ContainsKey(arg_tag)) {
 				Debug.LogError("[ToyBox]指定されたTagで登録されたSEが見つかりません:" + "<color=red>" + arg_tag + "</color>");
 				return;
