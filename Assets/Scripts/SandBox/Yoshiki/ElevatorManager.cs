@@ -57,8 +57,6 @@ namespace ToyBox.Yoshiki
                     m_isHit = Physics2D.Raycast(transform.position + m_correction, Vector3.left, 0.3f, 1 << LayerMask.NameToLayer("Player"));
                 }
 
-                Debug.Log(m_isHit);
-
                 if (m_isHit && !m_isRide)
                 {
                     m_isRide = true;
@@ -78,6 +76,7 @@ namespace ToyBox.Yoshiki
         void OnDrawGizmos()
         {
             Gizmos.DrawWireCube(transform.position - m_correction, Vector3.right);
+            
         }
 
 
