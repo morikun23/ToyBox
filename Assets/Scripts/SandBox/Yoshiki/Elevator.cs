@@ -13,6 +13,13 @@ namespace ToyBox.Yoshiki
         //エレベーター
         GameObject m_elevator;
 
+        Gate m_startGate;
+        Gate m_endGate;
+        [SerializeField]
+        bool m_isStart;
+        [SerializeField]
+        bool m_isEnd;
+
         BoxCollider2D m_left;
         BoxCollider2D m_right;
 
@@ -20,25 +27,28 @@ namespace ToyBox.Yoshiki
         [SerializeField]
         float m_moveNum;
 
-        Vector2 nowPos, targetPos;
+        Vector2 m_nowPos, m_targetPos;
 
-        public bool actionFlag = false;
+        public bool m_isAction = false;
 
         private Rigidbody2D m_rigidbody;
 
         // Use this for initialization
         void Start()
         {
-            nowPos = targetPos = Vector2.zero;
-
+            m_nowPos = m_targetPos = Vector2.zero;
+            
             //各種オブジェの参照
             m_startPoint = transform.Find("StartPoint").transform.position;
             m_endPoint = transform.Find("EndPoint").transform.position;
 
+            m_startGate = transform.Find("StartPoint").transform.Find("StartGate").GetComponent<Gate>();
+            m_endGate = transform.Find("EndPoint").transform.Find("EndGate").GetComponent<Gate>();
+
             m_elevator = transform.Find("Collider").gameObject;
             m_elevator.transform.position = m_startPoint;
 
-            targetPos = m_endPoint;
+            m_targetPos = m_endPoint;
 
             //TODO:プレハブへRigidbodyを追加させる
             if (m_rigidbody == null)
@@ -53,36 +63,42 @@ namespace ToyBox.Yoshiki
         // Update is called once per frame
         void Update()
         {
-            if (!actionFlag) return;
+            if (!m_isAction) return;
 
-            nowPos = Vector2.MoveTowards(m_elevator.transform.position, targetPos, m_moveNum);
+            m_nowPos = Vector2.MoveTowards(m_elevator.transform.position, m_targetPos, m_moveNum);
 
-            if (nowPos == m_startPoint || nowPos == m_endPoint)
+            if (m_nowPos == m_startPoint || m_nowPos == m_endPoint)
             {
-                if (targetPos == m_startPoint)
+                if (m_targetPos == m_startPoint)
                 {
-                    
-                    targetPos = m_endPoint;
-                    actionFlag = false;
+                    m_endGate.Close();
+                    m_targetPos = m_endPoint;
+                    m_isAction = false;
                 }
                 else
                 {
-                    targetPos = m_startPoint;
-                    actionFlag = false;
+                    m_startGate.Close();
+                    m_targetPos = m_startPoint;
+                    m_isAction = false;
                 }
 
             }
             else
             {
-
-                m_rigidbody.MovePosition(nowPos);
+                m_rigidbody.MovePosition(m_nowPos);
             }
         }
 
         //外部から作動させたい場合に
         public void Action()
         {
-            actionFlag = true;
+            m_isAction = true;
+            m_isStart = !m_isStart;
+            m_isEnd = !m_isEnd;
+
+            if(m_isStart){ m_startGate.Open(); }
+            if (m_isEnd) { m_endGate.Open(); }
+
         }
 
     }

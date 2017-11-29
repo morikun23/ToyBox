@@ -6,20 +6,10 @@ namespace ToyBox.Yoshiki
 {
     public class ElevatorManager : MonoBehaviour
     {
-        enum m_Direction
-        {
-            m_right,
-            m_left
-        }
-
         Elevator m_elevator;
 
         Vector3 m_correction = new Vector3(0.3f, 0);
-
-        //開いてる方
-        [SerializeField]
-        m_Direction m_direction;
-
+        
         bool m_isHit;
         bool m_isRide;
 
@@ -33,6 +23,7 @@ namespace ToyBox.Yoshiki
         {
             m_elevator = transform.parent.gameObject.GetComponent<Elevator>();
             StartCoroutine("UpdateByFrame");
+            m_isHit = false;
             m_isRide = false;
         }
 
@@ -42,20 +33,7 @@ namespace ToyBox.Yoshiki
         {
             while (true)
             {
-                if (m_direction == m_Direction.m_right)
-                {
-                    // ＿＿
-                    //|
-                    //|＿＿  の場合
-                    m_isHit = Physics2D.Raycast(transform.position - m_correction, Vector3.right, 0.3f, 1 << LayerMask.NameToLayer("Player"));
-                }
-                else
-                {
-                    //＿＿
-                    //　　|
-                    //＿＿|  の場合
-                    m_isHit = Physics2D.Raycast(transform.position + m_correction, Vector3.left, 0.3f, 1 << LayerMask.NameToLayer("Player"));
-                }
+                m_isHit = Physics2D.BoxCast(transform.position + new Vector3(0f, 0.5f), new Vector2(0.2f, 0.2f), 0f, Vector2.one, 1f);
 
                 if (m_isHit && !m_isRide)
                 {
@@ -72,13 +50,11 @@ namespace ToyBox.Yoshiki
             }
 
         }
-
         void OnDrawGizmos()
         {
-            Gizmos.DrawWireCube(transform.position - m_correction, Vector3.right);
-            
-        }
+            Gizmos.DrawWireCube(transform.position + new Vector3(0f, 0.5f), Vector2.one);
 
+        }
 
     }
 }
