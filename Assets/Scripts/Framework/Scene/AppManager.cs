@@ -44,7 +44,7 @@ namespace ToyBox {
 		/// </summary>
 		void Initialize() {
 			m_audioManager = new GameObject("Audio").AddComponent<AudioManager>();
-			m_audioManager.Initialize();
+			//m_audioManager.Initialize(0);
 			m_fade = FindObjectOfType<Fade>();
 
 			m_camera = CameraPosController.Instance;

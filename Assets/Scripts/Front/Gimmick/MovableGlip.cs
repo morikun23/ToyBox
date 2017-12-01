@@ -29,8 +29,8 @@ namespace ToyBox {
 			SetAbleGrasp (false);
 			SetAbleRelease (false);
 
-			AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_PlayerHand_grab");
-			source.Play ();
+			//AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_PlayerHand_grab");
+			//source.Play ();
 		}
 
 		public override void OnGraspedStay(PlayerComponent arg_player) {
