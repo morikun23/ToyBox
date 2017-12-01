@@ -96,6 +96,9 @@ namespace ToyBox {
 			CreateAndEnqueueAudioSource(m_seSize);
 			#endregion
 
+			//シーン遷移で削除されないようにする
+			DontDestroyOnLoad(this.gameObject);
+
 		}
 
 		/// <summary>
