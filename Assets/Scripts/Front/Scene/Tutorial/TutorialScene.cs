@@ -30,7 +30,7 @@ namespace ToyBox
 
             //入力環境を初期化
             m_inputManager = GetComponent<InputManager>();
-            m_inputManager.Initialize();
+           //m_inputManager.Initialize();
 
             AppManager.Instance.m_fade.StartFade(new FadeIn(), Color.black, 1.0f);
             yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);

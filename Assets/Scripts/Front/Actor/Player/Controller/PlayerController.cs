@@ -34,23 +34,23 @@ namespace ToyBox.Morita {
 				m_playable.m_direction = ActorBase.Direction.RIGHT;
 			}
 
-			if (Input.GetMouseButtonDown(0)) {
-				Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-				//タッチをした位置にオブジェクトがあるかどうかを判定
-				RaycastHit2D hit = Physics2D.Raycast(worldPoint , Vector2.zero,0.1f,1 << LayerMask.NameToLayer("Item") | 1 << LayerMask.NameToLayer("PotableItem_Ground"));
-
-				if (m_hand.IsGrasping()) {
-					m_playable.Release();
-				}
-				else {
-					if (hit) {
-						Item item = hit.collider.GetComponent<Item>();
-						m_playable.ReachOutFor(item);
-					}
-				}
-
-			}
+//			if (Input.GetMouseButtonDown(0)) {
+//				Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+//
+//				//タッチをした位置にオブジェクトがあるかどうかを判定
+//				RaycastHit2D hit = Physics2D.Raycast(worldPoint , Vector2.zero,0.1f,1 << LayerMask.NameToLayer("Item") | 1 << LayerMask.NameToLayer("PotableItem_Ground"));
+//
+//				if (m_hand.IsGrasping()) {
+//					m_playable.Release();
+//				}
+//				else {
+//					if (hit) {
+//						Item item = hit.collider.GetComponent<Item>();
+//						m_playable.ReachOutFor(item);
+//					}
+//				}
+//
+//			}
 
 			m_playable.m_inputHandle.m_run = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow);
 
