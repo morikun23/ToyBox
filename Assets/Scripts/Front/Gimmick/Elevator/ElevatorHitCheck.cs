@@ -2,23 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ToyBox.Yoshiki
+namespace ToyBox
 {
-    public class ElevatorManager : MonoBehaviour
+    public class ElevatorHitCheck : MonoBehaviour
     {
-        Elevator m_elevator;
+        private Elevator m_elevator;
 
-        Vector3 m_correction = new Vector3(0.3f, 0);
+        private Vector3 m_correction = new Vector3(0.3f, 0);
         
-        bool m_isHit;
-        bool m_isRide;
+        private bool m_isHit;
+        private bool m_isRide;
 
         void Start()
         {
             Initialize();
         }
 
-        // Use this for initialization
         void Initialize()
         {
             m_elevator = transform.parent.gameObject.GetComponent<Elevator>();
@@ -27,8 +26,6 @@ namespace ToyBox.Yoshiki
             m_isRide = false;
         }
 
-
-        // Update is called once per frame
         IEnumerator UpdateByFrame()
         {
             while (true)
@@ -50,11 +47,14 @@ namespace ToyBox.Yoshiki
             }
 
         }
+
+#if UNITY_EDITOR 
         void OnDrawGizmos()
         {
             Gizmos.DrawWireCube(transform.position + new Vector3(0f, 0.5f), Vector2.one);
 
         }
+#endif
 
     }
 }

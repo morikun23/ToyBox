@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-namespace ToyBox.Yoshiki
+namespace ToyBox
 {
     public class Gate : MonoBehaviour
     {
