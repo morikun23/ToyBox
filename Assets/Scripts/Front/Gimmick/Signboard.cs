@@ -32,8 +32,8 @@ namespace ToyBox
             m_Prefab.transform.Find("Picture").GetComponent<SpriteRenderer>().sprite = m_picture;
 
             //音じゃ
-            AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_Dialog_open");
-            source.Play();
+            //AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_Dialog_open");
+            //source.Play();
 
             m_flg_ableGrasp = false;
             m_flg_ableReleace = false;
@@ -52,8 +52,8 @@ namespace ToyBox
             m_ExtendFlg = false;
 
             //音じゃ
-            AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_Dialog_close");
-            source.Play();
+            //AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_Dialog_close");
+            //source.Play();
 
             arg_player.Arm.m_shorten = true;
             m_flg_ableGrasp = true;

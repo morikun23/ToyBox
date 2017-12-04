@@ -86,8 +86,8 @@ namespace ToyBox{
 
 
 			m_enu_status = Status.up;
-			AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_Shutter_open");
-			source.Play ();
+			//AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_Shutter_open");
+			//source.Play ();
 
 			yield return new WaitForSeconds (m_num_attentionTime);
 
@@ -114,8 +114,8 @@ namespace ToyBox{
 			}
 	
 			m_enu_status = Status.down;
-			AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_Shutter_close");
-			source.Play ();
+			//AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_Shutter_close");
+			//source.Play ();
 
 			yield return new WaitForSeconds (m_num_attentionTime);
 

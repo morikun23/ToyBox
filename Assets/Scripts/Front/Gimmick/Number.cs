@@ -44,8 +44,8 @@ namespace ToyBox
                     m_animetor.SetBool("light",true);
                     hited = true;
                     m_collider.enabled = false;
-                    AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_NumberOrder_count");
-                    source.Play();
+                    //AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_NumberOrder_count");
+                    //source.Play();
 
                 }
                 else
