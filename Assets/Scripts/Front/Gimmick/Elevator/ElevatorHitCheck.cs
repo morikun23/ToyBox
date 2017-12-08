@@ -6,9 +6,8 @@ namespace ToyBox
 {
     public class ElevatorHitCheck : MonoBehaviour
     {
+        
         private Elevator m_elevator;
-
-        private Vector3 m_correction = new Vector3(0.3f, 0);
         
         private bool m_isHit;
         private bool m_isRide;
@@ -30,15 +29,17 @@ namespace ToyBox
         {
             while (true)
             {
+                //当たり判定
                 m_isHit = Physics2D.BoxCast(transform.position + new Vector3(0f, 0.5f), new Vector2(0.2f, 0.2f), 0f, Vector2.one, 1f);
 
+                //初めて乗ったとき
                 if (m_isHit && !m_isRide)
                 {
                     m_isRide = true;
                     yield return new WaitForSeconds(2f);
                     m_elevator.Action();
                     
-                }
+                }//さっきまで乗ってたとき
                 else if(!m_isHit && m_isRide)
                 {
                     m_isRide = false;
@@ -51,6 +52,7 @@ namespace ToyBox
 #if UNITY_EDITOR 
         void OnDrawGizmos()
         {
+            //Castの可視化
             Gizmos.DrawWireCube(transform.position + new Vector3(0f, 0.5f), Vector2.one);
 
         }
