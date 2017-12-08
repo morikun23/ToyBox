@@ -36,20 +36,20 @@ namespace ToyBox{
 		Camera[] m_cam_judge;
 
 		//このコントローラーで操作するオブジェクト
-		Playable m_scr_playable;
+		Player m_scr_playable;
 
 		//Hierarchy上のツリー内で、InputActorが存在する最大深度
 		//root/hoge/fuga/TouchActorとツリーが出来ているなら、値は３と入力します
-		[SerializeField,Range(0,10)]
+		[SerializeField,Range(0,10),Tooltip("Hierarchy上で root/hoge/fuga/TouchActorとツリーが出来ているなら、値は３と入力します")]
 		int m_num_maxHierarchy;
 
 		// Use this for initialization
 		void Start () {
-			m_scr_playable = FindObjectOfType<Playable> ();
+			m_scr_playable = FindObjectOfType<Player> ();
 		}
 		
 		// Update is called once per frame
-		public void UpdateByFrame() {
+		void Update() {
 
 			if (!m_flg_active)
 				return;
@@ -98,6 +98,9 @@ namespace ToyBox{
 				}
 			}
 
+			if(m_scr_playable.GetCurrentState() != typeof(PlayerDeadState)){
+				m_flg_active = false;
+			}
 		}
 
 		//LineTraceを行い、複数のオブジェクトがヒットした場合は深度判定を行う
@@ -146,6 +149,9 @@ namespace ToyBox{
 			return baf_compActor;
 		}
 
+		/// <summary>
+		/// Hierarchy上で、InputActorが存在する最大深度を返します。
+		/// </summary>
 		public int GetMaxHeirarchy(){
 			return m_num_maxHierarchy;
 		}
@@ -157,6 +163,11 @@ namespace ToyBox{
 			m_flg_active = enabled;
 		}
 
+		/// <summary>
+		/// <para>このコントローラーが動かしているプレーヤーを返します。</para>
+		/// </summary>
+		/// <returns>The playable charactor.</returns>
+		//　旧InputManagerの機能の為、このスクリプト内では未使用
 		public Playable GetPlayableCharactor(){
 			return m_scr_playable;
 		}

@@ -43,10 +43,10 @@ namespace ToyBox
 
             while (true)
             {
-                if (m_player.GetCurrentState() != typeof(PlayerDeadState))
-                {
-                    m_inputManager.UpdateByFrame();
-                }
+//                if (m_player.GetCurrentState() != typeof(PlayerDeadState))
+//                {
+//                    //m_inputManager.UpdateByFrame();
+//                }
                 if (m_stage.DoesPlayerReachGoal())
                 {
                     m_doorAnimation.SetBool("Open", true);

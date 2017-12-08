@@ -63,9 +63,9 @@ namespace ToyBox {
 		public override IEnumerator OnUpdate() {
 
 			while (true) {
-				if(m_player.GetCurrentState() != typeof(PlayerDeadState)){
-					m_inputManager.UpdateByFrame();
-				}
+//				if(m_player.GetCurrentState() != typeof(PlayerDeadState)){
+//					m_inputManager.UpdateByFrame();
+//				}
 				if (m_stage.DoesPlayerReachGoal()) {
 					break;
 				}
