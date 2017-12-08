@@ -26,22 +26,22 @@ namespace ToyBox{
 		private InputManager() { }
 		#endregion
 
-		TouchActor[] m_scr_touchActor = new TouchActor[10];
-		bool[] m_flg_hit = new bool[10];
-		bool[] m_flg_swipe = new bool[10];
+		private TouchActor[] m_scr_touchActor = new TouchActor[10];
+		private bool[] m_flg_hit = new bool[10];
+		private bool[] m_flg_swipe = new bool[10];
 
-		bool m_flg_active = true;
+		private bool m_flg_active = true;
 
-		[SerializeField]
-		Camera[] m_cam_judge;
+		[SerializeField,Tooltip("このコントローラーが入力を受け取るカメラ配列")]
+		private Camera[] m_cam_judge;
 
 		//このコントローラーで操作するオブジェクト
-		Player m_scr_playable;
+		private Player m_scr_playable;
 
 		//Hierarchy上のツリー内で、InputActorが存在する最大深度
 		//root/hoge/fuga/TouchActorとツリーが出来ているなら、値は３と入力します
 		[SerializeField,Range(0,10),Tooltip("Hierarchy上で root/hoge/fuga/TouchActorとツリーが出来ているなら、値は３と入力します")]
-		int m_num_maxHierarchy;
+		private int m_num_maxHierarchy;
 
 		// Use this for initialization
 		void Start () {
@@ -98,7 +98,7 @@ namespace ToyBox{
 				}
 			}
 
-			if(m_scr_playable.GetCurrentState() != typeof(PlayerDeadState)){
+			if(m_scr_playable.GetCurrentState() == typeof(PlayerDeadState)){
 				m_flg_active = false;
 			}
 		}

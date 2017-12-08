@@ -11,8 +11,8 @@ using UnityEngine.UI;
 namespace ToyBox{
 	public class TouchActor : MonoBehaviour {
 
-		[SerializeField]
-		List<int> m_num_depth = new List<int>();
+		//[SerializeField]
+		private List<int> m_num_depth = new List<int>();
 
 		// Use this for initialization
 		public void Start () {
