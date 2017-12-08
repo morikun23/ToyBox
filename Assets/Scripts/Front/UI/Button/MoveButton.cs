@@ -8,13 +8,13 @@ namespace ToyBox {
 		[SerializeField]
 		private ActorBase.Direction m_direction;
 
-		public override void Initialize() {
-			base.Initialize();
-		}
+//		public override void Initialize() {
+//			base.Initialize();
+//		}
 
-		public override void UpdateByFrame() {
-
-			base.UpdateByFrame();
+//		public override void UpdateByFrame() {
+//
+//			base.UpdateByFrame();
 
 #if UNITY_EDITOR && DEVELOP
 			if (Input.GetKeyDown(m_key)) {
@@ -28,7 +28,7 @@ namespace ToyBox {
 				this.OnUp();
 			}
 #endif
-		}
+//		}
 
 		public override void OnDown() {
 			base.OnDown();
@@ -36,13 +36,14 @@ namespace ToyBox {
 
 		public override void OnPress() {
 			base.OnPress();
-			m_playable.m_direction = m_direction;
-			m_playable.m_inputHandle.m_run = true;
+			InputManager.Instance.GetPlayableCharactor ().m_direction = m_direction;
+			InputManager.Instance.GetPlayableCharactor ().m_inputHandle.m_run = true;
 		}
 
 		public override void OnUp() {
 			base.OnUp();
-			m_playable.m_inputHandle.m_run = false;
+
+			InputManager.Instance.GetPlayableCharactor ().m_inputHandle.m_run = false;
 		}
 
 	}

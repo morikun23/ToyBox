@@ -5,14 +5,14 @@ using UnityEngine;
 namespace ToyBox {
 	public class JumpButton : Button {
 
-		public override void Initialize() {
-			base.Initialize();
-		}
+//		public override void Initialize() {
+//			base.Initialize();
+//		}
 
-		public override void UpdateByFrame() {
-			base.UpdateByFrame();
-
-			m_animator.SetBool("Press" , !m_playable.m_isGrounded);
+//		public override void UpdateByFrame() {
+//			base.UpdateByFrame();
+//
+//			m_animator.SetBool("Press" , !m_playable.m_isGrounded);
 
 #if UNITY_EDITOR && DEVELOP
 			if (Input.GetKeyDown(m_key)) {
@@ -22,11 +22,11 @@ namespace ToyBox {
 				OnUp();
 			}
 #endif
-		}
+//		}
 
 		public override void OnDown() {
 			base.OnDown();
-			m_playable.m_inputHandle.m_jump = true;
+			InputManager.Instance.GetPlayableCharactor ().m_inputHandle.m_jump = true;
 			m_animator.SetBool("Press" , true);
 		}
 
@@ -36,7 +36,7 @@ namespace ToyBox {
 
 		public override void OnUp() {
 			base.OnUp();
-			m_playable.m_inputHandle.m_jump = false;
+			InputManager.Instance.GetPlayableCharactor ().m_inputHandle.m_jump = false;
 		}
 	}
 }

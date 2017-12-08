@@ -80,7 +80,7 @@ namespace ToyBox{
             if (m_flg_isInitOpen){
 				CameraPosController.Instance.SetTargetAndStart(m_num_cameraMoveId);
 
-                m_InputManager.InputStop();
+				m_InputManager.InputEnabled(false);
                 yield return new WaitForSeconds (m_num_attentionTime / 2);
 			}
 
@@ -94,7 +94,7 @@ namespace ToyBox{
 			if (m_flg_isInitOpen) {
 				CameraPosController.Instance.SetTargetAndStart (m_num_returnID);
 
-                m_InputManager.InputStart();
+				m_InputManager.InputEnabled(true);
                 m_flg_isInitOpen = false;
 			}
 
@@ -109,7 +109,7 @@ namespace ToyBox{
 			
 			if (m_flg_isInitClose) {
 				CameraPosController.Instance.SetTargetAndStart(m_num_cameraMoveId);
-                m_InputManager.InputStop();
+				m_InputManager.InputEnabled (false);
                 yield return new WaitForSeconds (m_num_attentionTime / 2);
 			}
 	
@@ -121,7 +121,7 @@ namespace ToyBox{
 
 			if(m_flg_isInitClose){
 				CameraPosController.Instance.SetTargetAndStart (m_num_returnID);
-                m_InputManager.InputStart();
+				m_InputManager.InputEnabled (true);
                 m_flg_isInitClose = false;
 			}
 

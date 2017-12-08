@@ -8,8 +8,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public abstract class ObjectBase : MonoBehaviour {
-		
+	public abstract class ObjectBase : TouchActor {
+
+		public void Start(){
+			base.Start ();
+		}
+
 		/// <summary>
 		/// コンストラクタ
 		/// GameObjectの呼び出しではコンストラクタは処理されないので注意！
@@ -26,6 +30,12 @@ namespace ToyBox {
 
 		//自身のTransform
 		private Transform m_transformBuf;
+
+		public override void TouchStart (Vector2 pos){
+			if(InputManager.Instance.GetPlayableCharactor ().IsAbleReach())
+				InputManager.Instance.GetPlayableCharactor ().ReachOutFor (gameObject.GetComponent<Item>());
+
+		}
 
 		/// <summary>
 		/// 自身のTransformを取得する
