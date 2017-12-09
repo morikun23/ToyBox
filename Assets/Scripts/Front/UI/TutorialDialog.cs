@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ToyBox
 {
 
-    public class Dialog : MonoBehaviour
+    public class TutorialDialog : MonoBehaviour
     {
         Signboard m_signboard;
 
