@@ -7,9 +7,9 @@ namespace ToyBox{
 	public class Shutter : MonoBehaviour {
 
 		//このシャッターが開くのは初めてか？
-		bool m_flg_isInitOpen = true;
+		//bool m_flg_isInitOpen = true;
 		//このシャッターが閉じるのは初めてか？
-		bool m_flg_isInitClose = true;
+		//bool m_flg_isInitClose = true;
 		//このボタンが押された時に再生するカメラムーブのID
 		[SerializeField]
 		int m_num_cameraMoveId;
@@ -77,12 +77,12 @@ namespace ToyBox{
 		public IEnumerator OpenMoveCamera(){
 
 
-            if (m_flg_isInitOpen){
-				CameraPosController.Instance.SetTargetAndStart(m_num_cameraMoveId);
-
-				m_InputManager.InputEnabled(false);
-                yield return new WaitForSeconds (m_num_attentionTime / 2);
-			}
+//            if (m_flg_isInitOpen){
+//				CameraPosController.Instance.SetTargetAndStart(m_num_cameraMoveId);
+//
+//				m_InputManager.InputEnabled(false);
+//                yield return new WaitForSeconds (m_num_attentionTime / 2);
+//			}
 
 
 			m_enu_status = Status.up;
@@ -91,12 +91,12 @@ namespace ToyBox{
 
 			yield return new WaitForSeconds (m_num_attentionTime);
 
-			if (m_flg_isInitOpen) {
-				CameraPosController.Instance.SetTargetAndStart (m_num_returnID);
-
-				m_InputManager.InputEnabled(true);
-                m_flg_isInitOpen = false;
-			}
+//			if (m_flg_isInitOpen) {
+//				CameraPosController.Instance.SetTargetAndStart (m_num_returnID);
+//
+//				m_InputManager.InputEnabled(true);
+//                m_flg_isInitOpen = false;
+//			}
 
             yield break;
 		}
@@ -107,11 +107,11 @@ namespace ToyBox{
             if (!isActiveAndEnabled)
 				yield break;
 			
-			if (m_flg_isInitClose) {
-				CameraPosController.Instance.SetTargetAndStart(m_num_cameraMoveId);
-				m_InputManager.InputEnabled (false);
-                yield return new WaitForSeconds (m_num_attentionTime / 2);
-			}
+//			if (m_flg_isInitClose) {
+//				CameraPosController.Instance.SetTargetAndStart(m_num_cameraMoveId);
+//				m_InputManager.InputEnabled (false);
+//                yield return new WaitForSeconds (m_num_attentionTime / 2);
+//			}
 	
 			m_enu_status = Status.down;
 			//AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_Shutter_close");
@@ -119,11 +119,11 @@ namespace ToyBox{
 
 			yield return new WaitForSeconds (m_num_attentionTime);
 
-			if(m_flg_isInitClose){
-				CameraPosController.Instance.SetTargetAndStart (m_num_returnID);
-				m_InputManager.InputEnabled (true);
-                m_flg_isInitClose = false;
-			}
+//			if(m_flg_isInitClose){
+//				CameraPosController.Instance.SetTargetAndStart (m_num_returnID);
+//				m_InputManager.InputEnabled (true);
+//                m_flg_isInitClose = false;
+//			}
 
             
             yield break;
