@@ -43,8 +43,8 @@ namespace ToyBox
             //Stopはアニメーターを停止してくれるが、その後再開できない糞メソッド
             //m_anime.Stop();
 
-            m_brastEffect = Resources.Load<GameObject>("Effect/EF_Explosion");
-            m_breakEffect = Resources.Load<GameObject>("Effect/EF_BreakWall");
+            m_brastEffect = Resources.Load<GameObject>("Effects/EF_Explosion");
+            m_breakEffect = Resources.Load<GameObject>("Effects/EF_BreakWall");
 
             m_rigid = GetComponent<Rigidbody2D>();
         }
