@@ -15,7 +15,7 @@ namespace ToyBox
         GameObject m_PFbomb;
 
         //爆弾プレハブへのパス
-        string m_bombPass = "Actor/Gimmick/GM_Bomb";
+        string m_bombPass = "Contents/Gimmick/Bomb/Prefabs/GM_Bomb";
 
         //何秒間隔で再度落とすか
         [SerializeField]
