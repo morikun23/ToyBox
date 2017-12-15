@@ -13,7 +13,7 @@ namespace ToyBox
         public GameObject m_diaPrefab;
 
         //生成したオブジェクト格納用
-        GameObject m_Prefab;
+        private GameObject m_Prefab;
 
         //オブジェクト生成場所
         public Vector3 m_formPos;

@@ -7,17 +7,17 @@ namespace ToyBox
 
     public class TutorialDialog : MonoBehaviour
     {
-        Signboard m_signboard;
+        private Signboard m_signboard;
 
-        float m_openNum;
+        private float m_openNum;
 
-        Vector3 endSize;
+        private Vector3 m_endSize;
 
-        float worldScreenHeight;
-        float worldScreenWidth;
+        private float m_worldScreenHeight;
+        private float m_worldScreenWidth;
         
-        float width;
-        float height;
+        private float m_width;
+        private float m_height;
 
         public void Init(Signboard arg_sign)
         {
@@ -29,40 +29,40 @@ namespace ToyBox
             SpriteRenderer sr = GetComponent<SpriteRenderer>();
 
             // カメラの外枠のスケールをワールド座標系で取得
-            worldScreenHeight = Camera.main.orthographicSize * 2f;
-            worldScreenWidth = worldScreenHeight / Screen.height * Screen.width;
+            m_worldScreenHeight = Camera.main.orthographicSize * 2f;
+            m_worldScreenWidth = m_worldScreenHeight / Screen.height * Screen.width;
 
             // スプライトのスケールもワールド座標系で取得
-            width = sr.sprite.bounds.size.x;
-            height = sr.sprite.bounds.size.y;
+            m_width = sr.sprite.bounds.size.x;
+            m_height = sr.sprite.bounds.size.y;
 
             //  両者の比率を出してスプライトのローカル座標系に反映
-            transform.localScale = new Vector3(worldScreenWidth / width, worldScreenHeight / height);
-            endSize = transform.localScale;
+            transform.localScale = new Vector3(m_worldScreenWidth / m_width, m_worldScreenHeight / m_height);
+            m_endSize = transform.localScale;
 
-            transform.localScale = new Vector3(0, endSize.y - (endSize.y / 20), 1);
+            transform.localScale = new Vector3(0, m_endSize.y - (m_endSize.y / 20), 1);
         }
 
         //ダイアログを一定値まで伸縮
         public void Extend()
         {
-            m_openNum += endSize.x / 100;
+            m_openNum += m_endSize.x / 100;
 
-            if (transform.localScale.x < endSize.x - (endSize.x / 10))
+            if (transform.localScale.x < m_endSize.x - (m_endSize.x / 10))
             {
                 transform.localScale += new Vector3(m_openNum, 0, 0);
             }
             else
             {
                 m_openNum = 0;
-                transform.localScale = new Vector3(endSize.x, endSize.y - (endSize.y / 20), 1);
+                transform.localScale = new Vector3(m_endSize.x, m_endSize.y - (m_endSize.y / 20), 1);
             }
         }
 
         //ダイアログを一定値まで収縮して削除
         public void Shrink()
         {
-            m_openNum += endSize.x / 100;
+            m_openNum += m_endSize.x / 100;
 
             transform.localScale += new Vector3(-m_openNum, 0, 0);
 
