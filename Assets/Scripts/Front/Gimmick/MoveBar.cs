@@ -48,8 +48,8 @@ namespace ToyBox
             nowPos = targetPos = Vector2.zero;
 
             //各種オブジェの参照
-            m_StartPoint = transform.Find("SP_MoveArea/StartPoint").transform.position;
-            m_EndPoint = transform.Find("SP_MoveArea/EndPoint").transform.position;
+            m_StartPoint = transform.Find("MoveArea/StartPoint").transform.position;
+            m_EndPoint = transform.Find("MoveArea/EndPoint").transform.position;
 
             m_Bar = transform.Find("Bar").gameObject;
             m_Bar.transform.position = m_StartPoint;
@@ -142,11 +142,11 @@ namespace ToyBox
                 EditorGUILayout.LabelField("※横向きで置きたい場合");
                 EditorGUILayout.LabelField("GM_MoveBarのRotationを０にした状態で押して回転してね");
                 //ボタンを追加
-                if (GUILayout.Button("Set->StartPos&EndPos"))
+                if (GUILayout.Button("Fix Range"))
                 {
 
                     this.moveBar = target as MoveBar;
-                    moveArea = moveBar.transform.Find("SP_MoveArea").gameObject;
+                    moveArea = moveBar.transform.Find("MoveArea").gameObject;
 
                     m_StartPointObj = moveArea.transform.Find("StartPoint").gameObject;
                     m_EndPointObj = moveArea.transform.Find("EndPoint").gameObject;
