@@ -13,7 +13,7 @@ namespace ToyBox
         public GameObject m_diaPrefab;
 
         //生成したオブジェクト格納用
-        GameObject m_Prefab;
+        private GameObject m_Prefab;
 
         //オブジェクト生成場所
         public Vector3 m_formPos;
@@ -28,8 +28,9 @@ namespace ToyBox
         {
             //ダイアログ生成
             m_Prefab = Instantiate(m_diaPrefab, m_formPos, Quaternion.identity);
-            m_Prefab.GetComponent<Dialog>().Init(this);
             m_Prefab.transform.Find("Picture").GetComponent<SpriteRenderer>().sprite = m_picture;
+            m_Prefab.GetComponent<TutorialDialog>().Init(this);
+            
 
             //音じゃ
             //AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_Dialog_open");
