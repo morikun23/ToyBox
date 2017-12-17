@@ -19,8 +19,7 @@ namespace ToyBox {
 			arg_player.m_rigidbody.velocity = Vector2.zero;
 			arg_player.m_viewer.m_animator.SetBool("Jump" , true);
 
-			//AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_Player_jump");
-			//source.Play ();
+			AudioManager.Instance.QuickPlaySE ("SE_Player_Jump");
 		}
 
 		/// <summary>
