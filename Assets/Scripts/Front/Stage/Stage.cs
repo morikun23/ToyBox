@@ -4,62 +4,82 @@ using UnityEngine;
 using System.Linq;
 
 namespace ToyBox {
-
-	public class StageConfig {
-		//ゴール地点のID幅
-		public const int GOAL_POINT_ID_MIN = 10;
-		public const int GOAL_POINT_ID_MAX = 99;
-		//スタート地点のID幅
-		public const int START_POINT_ID_MIN = 0100;
-		public const int START_POINT_ID_MAX = 9999;
-	}
-
 	public class Stage : MonoBehaviour {
-		
-		//中間地点
-		private List<CheckPoint> m_checkPoints;
+
+		//初期地点
+		private List<StartPoint> m_startPoints;
+
+		//ゴール地点
+		private List<GoalPoint> m_goalPoints;
 
 		//小部屋
 		private List<PlayRoom> m_playRooms;
-
-		//部屋の遷移を通知するコライダー
-		private List<RoomCollider> m_roomColliders;
-
-		//初期スタート地点だと判別するid
-		private const int START_POINT_ID = 101;
-
+		
 		//現在のリスタート地点
 		private StartPoint m_currentStartPoint;
 
-		//ゴールしたか
-		private bool m_isGoal;
-
 		//監視を行うプレイヤー
-		private PlayerComponent m_player;
+		private Player m_player;
 
 		//現在プレイヤーが入っている部屋
 		private PlayRoom m_activePlayroom;
 
-		private void Start() {
-			
-		}
+		private System.Action<object> m_onGoalAction;
 
-		public void Initialize(Player arg_player) {
-			if (arg_player == null) { return; }
+		/// <summary>
+		/// ※継承禁止
+		/// Initializeの処理を実行しないとエラーになるため
+		/// </summary>
+		protected void Start() { }
+
+		/// <summary>
+		/// ※継承禁止
+		/// Initializeの処理を実行しないとエラーになるため
+		/// </summary>
+		protected void Update() { }
+
+		public void Initialize(Player arg_player ,uint arg_defaultStartPoint , System.Action<object> arg_onGoalAction) {
+			if (arg_player == null) {
+				Debug.LogError("プレイヤーが見つかりません");
+				return;
+			}
+
+			if (arg_onGoalAction == null) {
+				Debug.LogError("コールバックが設定されていません");
+				return;
+			}
+
 			m_player = arg_player;
+			m_onGoalAction = arg_onGoalAction;
 
-			m_checkPoints = transform.GetComponentsInChildren<CheckPoint>().ToList();
+			m_startPoints = transform.GetComponentsInChildren<StartPoint>().ToList();
+			m_goalPoints = transform.GetComponentsInChildren<GoalPoint>().ToList();
 			m_playRooms = transform.GetComponentsInChildren<PlayRoom>().ToList();
-			m_roomColliders = transform.GetComponentsInChildren<RoomCollider>().ToList();
 
-			foreach (CheckPoint checkPoint in m_checkPoints) { checkPoint.Initialize(this.OnCheckPoint); }
-			foreach (RoomCollider roomCollider in m_roomColliders) { roomCollider.Initialize(this.OnRoomEnter); }
+			foreach (CheckPoint checkPoint in m_startPoints) {
+				checkPoint.Initialize(this.OnCheckPoint);
+			}
+			foreach(GoalPoint goalPoint in m_goalPoints) {
+				goalPoint.Initialize(this.OnGoalPoint);
+			}
+			foreach(PlayRoom playRoom in m_playRooms) {
+				playRoom.Initialize(this.OnRoomEnter);
+			}
 
-			//初期リスタート地点を設定
-			m_currentStartPoint = m_checkPoints.Find(_ => _.m_id == START_POINT_ID) as StartPoint;
-			m_activePlayroom = m_playRooms.Find(_ => _.Id == 1);
+			//初期リスタート地点を設定 
+			m_activePlayroom = m_playRooms.Find(_ => _.Id == arg_defaultStartPoint);
 
-			SetRoomActive(m_activePlayroom.Id);
+			if(m_activePlayroom == null) {
+				Debug.LogError("指定されたIDの部屋が見つかりません:" + "<color=red>" + arg_defaultStartPoint + "</color>");
+			}
+
+			m_currentStartPoint = m_startPoints.Find(_ => _.m_id == arg_defaultStartPoint);
+
+			if (m_activePlayroom == null) {
+				Debug.LogError("指定されたIDのスタート地点が見つかりません:" + "<color=red>" + arg_defaultStartPoint + "</color>");
+			}
+
+			SetRoomActive(m_activePlayroom);
 
 			PlayerGenerate(m_currentStartPoint);
 
@@ -71,162 +91,127 @@ namespace ToyBox {
 				
 				yield return new WaitWhile(() => m_player.GetCurrentState() != typeof(PlayerDeadState));
 
-				#region プレイヤーが死んだときの演出
-				//死亡アニメーションが終了するまで待機
-				yield return new Tsubakit.WaitForAnimation(m_player.m_viewer.m_animator , 0);
-
-				Fade fade = AppManager.Instance.m_fade;
-				fade.StartFade(new FadeOut() , Color.black , 1.0f);
-				yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
-
-				PlayerGenerate(m_currentStartPoint);
-
-				fade.StartFade(new FadeIn() , Color.black , 1.0f);
-				yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
-
-				#endregion
+				yield return OnPlayerDead();
 			}
 		}
+
+		private IEnumerator OnPlayerDead() {
+			#region プレイヤーが死んだときの演出
+			//死亡アニメーションが終了するまで待機
+			yield return new Tsubakit.WaitForAnimation(m_player.m_viewer.m_animator , 0);
+
+			Fade fade = AppManager.Instance.m_fade;
+			fade.StartFade(new FadeOut() , Color.black , 1.0f);
+			yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
+
+			//プレイヤーのリスタート
+			PlayerGenerate(m_currentStartPoint);
+
+			fade.StartFade(new FadeIn() , Color.black , 1.0f);
+			yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
+
+			#endregion
+		}
+
 		/// <summary>
-		/// プレイヤーの生成を行う
-		/// ここに生成時の演出を加えてもいい
+		/// プレイヤーの生成/リスタートなどの処理をおこなう
 		/// </summary>
 		/// <param name="arg_startPoint">指定されたスタート地点に生成します</param>
 		public void PlayerGenerate(StartPoint arg_startPoint) {
-			if (arg_startPoint == null)	return;
-			if (!arg_startPoint.m_isActive) return;
 
-			#region IDを識別するための処理（複雑なので隠蔽させます）
-			System.Func<int , int> RoomId = (id) => {
-				//IDの桁数を調べる(1の場合は0)
-				int digitCount = id / 10;
-
-				//調べる桁の位置(3桁なら3桁目のみ、4桁なら3桁目と4桁目、5桁なら3桁目~5桁目)
-				int digitPlace = 2 + (digitCount - 3);
-
-				string stId = string.Empty;
-
-				int i = digitCount;
-
-				while(i >= 2) {
-					//数値を結合させるため一旦文字列へ
-					int temp = (id / (int)Mathf.Pow(10 , i) % 10);
-					stId += temp.ToString();
-					i -= 1;
-				}
-				return int.Parse(stId);
-			};
-			#endregion
-
+			if (arg_startPoint == null) {
+				Debug.LogError("チェックポイントがNULLです");
+				return;
+			}
+			
 			//スタート地点が配置されている部屋をアクティブ化
-			m_activePlayroom = m_playRooms.Find(_ => _.Id == RoomId(arg_startPoint.m_id));
-			SetRoomActive(m_activePlayroom.Id);
+			m_activePlayroom = m_playRooms.Find(_ => _.Id == arg_startPoint.m_id);
+			if(m_activePlayroom == null) {
+				Debug.LogError("復活先の部屋が見つかりませんでした");
+			}
+
+			SetRoomActive(m_activePlayroom);
 			
 			//再生成
 			arg_startPoint.Generate(m_player);
 			m_player.Revive();
 
 			//カメラを移動させる
-			CameraPosController.Instance.SetTargetAndStart(m_activePlayroom.Id);
+			//CameraPosController.Instance.SetTargetAndStart((int)m_activePlayroom.Id);
 		}
 
-		/// <summary>
-		/// プレイヤーがゴールまで達したか
-		/// </summary>
-		/// <returns></returns>
-		public bool DoesPlayerReachGoal() {
-			return m_isGoal;
-		}
 
 		/// <summary>
-		/// コライダーからのコールバック
+		/// 部屋に入ったときの処理
+		/// 入ったときにコールバックとして呼ばれる
 		/// </summary>
-		/// <param name="roomManager"></param>
-		private void OnRoomEnter(int arg_prevId , int arg_nextId) {
+		/// <param name="arg_nextRoom"></param>
+		private void OnRoomEnter(PlayRoom arg_nextRoom) {
 
-			int currentId = m_activePlayroom.Id;
-
-			if (arg_nextId == currentId) return;
+			if (arg_nextRoom == m_activePlayroom) return;
 
 			//スムーズなカメラ遷移を開始させる
-			CameraPosController.Instance.SetTargetAndStart(arg_nextId);
-			PlayRoom nextRoom = m_playRooms.Find(_ => _.Id == arg_nextId);
+			//CameraPosController.Instance.SetTargetAndStart((int)arg_nextId);
 
-			if (nextRoom != null) {
-				this.SetRoomActive(nextRoom.Id);
-				m_activePlayroom = nextRoom;
-			}
+			m_activePlayroom = arg_nextRoom;
+			this.SetRoomActive(m_activePlayroom);
+			
 		}
 
 		/// <summary>
-		/// 指定された部屋番号の前後をアクティブ化させる
+		/// 指定された部屋とその周辺をアクティブ化させる
 		/// それ以外は非アクティブ状態にしておく
 		/// </summary>
-		private void SetRoomActive(int arg_id) {
+		private void SetRoomActive(PlayRoom arg_playRoom) {
+			if(arg_playRoom == null) {
+				Debug.LogError("部屋がNULLです");
+				return;
+			}
+
+			List<uint> m_sideRoomId = arg_playRoom.GetSideRoomsId();
+
 			foreach(PlayRoom playRoom in m_playRooms) {
-				if(arg_id - 1 <= playRoom.Id && playRoom.Id <= arg_id + 1) {
+				if (playRoom == arg_playRoom) {
+					playRoom.gameObject.SetActive(true);
+					continue;
+				}
+				if (m_sideRoomId.Contains(playRoom.Id)) {
 					playRoom.gameObject.SetActive(true);
 				}
-				else { playRoom.gameObject.SetActive(false); }
-			}
-		}
-
-
-		/// <summary>
-		/// チェックポイントからのコールバックを受け取る
-		/// </summary>
-		/// <param name="id"></param>
-		private void OnCheckPoint(int arg_id) {
-			
-			//渡された値が２つの値の間であるかを調べる
-			System.Func<int,int,int,bool> Between = (num , min , max) => {
-				return (min <= num && num < max);
-			};
-
-			if (Between(arg_id , StageConfig.START_POINT_ID_MIN, StageConfig.START_POINT_ID_MAX)) {
-				//渡されたIDが中間地点であったら、中間地点を更新する
-				StartPoint startPoint = m_checkPoints.Find(_ => _.m_id == arg_id) as StartPoint;
-				if (startPoint) {
-					if(!startPoint.m_isActive) m_currentStartPoint = startPoint;
+				else {
+					playRoom.gameObject.SetActive(false);
 				}
 			}
-			else if (Between(arg_id,StageConfig.GOAL_POINT_ID_MIN,StageConfig.GOAL_POINT_ID_MAX)) {
-				//渡されたIDがゴール地点であったら、ゴールしたことを通知する
-				//TODO:複数ゴールの対応
-				m_isGoal = true;
+		}
+
+		/// <summary>
+		/// チェックポイントを通過したときの処理
+		/// 通過したときにコールバックとして呼ばれる
+		/// </summary>
+		/// <param name="arg_startPoint"></param>
+		protected virtual void OnCheckPoint(object arg_startPoint) {
+
+			StartPoint startPoint = (StartPoint)arg_startPoint;
+
+			if (arg_startPoint == null) {
+				Debug.LogError("チェックポイントがNULLです");
+				return;
 			}
-			else {
-				Debug.LogError("認識されていないIDを検出");
-			}
-		}
-	}
-}
+			if (startPoint.m_isActive) return;
 
-/// <summary>
-/// 以下、テラシュールブログから引用
-/// </summary>
-namespace Tsubakit {
-	public class WaitForAnimation : CustomYieldInstruction {
-		Animator m_animator;
-		int m_lastStateHash = 0;
-		int m_layerNo = 0;
-
-		public WaitForAnimation(Animator animator , int layerNo) {
-			Init(animator , layerNo , animator.GetCurrentAnimatorStateInfo(layerNo).fullPathHash);
+			//リスタート地点を更新
+			this.m_currentStartPoint = startPoint;
 		}
 
-		void Init(Animator animator , int layerNo , int hash) {
-			m_layerNo = layerNo;
-			m_animator = animator;
-			m_lastStateHash = hash;
+		/// <summary>
+		/// ゴールしたときの処理
+		/// 通過したときにコールバックとして呼ばれる
+		/// </summary>
+		/// <param name="arg_id">ゴール地点のID</param>
+		protected virtual void OnGoalPoint(object arg_id) {
+			this.m_onGoalAction(arg_id);
 		}
 
-		public override bool keepWaiting {
-			get {
-				var currentAnimatorState = m_animator.GetCurrentAnimatorStateInfo(m_layerNo);
-				return currentAnimatorState.fullPathHash == m_lastStateHash &&
-					(currentAnimatorState.normalizedTime < 1);
-			}
-		}
+
 	}
 }

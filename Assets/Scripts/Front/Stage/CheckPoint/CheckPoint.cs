@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public class CheckPoint : MonoBehaviour {
+	public abstract class CheckPoint : MonoBehaviour {
 
 		//チェックポイントを区別するための個別番号
 		public int m_id;
@@ -12,16 +12,16 @@ namespace ToyBox {
 		public bool m_isActive { get; protected set; }
 
 		//コールバック
-		protected System.Action<int> CallBack;
+		protected System.Action<object> m_callBack;
 
-		public virtual void Initialize(System.Action<int> arg_callBack) {
-			CallBack = arg_callBack;
+		public virtual void Initialize(System.Action<object> arg_callBack) {
+			m_callBack = arg_callBack;
 		}
 		
 		protected virtual void OnTriggerEnter2D(Collider2D arg_collider) {
 
 			if (arg_collider.gameObject.layer == LayerMask.NameToLayer("Player")) {
-				CallBack(m_id);
+				m_callBack(this);
 				m_isActive = true;
 			}
 		}
