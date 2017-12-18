@@ -72,10 +72,7 @@ namespace ToyBox
         bool m_flg_complate = false;
 
         public bool flg_hoge;
-
-        //InputManager　プレイヤーを動かさないために必要
-        InputManager m_InputManager;
-
+		
         // Use this for initialization
         void Start()
         {
@@ -83,15 +80,13 @@ namespace ToyBox
             //カメラが何も入っていなければ、自身のコンポーネントから取得を試みる
             if (m_obj_camera == null)
             {
-                m_obj_camera = GetComponent<Camera>();
+				m_obj_camera = Camera.main;
             }
 
             m_str_cameraStatus[0].pos_target = m_obj_cameraTarget.transform;
             SetTargetID(1);
             StartTargetMove();
 
-            m_InputManager = FindObjectOfType<InputManager>();
-            
         }
 
         // Update is called once per frame
