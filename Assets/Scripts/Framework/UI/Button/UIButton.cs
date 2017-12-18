@@ -77,16 +77,13 @@ namespace ToyBox {
 	/// UIに使用されるボタンの機能
 	/// </summary>
 	[AddComponentMenu("ToyBox/UI/Button")]
-	public class UIButton : MonoBehaviour,
-		IPointerUpHandler,
-		IPointerDownHandler,
-		IPointerClickHandler {
+	public class UIButton : TouchActor {
 
 		/// <summary>ボタンが押されたとみなすタイミング</summary>
 		public enum EventTrgger {
 			OnClick,
 			OnPress,
-			OnRelease
+			OnLongPress
 		}
 
 		/// <summary>コールバック</summary>
@@ -124,43 +121,56 @@ namespace ToyBox {
 		}
 
 		/// <summary>
-		/// カーソルが離されたときの処理
-		/// </summary>
-		/// <param name="eventData"></param>
-		void IPointerUpHandler.OnPointerUp(PointerEventData eventData) {
-			if (m_btnOption.IsAutoScale) {
-				iTween.ScaleTo(this.gameObject , new Vector3(1f , 1f , 1) , 0.5f);
-			}
-
-			if (m_btnOption.Trigger != EventTrgger.OnRelease) return;
-			Action();
-		}
-
-		/// <summary>
 		/// カーソルが押されたときの処理
 		/// </summary>
-		/// <param name="eventData"></param>
-		void IPointerDownHandler.OnPointerDown(PointerEventData eventData) {
+		/// <param name="pos"></param>
+		public override void TouchStart(Vector2 pos) {
 			if (m_btnOption.IsAutoScale) {
 				iTween.ScaleTo(this.gameObject , new Vector3(0.95f , 0.95f , 1) , 0.5f);
 			}
 
 			if (m_btnOption.Trigger != EventTrgger.OnPress) return;
 			Action();
-
 		}
 
 		/// <summary>
-		/// カーソルがクリック動作をおこなったときの処理
+		/// カーソルが押されている間の処理
 		/// </summary>
-		/// <param name="eventData"></param>
-		void IPointerClickHandler.OnPointerClick(PointerEventData eventData) {
+		/// <param name="pos"></param>
+		public override void TouchStay(Vector2 pos) {
+			if (m_btnOption.Trigger != EventTrgger.OnLongPress) return;
+			Action();
+		}
+
+		/// <summary>
+		/// カーソルが離された時の処理
+		/// </summary>
+		/// <param name="pos"></param>
+		public override void TouchEnd(Vector2 pos) {
+			if (m_btnOption.IsAutoScale) {
+				iTween.ScaleTo(this.gameObject , new Vector3(1f , 1f , 1) , 0.5f);
+			}
+
 			if (m_btnOption.Trigger != EventTrgger.OnClick) return;
 			Action();
 		}
 
 		/// <summary>
+		/// カーソルが離された時の処理
+		/// </summary>
+		/// <param name="pos"></param>
+		public override void SwipeEnd(Vector2 pos) {
+			if (m_btnOption.IsAutoScale) {
+				iTween.ScaleTo(this.gameObject , new Vector3(1f , 1f , 1) , 0.5f);
+			}
+
+			if (m_btnOption.Trigger != EventTrgger.OnClick) return;
+			Action();
+		}
+		
+		/// <summary>
 		/// ボタンが押されたときの処理
+		/// コールバックを実行する
 		/// </summary>
 		private void Action() {
 
