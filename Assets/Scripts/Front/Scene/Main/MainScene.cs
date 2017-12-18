@@ -9,6 +9,9 @@ namespace ToyBox {
 		[SerializeField]
 		private StageFactory m_stageFactory;
 
+		[SerializeField]
+		MainSceneUI m_mainSceneUI;
+
 		private Stage m_stage;
 		
 		private Player m_player;
@@ -48,6 +51,13 @@ namespace ToyBox {
 			m_player.Initialize();
 
 			m_stage.Initialize(m_player,playRoomId, this.OnPlayerGoaled);
+
+			if(m_mainSceneUI == null) {
+				Debug.LogError("UIを参照できません");
+				yield break;
+			}
+
+			m_mainSceneUI.Initialize(m_player);
 
 			AppManager.Instance.m_fade.StartFade(new FadeIn() , Color.black , 1.0f);
 			yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
