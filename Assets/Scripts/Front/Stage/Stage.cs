@@ -38,6 +38,12 @@ namespace ToyBox {
 		/// </summary>
 		protected void Update() { }
 
+		/// <summary>
+		/// 初期化
+		/// </summary>
+		/// <param name="arg_player"></param>
+		/// <param name="arg_defaultStartPoint"></param>
+		/// <param name="arg_onGoalAction"></param>
 		public void Initialize(Player arg_player ,uint arg_defaultStartPoint , System.Action<object> arg_onGoalAction) {
 			if (arg_player == null) {
 				Debug.LogError("プレイヤーが見つかりません");
@@ -78,6 +84,9 @@ namespace ToyBox {
 			if (m_activePlayroom == null) {
 				Debug.LogError("指定されたIDのスタート地点が見つかりません:" + "<color=red>" + arg_defaultStartPoint + "</color>");
 			}
+
+			//
+			CameraPosController.Instance.SetTargetObject(m_player.gameObject);
 
 			SetRoomActive(m_activePlayroom);
 
@@ -137,7 +146,7 @@ namespace ToyBox {
 			m_player.Revive();
 
 			//カメラを移動させる
-			//CameraPosController.Instance.SetTargetAndStart((int)m_activePlayroom.Id);
+			CameraPosController.Instance.SetTargetAndStart((int)m_activePlayroom.Id);
 		}
 
 
@@ -151,7 +160,7 @@ namespace ToyBox {
 			if (arg_nextRoom == m_activePlayroom) return;
 
 			//スムーズなカメラ遷移を開始させる
-			//CameraPosController.Instance.SetTargetAndStart((int)arg_nextId);
+			CameraPosController.Instance.SetTargetAndStart((int)arg_nextRoom.Id);
 
 			m_activePlayroom = arg_nextRoom;
 			this.SetRoomActive(m_activePlayroom);
