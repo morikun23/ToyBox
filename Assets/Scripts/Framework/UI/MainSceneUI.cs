@@ -5,40 +5,49 @@ using UnityEngine;
 namespace ToyBox {
 	public class MainSceneUI : CommonUI {
 
-        [SerializeField]
-        UIButton m_jumpButton;
+		[Header("Buttons")]
+		[SerializeField]
+		UIButton m_jumpButton;
+		
+		[SerializeField]
+		UIButton m_leftButton;
 
-        [SerializeField]
-        UIButton m_leftButton;
-        [SerializeField]
-        UIButton m_rightButton;
+		[SerializeField]
+		UIButton m_rightButton;
 
-        void Start()
-        {
-            m_jumpButton.Initialize(JumpButton,"反応");
+		private Playable m_player;
 
-            m_leftButton.Initialize(LeftButton);
-            m_rightButton.Initialize(RightButton);
-        }
+		public void Initialize(Playable arg_player) {
 
-        void JumpButton(object arg_jump)
-        {
-            InputManager.Instance.GetPlayableCharactor().m_inputHandle.m_jump = true;
-            Debug.Log(arg_jump);
-        }
+			m_player = arg_player;
+			m_jumpButton.Initialize(new ButtonAction(ButtonEventTrigger.OnPress , this.OnJumpButtonDown),
+				new ButtonAction(ButtonEventTrigger.OnRelease,this.OnJumpButtonUp));
+			m_leftButton.Initialize(new ButtonAction(ButtonEventTrigger.OnPress , this.OnLeftButtonDown) ,
+				new ButtonAction(ButtonEventTrigger.OnRelease , this.OnMoveButtonUp));
+			m_rightButton.Initialize(new ButtonAction(ButtonEventTrigger.OnPress , this.OnRightButtonDown) ,
+				new ButtonAction(ButtonEventTrigger.OnRelease , this.OnMoveButtonUp));
+		}
+		
+		private void OnJumpButtonDown() {
+			m_player.m_inputHandle.m_jump = true;
+		}
 
-        void LeftButton()
-        {
-            InputManager.Instance.GetPlayableCharactor().m_direction = ActorBase.Direction.LEFT;
-            InputManager.Instance.GetPlayableCharactor().m_inputHandle.m_run = true;
-        }
+		private void OnJumpButtonUp() {
+			m_player.m_inputHandle.m_jump = false;
+		}
 
-        void RightButton()
-        {
-            InputManager.Instance.GetPlayableCharactor().m_direction = ActorBase.Direction.RIGHT;
-            InputManager.Instance.GetPlayableCharactor().m_inputHandle.m_run = true;
-        }
+		private void OnLeftButtonDown() {
+			m_player.m_direction = ActorBase.Direction.LEFT;
+			m_player.m_inputHandle.m_run = true;
+		}
 
+		private void OnMoveButtonUp() {
+			m_player.m_inputHandle.m_run = false;
+		}
 
-    }
+		private void OnRightButtonDown() {
+			m_player.m_direction = ActorBase.Direction.RIGHT;
+			m_player.m_inputHandle.m_run = true;
+		}
+	}
 }
