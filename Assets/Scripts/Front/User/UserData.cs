@@ -30,7 +30,7 @@ namespace ToyBox {
 		}
 
 		/// <summary>一時保存データ</summary>
-		public TempData m_temp;
+		public TempData m_temp = new TempData();
 
 		/// <summary>
 		/// 保存されたデータを取得する

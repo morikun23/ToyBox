@@ -28,8 +28,8 @@ namespace ToyBox {
 				yield break;
 			}
 
-			uint playStageId = 1234;
-			uint playRoomId = 0;
+			uint playStageId = 2000;
+			uint playRoomId = 1;
 
 			//uint playStageId = AppManager.Instance.user.m_temp.m_playStageId;
 			//uint playRoomId = AppManager.Instance.user.m_temp.m_playRoomId;
