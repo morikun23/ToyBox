@@ -16,6 +16,9 @@ namespace ToyBox{
 		}
 
 		public void Update(){
+
+            transform.position = Camera.main.transform.position;
+
 			if (isAbleHandShot()) {
 				col_.enabled = false;
 			} else {
