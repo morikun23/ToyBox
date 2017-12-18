@@ -85,7 +85,9 @@ namespace ToyBox {
 				Debug.LogError("指定されたIDのスタート地点が見つかりません:" + "<color=red>" + arg_defaultStartPoint + "</color>");
 			}
 
-			//
+			if (CameraPosController.Instance == null) {
+				Debug.LogError("カメラ遷移の機能が使用できません");
+			}
 			CameraPosController.Instance.SetTargetObject(m_player.gameObject);
 
 			SetRoomActive(m_activePlayroom);
