@@ -10,6 +10,17 @@ using UnityEngine;
 namespace ToyBox {
 	public abstract class ObjectBase : TouchActor {
 
+		private Playable m_player;
+
+		public Playable player {
+			get {
+				if(m_player == null) {
+					m_player = FindObjectOfType<Playable>();
+				}
+				return m_player;
+			}
+		}
+
 		public void Start(){
 			base.Start ();
 		}
@@ -32,8 +43,8 @@ namespace ToyBox {
 		private Transform m_transformBuf;
 
 		public override void TouchStart (Vector2 pos){
-			if(InputManager.Instance.GetPlayableCharactor ().IsAbleReach())
-				InputManager.Instance.GetPlayableCharactor ().ReachOutFor (gameObject.GetComponent<Item>());
+			if(player.IsAbleReach())
+				player.ReachOutFor (gameObject.GetComponent<Item>());
 
 		}
 
