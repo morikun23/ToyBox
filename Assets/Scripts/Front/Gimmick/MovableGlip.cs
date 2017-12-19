@@ -29,9 +29,6 @@ namespace ToyBox {
 			SetAbleGrasp (false);
 			SetAbleRelease (false);
 
-            //AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_PlayerHand_grab");
-            //source.Play ();
-
             //新しい音でございます
             AudioManager.Instance.QuickPlaySE("SE_PlayerHand_grab");
 		}

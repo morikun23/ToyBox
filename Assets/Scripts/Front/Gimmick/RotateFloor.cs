@@ -69,8 +69,6 @@ namespace ToyBox{
 				yield break;
 			}
 
-            //AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_RotateFloor_rotate");
-            //source.Play ();
 
             //新しい音でして
             AudioManager.Instance.QuickPlaySE("SE_RotateFloor_rotate");
@@ -92,8 +90,6 @@ namespace ToyBox{
 			//回転が終わったら離してよいことにする
 			m_scr_MovableGrip[arg_gripId].SetAbleRelease(true);
 
-            //source = AppManager.Instance.m_audioManager.CreateSe ("SE_RotateFloor_rotateComp");
-            //source.Play ();
 
             //あたらしい音でございます
             AudioManager.Instance.QuickPlaySE("SE_RotateFloor_rotateComp");

@@ -12,8 +12,6 @@ namespace ToyBox {
 
 		public override IEnumerator OnUpdate() {
 
-            //AppManager.Instance.m_audioManager.CreateSe("SE_Gimmick_Clear").Play();
-
             //音でございます
             AudioManager.Instance.QuickPlaySE("SE_Gimmick_Clear");
 

@@ -16,10 +16,6 @@ namespace ToyBox {
 			rig_ = GetComponent<Rigidbody2D>();
 			rig_.simulated = false;
 
-
-            //AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_PlayerHand_grab");
-            //source.Play ();
-
             //新しい音でして
             AudioManager.Instance.QuickPlaySE("SE_PlayerHand_grab");
 		}

@@ -45,8 +45,6 @@ namespace ToyBox
             {
                 Debug.Log("クリア");
                 //クリアした際の処理
-                //AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_NumberOrder_comp");
-                //source.Play();
 
                 //新しい音でして
                 AudioManager.Instance.QuickPlaySE("SE_NumberOrder_comp");
@@ -72,8 +70,6 @@ namespace ToyBox
                 }
 
             }
-            //AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_NumberOrder_cancel");
-            //source.Play();
 
             //新しい音でして
             AudioManager.Instance.QuickPlaySE("SE_NumberOrder_cancel");
