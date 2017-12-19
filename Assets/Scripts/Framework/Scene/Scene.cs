@@ -7,6 +7,8 @@ namespace ToyBox {
 	public abstract class Scene : MonoBehaviour {
 
 		protected void Start() {
+			//シーン開始時に使用されていないリソースを破棄する
+			Resources.UnloadUnusedAssets();
 			StartCoroutine(GameLoop());
 		}
 
