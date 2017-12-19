@@ -42,6 +42,9 @@ namespace ToyBox
         //移動値を加算させる回数
         int m_count = 0;
 
+        //グリップ
+        private GameObject m_grip;
+
         // Use this for initialization
         void Start()
         {
@@ -57,6 +60,10 @@ namespace ToyBox
             targetPos = m_EndPoint;
 
             m_rigidbodyOfBar = m_Bar.GetComponent<Rigidbody2D>();
+
+            //グリップが子供にいるのであれば取得
+            if(transform.Find("GM_MovableGlip"))
+            m_grip = transform.Find("GM_MovableGlip").gameObject;
 
             m_moveNumReal = 0;
             //ターゲットまでの距離を算出
@@ -112,6 +119,11 @@ namespace ToyBox
             {
                 //バーの移動
                 m_rigidbodyOfBar.MovePosition(nowPos);
+                //グリップがいればバーに追従
+                if (m_grip)
+                {
+                    m_grip.transform.position = new Vector3(m_Bar.transform.position.x, m_Bar.transform.position.y - 0.5f, 0);
+                }
             }
         }
 
