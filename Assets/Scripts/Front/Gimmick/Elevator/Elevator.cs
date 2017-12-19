@@ -31,6 +31,11 @@ namespace ToyBox
 
         private Rigidbody2D m_rigidbody;
 
+
+        //イベントマネージャができるまで
+        GameObject m_player;
+
+
         void Start()
         {
             
@@ -71,9 +76,15 @@ namespace ToyBox
             //往復移動
             m_nowPos = Vector2.MoveTowards(m_collider.transform.position, m_targetPos, m_moveNum);
 
+            //イベントマネージャができるまで
+            //プレイヤーを動けないようにする
+            m_player.transform.position = new Vector2(m_player.transform.position.x, m_nowPos.y + 0.6f);
+
 
             if (IsMoveComleted())
-            {
+            {             
+
+
                 //スタート地点向きかどうか
                 if (m_targetPos == m_startPoint)
                 {
@@ -96,14 +107,33 @@ namespace ToyBox
             }
         }
 
+        /////<summary>
+        /////外部から作動させたい場合に
+        /////</summary> 
+        //public void Action()
+        //{
+        //    m_isAction = true;
+        //    m_isStart = !m_isStart;
+        //    m_isEnd = !m_isEnd;
+
+        //    if (m_isStart) { m_startGate.Open(); }
+        //    if (m_isEnd) { m_endGate.Open(); }
+
+        //}
+
+
         ///<summary>
-        ///外部から作動させたい場合に
+        ///外部から作動させたい場合に(イベントマネージャができるまで)
         ///</summary> 
         public void Action()
         {
             m_isAction = true;
             m_isStart = !m_isStart;
             m_isEnd = !m_isEnd;
+
+            //プレイヤー情報の取得
+            m_player = GameObject.Find("Player");
+            Debug.Log(m_player);
 
             if(m_isStart){ m_startGate.Open(); }
             if (m_isEnd) { m_endGate.Open(); }
