@@ -69,8 +69,9 @@ namespace ToyBox {
 		
 		public override IEnumerator OnExit() {
 			//TODO:今後リザルトシーンではなくホーム画面に移動する
+			AppManager.Instance.m_fade.StartFade(new FadeOut() , Color.white , 1.0f);
+			yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
 			SceneManager.LoadScene("Result");
-			yield return null;
 		}
 
 		private void OnPlayerGoaled(object arg_message) {
