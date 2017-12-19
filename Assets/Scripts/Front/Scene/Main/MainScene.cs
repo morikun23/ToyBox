@@ -27,12 +27,9 @@ namespace ToyBox {
 				Debug.LogError("StageFactoryに参照できません");
 				yield break;
 			}
-
-			uint playStageId = 2000;
-			uint playRoomId = 1;
-
-			//uint playStageId = AppManager.Instance.user.m_temp.m_playStageId;
-			//uint playRoomId = AppManager.Instance.user.m_temp.m_playRoomId;
+			
+			uint playStageId = AppManager.Instance.user.m_temp.m_playStageId;
+			uint playRoomId = AppManager.Instance.user.m_temp.m_playRoomId;
 
 			m_stage = m_stageFactory.Load(playStageId);
 
