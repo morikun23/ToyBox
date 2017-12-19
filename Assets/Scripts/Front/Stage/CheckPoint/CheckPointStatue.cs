@@ -5,14 +5,11 @@ using UnityEngine;
 namespace ToyBox {
 	public class CheckPointStatue : StartPoint {
 
-		[SerializeField]
 		private Animator m_animator;
 
 		// Use this for initialization
 		private void Start() {
-			if (m_animator == null) {
-				m_animator = GetComponentInChildren<Animator>();
-			}
+			m_animator = GetComponentInChildren<Animator>();
 			m_isActive = false;
 		}
 

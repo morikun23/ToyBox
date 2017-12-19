@@ -5,18 +5,20 @@ using UnityEngine;
 namespace ToyBox {
 	public class RoomCollider : MonoBehaviour {
 
-		[Header("部屋番号")]
-		[SerializeField]
-		private int m_NextPlayRoom, m_PrevPlayRoom;
+		[HideInInspector]
+		public uint m_roomId;
+
+		[HideInInspector]
+		public uint m_prevRoomId;
 
 		//コールバック
-		private System.Action<int,int> CallBack;
+		private System.Action<uint> CallBack;
 
 		/// <summary>
 		/// 初期化
 		/// </summary>
 		/// <param name="arg_action">通知用関数インスタンス</param>
-		public void Initialize(System.Action<int,int> arg_callBack) {
+		public void Initialize(System.Action<uint> arg_callBack) {
 			CallBack = arg_callBack;
 		}
 
@@ -26,7 +28,7 @@ namespace ToyBox {
 		/// <param name="arg_col"></param>
 		void OnTriggerEnter2D(Collider2D arg_col) {
 			if (arg_col.gameObject.layer == LayerMask.NameToLayer("Player")) {
-				CallBack(m_PrevPlayRoom , m_NextPlayRoom);
+				CallBack(m_prevRoomId);
 			}
 		}
 

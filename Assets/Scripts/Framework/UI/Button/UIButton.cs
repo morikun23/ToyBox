@@ -1,14 +1,23 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 namespace ToyBox {
+
+	/// <summary>コールバックを実行するタイミング</summary>
+	public enum ButtonEventTrigger {
+		OnRelease,
+		OnPress,
+		OnLongPress
+	}
 
 	/// <summary>
 	/// ボタンのコールバック（通知）機能
 	/// </summary>
-	[System.Serializable]
 	public class ButtonAction {
+			
+		/// <summary>押されたとみなすタイミング</summary>
+		public ButtonEventTrigger m_trigger { get; private set; }
 
 		/// <summary>コールバック</summary>
 		public System.Action m_action { get; private set; }
@@ -23,8 +32,10 @@ namespace ToyBox {
 		/// コンストラクタ
 		/// コールバックを設定する
 		/// </summary>
+		/// <param name="arg_trigger">タイミング</param>
 		/// <param name="arg_action">コールバック</param>
-		public ButtonAction(Action arg_action) {
+		public ButtonAction(ButtonEventTrigger arg_trigger , Action arg_action) {
+			m_trigger = arg_trigger;
 			m_action = arg_action;
 		}
 
@@ -32,9 +43,11 @@ namespace ToyBox {
 		/// コンストラクタ
 		/// 引数ありコールバックを設定する
 		/// </summary>
+		/// <param name="arg_trigger">タイミング</param>
 		/// <param name="arg_objectAction">コールバック</param>
 		/// <param name="arg_value">引数</param>
-		public ButtonAction(System.Action<object> arg_objectAction , object arg_value) {
+		public ButtonAction(ButtonEventTrigger arg_trigger , System.Action<object> arg_objectAction , object arg_value) {
+			m_trigger = arg_trigger;
 			m_objectAction = arg_objectAction;
 			m_value = arg_value;
 		}
@@ -47,24 +60,13 @@ namespace ToyBox {
 	[System.Serializable]
 	public class ButtonOption {
 
-		/// <summary>押されたとみなすタイミング</summary>
-		[SerializeField]
-		private UIButton.EventTrgger m_trigger = UIButton.EventTrgger.OnClick;
-
 		/// <summary>
 		/// ボタンが押されたときに自動でスケーリング処理をするか
 		/// ここをfalseにすることで独自のアニメーションを実装可能
 		/// </summary>
 		[SerializeField]
 		private bool m_isAutoScale = true;
-
-		/// <summary>
-		/// ボタンが押されたとみなすタイミング
-		/// </summary>
-		public UIButton.EventTrgger Trigger {
-			get { return m_trigger; }
-		}
-
+		
 		/// <summary>
 		/// 自動でスケーリング処理をおこなう
 		/// </summary>
@@ -77,110 +79,189 @@ namespace ToyBox {
 	/// UIに使用されるボタンの機能
 	/// </summary>
 	[AddComponentMenu("ToyBox/UI/Button")]
-	public class UIButton : MonoBehaviour,
-		IPointerUpHandler,
-		IPointerDownHandler,
-		IPointerClickHandler {
-
-		/// <summary>ボタンが押されたとみなすタイミング</summary>
-		public enum EventTrgger {
-			OnClick,
-			OnPress,
-			OnRelease
-		}
-
+	public class UIButton : TouchActor {
+		
 		/// <summary>コールバック</summary>
-		private ButtonAction m_btnAction;
+		private readonly List<ButtonAction> m_btnActions = new List<ButtonAction>();
 
 		/// <summary>ボタンの設定</summary>
 		[SerializeField]
 		private ButtonOption m_btnOption;
 
+		/// <summary>このボタンが現在押されている状態である</summary>
+		private bool m_isUsing;
+
+		/// <summary>
+		/// ボタンの設定
+		/// ※読み取り専用
+		/// </summary>
+		public ButtonOption BtnOption {
+			get { return m_btnOption; }
+		}
+
+		/// <summary>
+		/// このボタンが現在押されている状態であるか
+		/// </summary>
+		public bool IsUsing {
+			get {
+				return m_isUsing;
+			}
+		}
+		
 		/// <summary>
 		/// 初期化
-		/// ここでコールバックを設定する必要がある
+		/// ここでコールバックを設定する
 		/// </summary>
 		/// <param name="arg_action">コールバック</param>
-		public void Initialize(System.Action arg_action) {
+		public void Initialize(ButtonAction arg_action) {
 			if (arg_action == null) {
-				Debug.LogError("[ToyBox]数がNULL");
+				Debug.LogError("[ToyBox]コールバックがNULL");
 				return;
 			}
-			m_btnAction = new ButtonAction(arg_action);
+			m_btnActions.Add(arg_action);
 		}
 
 		/// <summary>
 		/// 初期化
-		/// ここでコールバックを設定する必要がある
+		/// ここでコールバックを設定する
 		/// </summary>
-		/// <param name="arg_action">コールバック</param>
-		/// <param name="arg_value">コールバック時の引数</param>
-		public void Initialize(System.Action<object> arg_action , object arg_value) {
-			if (arg_action == null || arg_value == null) {
-				Debug.LogError("[ToyBox]引数がNULL");
+		/// <param name="arg_action1">コールバック</param>
+		/// <param name="arg_action2">コールバック</param>
+		public void Initialize(ButtonAction arg_action1,ButtonAction arg_action2) {
+			if (arg_action1 == null) {
+				Debug.LogError("[ToyBox]コールバックがNULL");
 				return;
 			}
-			m_btnAction = new ButtonAction(arg_action , arg_value);
+			if (arg_action2 == null) {
+				Debug.LogError("[ToyBox]コールバックがNULL");
+				return;
+			}
+			m_btnActions.Add(arg_action1);
+			m_btnActions.Add(arg_action2);
 		}
 
 		/// <summary>
-		/// カーソルが離されたときの処理
+		/// 初期化
+		/// ここでコールバックを設定する
 		/// </summary>
-		/// <param name="eventData"></param>
-		void IPointerUpHandler.OnPointerUp(PointerEventData eventData) {
-			if (m_btnOption.IsAutoScale) {
-				iTween.ScaleTo(this.gameObject , new Vector3(1f , 1f , 1) , 0.5f);
+		/// <param name="arg_action1">コールバック</param>
+		/// <param name="arg_action2">コールバック</param>
+		/// <param name="arg_action3">コールバック</param>
+		public void Initialize(ButtonAction arg_action1 , ButtonAction arg_action2,ButtonAction arg_action3) {
+			if (arg_action1 == null) {
+				Debug.LogError("[ToyBox]コールバックがNULL");
+				return;
 			}
-
-			if (m_btnOption.Trigger != EventTrgger.OnRelease) return;
-			Action();
+			if (arg_action2 == null) {
+				Debug.LogError("[ToyBox]コールバックがNULL");
+				return;
+			}
+			if (arg_action3 == null) {
+				Debug.LogError("[ToyBox]コールバックがNULL");
+				return;
+			}
+			m_btnActions.Add(arg_action1);
+			m_btnActions.Add(arg_action2);
+			m_btnActions.Add(arg_action3);
 		}
+
+		#region TouchActorからの継承
 
 		/// <summary>
 		/// カーソルが押されたときの処理
 		/// </summary>
-		/// <param name="eventData"></param>
-		void IPointerDownHandler.OnPointerDown(PointerEventData eventData) {
+		/// <param name="pos"></param>
+		public sealed override void TouchStart(Vector2 pos) {
+			this.OnPressed();
+		}
+
+		/// <summary>
+		/// カーソルが押されている間の処理
+		/// </summary>
+		/// <param name="pos"></param>
+		public sealed override void TouchStay(Vector2 pos) {
+			this.OnLongPressed();
+		}
+		
+		/// <summary>
+		/// カーソルが離された時の処理
+		/// </summary>
+		/// <param name="pos"></param>
+		public sealed override void TouchEnd(Vector2 pos) {
+			OnReleased();
+		}
+
+		/// <summary>
+		/// カーソルが離された時の処理
+		/// </summary>
+		/// <param name="pos"></param>
+		public sealed override void SwipeEnd(Vector2 pos) {
+			OnReleased();
+		}
+
+		#endregion
+
+		/// <summary>
+		/// カーソルが押されたときの処理
+		/// </summary>
+		protected virtual void OnPressed() {
+
+			m_isUsing = true;
+
 			if (m_btnOption.IsAutoScale) {
 				iTween.ScaleTo(this.gameObject , new Vector3(0.95f , 0.95f , 1) , 0.5f);
 			}
 
-			if (m_btnOption.Trigger != EventTrgger.OnPress) return;
-			Action();
-
+			foreach (var action in m_btnActions.FindAll(_ => _.m_trigger == ButtonEventTrigger.OnPress)) {
+				ExecCallBack(action);
+			}
 		}
 
 		/// <summary>
-		/// カーソルがクリック動作をおこなったときの処理
+		/// カーソルが押されている間の処理
 		/// </summary>
-		/// <param name="eventData"></param>
-		void IPointerClickHandler.OnPointerClick(PointerEventData eventData) {
-			if (m_btnOption.Trigger != EventTrgger.OnClick) return;
-			Action();
+		protected virtual void OnLongPressed() {
+			foreach (var action in m_btnActions.FindAll(_ => _.m_trigger == ButtonEventTrigger.OnLongPress)) {
+				ExecCallBack(action);
+			}
 		}
 
 		/// <summary>
-		/// ボタンが押されたときの処理
+		/// カーソルが離された時の処理
 		/// </summary>
-		private void Action() {
+		protected virtual void OnReleased() {
 
-			if (m_btnAction == null) {
-				Debug.LogError("[ToyBox]ボタンにアクションが設定されていない");
-				return;
+			m_isUsing = false;
+
+			if (m_btnOption.IsAutoScale) {
+				iTween.ScaleTo(this.gameObject , new Vector3(1f , 1f , 1) , 0.5f);
 			}
 
-			System.Action action = m_btnAction.m_action;
+			foreach (var action in m_btnActions.FindAll(_ => _.m_trigger == ButtonEventTrigger.OnRelease)) {
+				ExecCallBack(action);
+			}
+		}
+		
+		/// <summary>
+		/// ボタンが押されたときの処理
+		/// コールバックを実行する
+		/// </summary>
+		private void ExecCallBack(ButtonAction arg_action) {
+
+			if (arg_action == null) return;
+
+			System.Action action = arg_action.m_action;
 
 			if (action != null) {
 				action();
 				return;
 			}
 
-			System.Action<object> objectAction = m_btnAction.m_objectAction;
-			object value = m_btnAction.m_value;
+			System.Action<object> objectAction = arg_action.m_objectAction;
+			object value = arg_action.m_value;
 
-			if (m_btnAction.m_objectAction != null) {
-				m_btnAction.m_objectAction(m_btnAction.m_value);
+			if (arg_action.m_objectAction != null) {
+				arg_action.m_objectAction(arg_action.m_value);
 				return;
 			}
 		}

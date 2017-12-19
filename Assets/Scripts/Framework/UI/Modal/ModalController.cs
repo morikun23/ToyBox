@@ -42,7 +42,7 @@ namespace ToyBox {
 				));
 
 			if (m_exitButton != null) {
-				m_exitButton.Initialize(this.Hide);
+				m_exitButton.Initialize(new ButtonAction(ButtonEventTrigger.OnPress,this.Hide));
 			}
 		}
 

@@ -30,7 +30,7 @@ namespace ToyBox
             while (true)
             {
                 //当たり判定
-                m_isHit = Physics2D.BoxCast(transform.position + new Vector3(0f, 0.5f), new Vector2(0.2f, 0.2f), 0f, Vector2.one, 1f);
+                m_isHit = Physics2D.BoxCast(transform.position + new Vector3(0f, 0.5f), new Vector2(0.2f, 0.2f), 0f, Vector2.one, 1f, 1 << LayerMask.NameToLayer("Player"));
 
                 //初めて乗ったとき
                 if (m_isHit && !m_isRide)

@@ -1,9 +1,4 @@
-﻿//担当：森田　勝
-//概要：メインシーン全体を管理するクラス
-//　　　シーン内の処理はこのクラスをトリガーとしてください。
-//参考：特になし
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,78 +6,85 @@ using UnityEngine.SceneManagement;
 namespace ToyBox {
 	public class MainScene : ToyBox.Scene {
 
-		private Stage m_stage;
+		[SerializeField]
+		private StageFactory m_stageFactory;
 
+		[SerializeField]
+		MainSceneUI m_mainSceneUI;
+
+		private Stage m_stage;
+		
 		private Player m_player;
 
-		private InputManager m_inputManager;
+		//シーン遷移用のフラグ
+		private bool m_isAblesceneTransition;
 
-		#region 入場時の演出に使用する
-		[SerializeField]
-		private Animator m_doorAnimation;
-
-		private Color m_colorBuf;
-		#endregion
+		private const string PLAYER_PATH = "Contents/Player/Prefabs/BD_Player";
 
 		public override IEnumerator OnEnter() {
-			//ステージの生成（どのステージなのかを区別させたい）
-			m_stage = FindObjectOfType<Stage>();
+			
+			if (m_stageFactory == null) {
+				Debug.LogError("StageFactoryに参照できません");
+				yield break;
+			}
+			
+			uint playStageId = AppManager.Instance.user.m_temp.m_playStageId;
+			uint playRoomId = AppManager.Instance.user.m_temp.m_playRoomId;
+
+			m_stage = m_stageFactory.Load(playStageId);
+
+			if(m_stage == null) {
+				Debug.LogError("ステージの生成に失敗しました");
+				yield break;
+			}
 
 			//プレイヤーの生成
-			m_player = FindObjectOfType<Player>();
-			m_colorBuf = m_player.m_viewer.m_spriteRenderer.color;
-			m_player.m_viewer.m_spriteRenderer.color = new Color(m_colorBuf.r,m_colorBuf.g,m_colorBuf.b,0);
+			m_player = Instantiate(Resources.Load<GameObject>(PLAYER_PATH)).GetComponent<Player>();
+			if (m_player == null) {
+				Debug.LogError("Playerの生成に失敗しました");
+				yield break;
+			}
+			m_player.gameObject.name = "Player";
+			m_player.Initialize();
 
-			m_stage.Initialize(m_player);
+			m_stage.Initialize(m_player,playRoomId, this.OnPlayerGoaled);
 
-			//入力環境を初期化
-			m_inputManager = GetComponent<InputManager>();
-			//m_inputManager.Initialize();
+			if(m_mainSceneUI == null) {
+				Debug.LogError("UIを参照できません");
+				yield break;
+			}
+
+			m_mainSceneUI.Initialize(m_player);
 
 			AppManager.Instance.m_fade.StartFade(new FadeIn() , Color.black , 1.0f);
 			yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
 
-			yield return new WaitForSeconds(1.5f);
-
-			#region 入場時の演出
-			m_doorAnimation.SetBool("Open",true);
-			yield return null;
-			yield return new Tsubakit.WaitForAnimation(m_doorAnimation , 0);
-
-			float alpha = 0;
-			
-			while (alpha < 1) {
-				alpha += 0.01f;
-				m_player.m_viewer.m_spriteRenderer.color = new Color(m_colorBuf.r , m_colorBuf.g , m_colorBuf.b , alpha);
-				yield return null;
-			}
-
-			#endregion
 		}
 
 		public override IEnumerator OnUpdate() {
-
-			while (true) {
-//				if(m_player.GetCurrentState() != typeof(PlayerDeadState)){
-//					m_inputManager.UpdateByFrame();
-//				}
-				if (m_stage.DoesPlayerReachGoal()) {
-					break;
-				}
-				yield return null;
-			}
-
-			#region ゴール後の演出
-			AppManager.Instance.m_fade.StartFade(new FadeOut() , Color.white , 3.0f);
-			yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
-			#endregion
+			//フラグが立つまでシーン遷移を実行しない
+			yield return new WaitWhile(() => !m_isAblesceneTransition);
 		}
 
+		
 		public override IEnumerator OnExit() {
-			
+			//TODO:今後リザルトシーンではなくホーム画面に移動する
+			AppManager.Instance.m_fade.StartFade(new FadeOut() , Color.white , 1.0f);
+			yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
 			SceneManager.LoadScene("Result");
-			yield return null;
+		}
 
+		private void OnPlayerGoaled(object arg_message) {
+			//TODO:ユーザー情報にクリアを加える
+			m_isAblesceneTransition = true;
+		}
+
+		/// <summary>
+		/// ゲームを途中で中断し、ホーム画面へ戻る
+		/// </summary>
+		public void ExitMainGame() {
+			//TODO:現在の進行度を保存する
+			m_isAblesceneTransition = true;
 		}
 	}
 }

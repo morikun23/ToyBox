@@ -7,10 +7,9 @@ namespace ToyBox {
 	public class StartPoint : CheckPoint {
 
 		//初期リスタート地点であるか
-		[SerializeField]
-		protected bool m_isInitPosition;
+		public bool m_isInitPosition;
 
-		public override void Initialize(Action<int> arg_callBack) {
+		public override void Initialize(Action<object> arg_callBack) {
 			if (m_isInitPosition) { m_isActive = true; }
 			base.Initialize(arg_callBack);
 		}

@@ -1,24 +1,17 @@
-﻿//担当：森田　勝
-//概要：アプリケーション内のパブリック機能および
-//　　　パブリックなマネージャーを管理しているクラス
-//　　　ユーティリティを使用するためにはこのクラスにアクセスする
-//参考：なし
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public class AppManager : MonoBehaviour {
+	public sealed class AppManager : MonoBehaviour {
 
-		#region Singleton実装
+		#region Singleton
 		private static AppManager m_instance;
 
 		public static AppManager Instance {
 			get {
 				if (m_instance == null) {
-					m_instance = new GameObject("AppManager").AddComponent<AppManager>();
-					m_instance.Initialize();
+					m_instance = FindObjectOfType<AppManager>();
 				}
 				return m_instance;
 			}
@@ -28,38 +21,57 @@ namespace ToyBox {
 		#endregion
 
 		//オーディオ環境
-		public AudioManager m_audioManager { get; private set; }
+		[SerializeField]
+		private AudioManager audioManager;
+		public AudioManager m_audioManager { get { return audioManager; } }
 
 		//フェード環境
-		public Fade m_fade { get; private set; }
-
-		//カメラ操作
-		public CameraPosController m_camera { get; private set; }
+		[SerializeField]
+		private Fade fade;
+		public Fade m_fade { get { return fade; } }
 
 		//時間環境
-		public TimeManager m_timeManager { get; private set; }
+		[SerializeField]
+		private TimeManager timeManager;
+		public TimeManager m_timeManager { get { return timeManager; } }
+
+		//ユーザー情報
+		private UserData m_user;
+		public UserData user { get { return m_user; } }
 
 		/// <summary>
-		/// 初期化
+		/// 初期起動
 		/// </summary>
-		void Initialize() {
-			m_audioManager = new GameObject("Audio").AddComponent<AudioManager>();
-			//m_audioManager.Initialize(0);
-			m_fade = FindObjectOfType<Fade>();
+		private void Awake() {
+			if (Instance != this) {
+				Destroy(this.gameObject);
+				return;
+			}
 
-			m_camera = CameraPosController.Instance;
-			m_timeManager = new GameObject("TimeManager").AddComponent<TimeManager>();
+			#region NULLチェック
+			if (m_audioManager == null) {
+				Debug.LogError("[ToyBox]<color=red>AudioManager</color>が設定されていません");
+			}
+
+			if (m_fade == null) {
+				Debug.LogError("[ToyBox]<color=red>Fade</color>が設定されていません");
+			}
+
+			if (m_timeManager == null) {
+				Debug.LogError("[ToyBox]<color=red>TimeManager</color>が設定されていません");
+			}
+			#endregion
+
+			DontDestroyOnLoad(this.gameObject);
+
+			m_user = new UserData();
+			m_user.Load();
+
 			m_timeManager.Initialize();
 
-			if (!m_fade) {
-				m_fade = Instantiate(Resources.Load<GameObject>("Effect/FadeCanvas")).GetComponentInChildren<Fade>();
-			}
 			m_fade.Initialize();
-			DontDestroyOnLoad(this.gameObject);
-			DontDestroyOnLoad(m_audioManager.gameObject);
-			DontDestroyOnLoad(m_fade.transform.parent.gameObject);
-			DontDestroyOnLoad(m_timeManager.gameObject);
-		}
 
+			
+		}
 	}
 }

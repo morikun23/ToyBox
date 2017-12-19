@@ -9,13 +9,26 @@ namespace ToyBox{
 		Playable m_scr_playable;
 		BoxCollider2D col_;
 
-		public void Start(){
+		private Playable player {
+			get {
+				if(m_scr_playable == null) {
+					m_scr_playable = FindObjectOfType<Playable>();
+				}
+				return m_scr_playable;
+			}
+		}
+
+		public new void Start(){
 			base.Start ();
 			col_ = GetComponent<BoxCollider2D> ();
-
 		}
 
 		public void Update(){
+
+            transform.position = Camera.main.transform.position;
+
+			if (player == null) return;
+
 			if (isAbleHandShot()) {
 				col_.enabled = false;
 			} else {
@@ -27,13 +40,15 @@ namespace ToyBox{
 
 		public override void TouchStart (Vector2 pos){
 			base.TouchStart (pos);
+
+			if (player == null) return;
 			if (!isAbleHandShot()) {
-				InputManager.Instance.GetPlayableCharactor ().Release();
+				player.Release();
 			}
 		}
 
 		bool isAbleHandShot(){
-			return InputManager.Instance.GetPlayableCharactor ().IsAbleReach () && !InputManager.Instance.GetPlayableCharactor ().m_playableHand.IsGrasping ();
+			return player.IsAbleReach () && !player.m_playableHand.IsGrasping ();
 		}
 	}
 }
