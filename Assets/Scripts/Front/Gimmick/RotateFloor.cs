@@ -68,9 +68,10 @@ namespace ToyBox{
 				m_enu_status = Status.NEUTRAL;
 				yield break;
 			}
-				
-			//AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_RotateFloor_rotate");
-			//source.Play ();
+
+
+            //新しい音でして
+            AudioManager.Instance.QuickPlaySE("SE_RotateFloor_rotate");
 		
 			//グリップの角度が０になるまで(num_rotateCompの値だけ)処理
 			for(int i = 1;i <= m_num_rotateComp;i ++){
@@ -89,8 +90,9 @@ namespace ToyBox{
 			//回転が終わったら離してよいことにする
 			m_scr_MovableGrip[arg_gripId].SetAbleRelease(true);
 
-			//source = AppManager.Instance.m_audioManager.CreateSe ("SE_RotateFloor_rotateComp");
-			//source.Play ();
+
+            //あたらしい音でございます
+            AudioManager.Instance.QuickPlaySE("SE_RotateFloor_rotateComp");
 
 			//プレーヤーが手を離すのを待つ
 			while(m_scr_MovableGrip[arg_gripId].m_enu_state == MovableGlip.GripState.STAY){

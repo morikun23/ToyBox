@@ -21,6 +21,8 @@ namespace ToyBox {
 
 			m_directionBuf = arg_player.m_direction;
 
+			AudioManager.Instance.RegisterSE ("Foot", "SE_Player_Walk");
+			AudioManager.Instance.PlaySE ("Foot",true);
 			
 		}
 
@@ -39,11 +41,6 @@ namespace ToyBox {
 				y = arg_player.m_rigidbody.velocity.y ,
 				z = 0
 			};
-			m_cnt_move += 1;
-			if(m_cnt_move % 10 == 0){
-				//AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_Player_walk");
-				//source.Play ();
-			}
 
 
 		}
@@ -59,6 +56,8 @@ namespace ToyBox {
 				y = arg_player.m_rigidbody.velocity.y ,
 				z = 0
 			};
+			AudioManager.Instance.StopSE ("Foot");
+			AudioManager.Instance.ReleaseSE ("Foot");
 		}
 
 		public virtual IPlayerState GetNextState(PlayerComponent arg_player) {
