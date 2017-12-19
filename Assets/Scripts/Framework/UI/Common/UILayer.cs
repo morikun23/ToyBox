@@ -81,18 +81,18 @@ namespace ToyBox {
 		}
 
 		private void NullCheck() {
-			if (AnchorLeft == null) {
-				Debug.LogError("[ToyBox]" + "<color=red>" + Layer.ToString() + "</color>"
-					+ "レイヤーの<color=red>AnchorLeft</color>が設定されていません");
-			}
-			if (AnchorCenter == null) {
-				Debug.LogError("[ToyBox]" + "<color=red>" + Layer.ToString() + "</color>"
-					+ "レイヤーの<color=red>AnchorCenter</color>が設定されていません");
-			}
-			if (AnchorRight == null) {
-				Debug.LogError("[ToyBox]" + "<color=red>" + Layer.ToString() + "</color>"
-					+ "レイヤーの<color=red>AnchorRight</color>が設定されていません");
-			}
+			//if (AnchorLeft == null) {
+			//	Debug.LogError("[ToyBox]" + "<color=red>" + Layer.ToString() + "</color>"
+			//		+ "レイヤーの<color=red>AnchorLeft</color>が設定されていません");
+			//}
+			//if (AnchorCenter == null) {
+			//	Debug.LogError("[ToyBox]" + "<color=red>" + Layer.ToString() + "</color>"
+			//		+ "レイヤーの<color=red>AnchorCenter</color>が設定されていません");
+			//}
+			//if (AnchorRight == null) {
+			//	Debug.LogError("[ToyBox]" + "<color=red>" + Layer.ToString() + "</color>"
+			//		+ "レイヤーの<color=red>AnchorRight</color>が設定されていません");
+			//}
 		}
 
 		#endregion
