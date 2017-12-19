@@ -24,17 +24,21 @@ namespace ToyBox
         [SerializeField]
         Sprite m_picture;
 
+
         public override void OnGraspedEnter(PlayerComponent arg_player)
         {
             //ダイアログ生成
             m_Prefab = Instantiate(m_diaPrefab, m_formPos, Quaternion.identity);
             m_Prefab.transform.Find("Picture").GetComponent<SpriteRenderer>().sprite = m_picture;
             m_Prefab.GetComponent<TutorialDialog>().Init(this);
-            
+
 
             //音じゃ
             //AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_Dialog_open");
             //source.Play();
+
+            //新しい音でして
+            AudioManager.Instance.QuickPlaySE("SE_Dialog_open");
 
             m_flg_ableGrasp = false;
             m_flg_ableReleace = false;
@@ -56,10 +60,13 @@ namespace ToyBox
             //AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_Dialog_close");
             //source.Play();
 
+            //新しい音でして
+             AudioManager.Instance.QuickPlaySE("SE_Dialog_close");
+
+
             arg_player.Arm.m_shorten = true;
             m_flg_ableGrasp = true;
             m_flg_ableReleace = false;
         }
-
     }
 }

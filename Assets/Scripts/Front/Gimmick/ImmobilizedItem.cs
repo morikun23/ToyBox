@@ -5,9 +5,13 @@ using UnityEngine;
 namespace ToyBox {
 	public class ImmobilizedItem : Item {
 
+
 		public override void OnGraspedEnter(PlayerComponent arg_player) {
-			//AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_PlayerHand_grab");
-			//source.Play ();
+            //AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_PlayerHand_grab");
+            //source.Play ();
+
+            //新しい音でございます
+            AudioManager.Instance.QuickPlaySE("SE_PlayerHand_grab");
 		}
 
 		public override void OnGraspedStay(PlayerComponent arg_player) {

@@ -17,8 +17,10 @@ namespace ToyBox {
 			arg_player.m_viewer.m_animator.Play("Dead" , 0);
 			arg_player.m_viewer.m_animator.SetBool("Dead" , true);
 
-			//AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_Player_Dead_02");
-			//source.Play ();
+            //AudioSource source = AppManager.Instance.m_audioManager.CreateSe ("SE_Player_Dead_02");
+            //source.Play ();
+
+            AudioManager.Instance.QuickPlaySE("SE_Player_Dead_02");
 		}
 
 		/// <summary>

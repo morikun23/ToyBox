@@ -48,6 +48,8 @@ namespace ToyBox
                 //AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_NumberOrder_comp");
                 //source.Play();
 
+                //新しい音でして
+                AudioManager.Instance.QuickPlaySE("SE_NumberOrder_comp");
 
                 StartCoroutine(m_scr_shutter.OpenMoveCamera());
             }
@@ -72,6 +74,9 @@ namespace ToyBox
             }
             //AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_NumberOrder_cancel");
             //source.Play();
+
+            //新しい音でして
+            AudioManager.Instance.QuickPlaySE("SE_NumberOrder_cancel");
         }
 
     }

@@ -111,6 +111,9 @@ namespace ToyBox
             //AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_Bomb_expload");
             //source.Play();
 
+            //新しい音でございます
+            AudioManager.Instance.QuickPlaySE("SE_Bomb_expload");
+
             List<RaycastHit2D> hit = new List<RaycastHit2D>();
 
             foreach (var col in Physics2D.CircleCastAll(transform.position, rad, Vector3.forward, Mathf.Infinity))

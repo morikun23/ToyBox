@@ -47,6 +47,9 @@ namespace ToyBox
                     //AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_NumberOrder_count");
                     //source.Play();
 
+                    //新しい音でして
+                    AudioManager.Instance.QuickPlaySE("SE_NumberOrder_count");
+
                 }
                 else
                 {

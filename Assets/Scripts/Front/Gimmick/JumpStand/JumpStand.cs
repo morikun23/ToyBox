@@ -40,6 +40,10 @@ namespace ToyBox
 
             //velocityでジャンプ量を制御
             m_colObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, m_jumpPower);
+
+
+            //音でございます
+            AudioManager.Instance.QuickPlaySE("SE_JumpStand");
         }
     }
 }
