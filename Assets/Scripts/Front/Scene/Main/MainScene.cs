@@ -22,7 +22,7 @@ namespace ToyBox {
 		private const string PLAYER_PATH = "Contents/Player/Prefabs/BD_Player";
 
 		public override IEnumerator OnEnter() {
-			
+
 			if (m_stageFactory == null) {
 				Debug.LogError("StageFactoryに参照できません");
 				yield break;
@@ -57,6 +57,17 @@ namespace ToyBox {
 			m_mainSceneUI.Initialize(m_player);
 
 			AppManager.Instance.m_fade.StartFade(new FadeIn() , Color.black , 1.0f);
+
+
+			AudioManager.Instance.StopBGM();
+			if ((int)playStageId == 1000) {
+				AudioManager.Instance.RegisterBGM("BGM_Stage1");
+			}
+			else if((int)playStageId == 2000) {
+				AudioManager.Instance.RegisterBGM("BGM_Stage2");
+			}
+			AudioManager.Instance.PlayBGM(1.5f);
+
 			yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
 
 		}
@@ -71,6 +82,7 @@ namespace ToyBox {
 			//TODO:今後リザルトシーンではなくホーム画面に移動する
 			AppManager.Instance.m_fade.StartFade(new FadeOut() , Color.white , 1.0f);
 			yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
+			AudioManager.Instance.StopBGM();
 			SceneManager.LoadScene("Result");
 		}
 
