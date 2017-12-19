@@ -18,8 +18,8 @@ namespace ToyBox {
 		/// 初期化
 		/// </summary>
 		public void Initialize() {
-			m_stage1.Initialize(new ButtonAction(ButtonEventTrigger.OnRelease , this.OnStageSelected , (uint)1000));
-			m_stage2.Initialize(new ButtonAction(ButtonEventTrigger.OnRelease , this.OnStageSelected , (uint)2000));	
+			m_stage1.Initialize(new ButtonAction(ButtonEventTrigger.OnPress , this.OnStageSelected , (uint)1000));
+			m_stage2.Initialize(new ButtonAction(ButtonEventTrigger.OnPress , this.OnStageSelected , (uint)2000));	
 		}
 
 		private void OnStageSelected(object arg_stageId) {
