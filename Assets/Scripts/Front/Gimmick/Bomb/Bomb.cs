@@ -107,9 +107,9 @@ namespace ToyBox
             //爆風範囲はちょっと大きめで
             rad += rad * 2;
 
-            //音じゃ
-            //AudioSource source = AppManager.Instance.m_audioManager.CreateSe("SE_Bomb_expload");
-            //source.Play();
+
+            //音でございます
+            AudioManager.Instance.QuickPlaySE("SE_Bomb_expload");
 
             List<RaycastHit2D> hit = new List<RaycastHit2D>();
 
