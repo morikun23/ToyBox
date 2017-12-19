@@ -83,6 +83,8 @@ namespace ToyBox {
 			AppManager.Instance.m_fade.StartFade(new FadeOut() , Color.white , 1.0f);
 			yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
 			AudioManager.Instance.StopBGM();
+			AudioManager.Instance.StopSE("Foot");
+			AudioManager.Instance.ReleaseSE("Foot");
 			SceneManager.LoadScene("Result");
 		}
 
