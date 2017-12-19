@@ -227,6 +227,9 @@ namespace ToyBox {
 			this.m_onGoalAction(arg_id);
 		}
 
+		public void StashData() {
+			AppManager.Instance.user.m_temp.m_playRoomId = (uint)m_currentStartPoint.m_id;
+		}
 
 	}
 }
