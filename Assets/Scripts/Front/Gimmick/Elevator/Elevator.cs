@@ -34,7 +34,7 @@ namespace ToyBox
 
         //イベントマネージャができるまで
         GameObject m_player;
-
+        Vector3 m_playerRidePos;
 
         void Start()
         {
@@ -78,7 +78,7 @@ namespace ToyBox
 
             //イベントマネージャができるまで
             //プレイヤーを動けないようにする
-            m_player.transform.position = new Vector2(m_player.transform.position.x, m_nowPos.y + 0.6f);
+            m_player.transform.position = new Vector2(m_playerRidePos.x, m_nowPos.y + 0.65f);
 
 
             if (IsMoveComleted())
@@ -128,12 +128,14 @@ namespace ToyBox
         public void Action()
         {
             m_isAction = true;
-            m_isStart = !m_isStart;
-            m_isEnd = !m_isEnd;
 
             //プレイヤー情報の取得
             m_player = GameObject.Find("Player");
-            Debug.Log(m_player);
+            m_playerRidePos = m_player.transform.position;
+            m_player.transform.position = new Vector2(m_playerRidePos.x, m_nowPos.y + 0.65f);
+
+            m_isStart = !m_isStart;
+            m_isEnd = !m_isEnd;
 
             if(m_isStart){ m_startGate.Open(); }
             if (m_isEnd) { m_endGate.Open(); }
