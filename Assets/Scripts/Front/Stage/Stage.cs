@@ -107,9 +107,13 @@ namespace ToyBox {
 		}
 
 		private IEnumerator OnPlayerDead() {
-			#region プレイヤーが死んだときの演出
-			//死亡アニメーションが終了するまで待機
-			yield return new Tsubakit.WaitForAnimation(m_player.m_viewer.m_animator , 0);
+            #region プレイヤーが死んだときの演出
+            //死亡アニメーションが終了するまで待機
+
+            //同フレーム内でアニメーション情報の更新をするには一度アップデートしなければならない(うろ覚え)
+            m_player.m_viewer.m_animator.Update(0);
+
+            yield return new Tsubakit.WaitForAnimation(m_player.m_viewer.m_animator , 0);
 
 			Fade fade = AppManager.Instance.m_fade;
 			fade.StartFade(new FadeOut() , Color.black , 1.0f);
@@ -223,6 +227,9 @@ namespace ToyBox {
 			this.m_onGoalAction(arg_id);
 		}
 
+		public void StashData() {
+			AppManager.Instance.user.m_temp.m_playRoomId = (uint)m_currentStartPoint.m_id;
+		}
 
 	}
 }

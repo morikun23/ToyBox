@@ -15,6 +15,10 @@ namespace ToyBox {
 		[SerializeField]
 		UIButton m_rightButton;
 
+		[SerializeField]
+		UIButton m_debugButton;
+
+
 		private Playable m_player;
 
 		public void Initialize(Playable arg_player) {
@@ -26,6 +30,8 @@ namespace ToyBox {
 				new ButtonAction(ButtonEventTrigger.OnRelease , this.OnMoveButtonUp));
 			m_rightButton.Initialize(new ButtonAction(ButtonEventTrigger.OnPress , this.OnRightButtonDown) ,
 				new ButtonAction(ButtonEventTrigger.OnRelease , this.OnMoveButtonUp));
+
+			m_debugButton.Initialize(new ButtonAction(ButtonEventTrigger.OnRelease , this.OnDebugButton));
 		}
 		
 		private void OnJumpButtonDown() {
@@ -48,6 +54,19 @@ namespace ToyBox {
 		private void OnRightButtonDown() {
 			m_player.m_direction = ActorBase.Direction.RIGHT;
 			m_player.m_inputHandle.m_run = true;
+		}
+
+
+		int count = 0;
+		private void OnDebugButton() {
+			count += 1;
+			if(count >= 10) {
+				Stage stage = FindObjectOfType<Stage>();
+				if (stage) {
+					stage.StashData();
+					UnityEngine.SceneManagement.SceneManager.LoadScene("Main");
+				}
+			}
 		}
 	}
 }

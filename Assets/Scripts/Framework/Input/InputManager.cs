@@ -124,7 +124,10 @@ namespace ToyBox{
 					int baf_cnt = 0;
 					//深度判定
 					foreach(int val in baf_touchActor.GetDepth()){
-						if (baf_depth [baf_cnt] < val) {
+
+						if (baf_cnt >= baf_depth.Count) break;
+
+						if (baf_depth [baf_cnt] <= val) {
 							baf_compActor = baf_touchActor;
 							baf_depth = baf_touchActor.GetDepth ();
 							baf_cnt++;
