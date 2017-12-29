@@ -181,45 +181,9 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="pos"></param>
 		public sealed override void TouchStart(Vector2 pos) {
-			this.OnPressed();
-		}
-
-		/// <summary>
-		/// カーソルが押されている間の処理
-		/// </summary>
-		/// <param name="pos"></param>
-		public sealed override void TouchStay(Vector2 pos) {
-			this.OnLongPressed();
-		}
-		
-		/// <summary>
-		/// カーソルが離された時の処理
-		/// </summary>
-		/// <param name="pos"></param>
-		public sealed override void TouchEnd(Vector2 pos) {
-			OnReleased();
-		}
-
-		/// <summary>
-		/// カーソルが離された時の処理
-		/// </summary>
-		/// <param name="pos"></param>
-		public sealed override void SwipeEnd(Vector2 pos) {
-			OnReleased();
-		}
-
-		#endregion
-
-		/// <summary>
-		/// カーソルが押されたときの処理
-		/// </summary>
-		protected virtual void OnPressed() {
-
 			m_isUsing = true;
 
-			if (m_btnOption.IsAutoScale) {
-				iTween.ScaleTo(this.gameObject , new Vector3(0.95f , 0.95f , 1) , 0.5f);
-			}
+			this.OnPressed();
 
 			foreach (var action in m_btnActions.FindAll(_ => _.m_trigger == ButtonEventTrigger.OnPress)) {
 				ExecCallBack(action);
@@ -229,8 +193,22 @@ namespace ToyBox {
 		/// <summary>
 		/// カーソルが押されている間の処理
 		/// </summary>
-		protected virtual void OnLongPressed() {
+		/// <param name="pos"></param>
+		public sealed override void TouchStay(Vector2 pos) {
+			this.OnLongPressed();
 			foreach (var action in m_btnActions.FindAll(_ => _.m_trigger == ButtonEventTrigger.OnLongPress)) {
+				ExecCallBack(action);
+			}
+		}
+		
+		/// <summary>
+		/// カーソルが離された時の処理
+		/// </summary>
+		/// <param name="pos"></param>
+		public sealed override void TouchEnd(Vector2 pos) {
+			m_isUsing = false;
+			OnReleased();
+			foreach (var action in m_btnActions.FindAll(_ => _.m_trigger == ButtonEventTrigger.OnRelease)) {
 				ExecCallBack(action);
 			}
 		}
@@ -238,16 +216,37 @@ namespace ToyBox {
 		/// <summary>
 		/// カーソルが離された時の処理
 		/// </summary>
-		protected virtual void OnReleased() {
-
+		/// <param name="pos"></param>
+		public sealed override void SwipeEnd(Vector2 pos) {
 			m_isUsing = false;
-
-			if (m_btnOption.IsAutoScale) {
-				iTween.ScaleTo(this.gameObject , new Vector3(1f , 1f , 1) , 0.5f);
-			}
-
+			OnReleased();
 			foreach (var action in m_btnActions.FindAll(_ => _.m_trigger == ButtonEventTrigger.OnRelease)) {
 				ExecCallBack(action);
+			}
+		}
+
+		#endregion
+
+		/// <summary>
+		/// カーソルが押されたときの処理
+		/// </summary>
+		protected virtual void OnPressed() {
+			if (m_btnOption.IsAutoScale) {
+				iTween.ScaleTo(this.gameObject , new Vector3(0.95f , 0.95f , 1) , 0.5f);
+			}
+		}
+
+		/// <summary>
+		/// カーソルが押されている間の処理
+		/// </summary>
+		protected virtual void OnLongPressed() { }
+
+		/// <summary>
+		/// カーソルが離された時の処理
+		/// </summary>
+		protected virtual void OnReleased() {
+			if (m_btnOption.IsAutoScale) {
+				iTween.ScaleTo(this.gameObject , new Vector3(1f , 1f , 1) , 0.5f);
 			}
 		}
 		
