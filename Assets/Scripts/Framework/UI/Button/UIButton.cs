@@ -115,10 +115,11 @@ namespace ToyBox {
 		/// <param name="arg_action">コールバック</param>
 		public void Initialize(ButtonAction arg_action) {
 			if (arg_action == null) {
-				Debug.LogError("[ToyBox]コールバックがNULL");
-				return;
+				Debug.LogWarning("[ToyBox]コールバックがNULL");
 			}
-			m_btnActions.Add(arg_action);
+			else {
+				m_btnActions.Add(arg_action);
+			}
 		}
 
 		/// <summary>
@@ -129,15 +130,18 @@ namespace ToyBox {
 		/// <param name="arg_action2">コールバック</param>
 		public void Initialize(ButtonAction arg_action1,ButtonAction arg_action2) {
 			if (arg_action1 == null) {
-				Debug.LogError("[ToyBox]コールバックがNULL");
-				return;
+				Debug.LogWarning("[ToyBox]コールバックがNULL");
 			}
+			else {
+				m_btnActions.Add(arg_action1);
+			}
+			
 			if (arg_action2 == null) {
-				Debug.LogError("[ToyBox]コールバックがNULL");
-				return;
+				Debug.LogWarning("[ToyBox]コールバックがNULL");
 			}
-			m_btnActions.Add(arg_action1);
-			m_btnActions.Add(arg_action2);
+			else {
+				m_btnActions.Add(arg_action2);
+			}
 		}
 
 		/// <summary>
@@ -149,20 +153,25 @@ namespace ToyBox {
 		/// <param name="arg_action3">コールバック</param>
 		public void Initialize(ButtonAction arg_action1 , ButtonAction arg_action2,ButtonAction arg_action3) {
 			if (arg_action1 == null) {
-				Debug.LogError("[ToyBox]コールバックがNULL");
-				return;
+				Debug.LogWarning("[ToyBox]コールバックがNULL");
 			}
+			else {
+				m_btnActions.Add(arg_action1);
+			}
+
 			if (arg_action2 == null) {
-				Debug.LogError("[ToyBox]コールバックがNULL");
-				return;
+				Debug.LogWarning("[ToyBox]コールバックがNULL");
 			}
+			else {
+				m_btnActions.Add(arg_action2);
+			}
+
 			if (arg_action3 == null) {
-				Debug.LogError("[ToyBox]コールバックがNULL");
-				return;
+				Debug.LogWarning("[ToyBox]コールバックがNULL");
 			}
-			m_btnActions.Add(arg_action1);
-			m_btnActions.Add(arg_action2);
-			m_btnActions.Add(arg_action3);
+			else {
+				m_btnActions.Add(arg_action3);
+			}
 		}
 
 		#region TouchActorからの継承
