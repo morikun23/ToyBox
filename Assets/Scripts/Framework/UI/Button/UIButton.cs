@@ -66,12 +66,22 @@ namespace ToyBox {
 		/// </summary>
 		[SerializeField]
 		private bool m_isAutoScale = true;
-		
+
+		[SerializeField,Range(0.0f,1.0f)]
+		private float m_scalePower = 0.05f;
+
 		/// <summary>
 		/// 自動でスケーリング処理をおこなう
 		/// </summary>
 		public bool IsAutoScale {
 			get { return m_isAutoScale; }
+		}
+
+		/// <summary>
+		/// AutoScaleモードでスケーリングする量
+		/// </summary>
+		public float ScalePower{
+			get{ return 1.0f - m_scalePower; }
 		}
 	}
 
@@ -232,7 +242,9 @@ namespace ToyBox {
 		/// </summary>
 		protected virtual void OnPressed() {
 			if (m_btnOption.IsAutoScale) {
-				iTween.ScaleTo(this.gameObject , new Vector3(0.95f , 0.95f , 1) , 0.5f);
+				iTween.ScaleTo(this.gameObject , 
+					new Vector3(m_btnOption.ScalePower , m_btnOption.ScalePower , 1) ,
+					0.5f);
 			}
 		}
 
@@ -246,7 +258,7 @@ namespace ToyBox {
 		/// </summary>
 		protected virtual void OnReleased() {
 			if (m_btnOption.IsAutoScale) {
-				iTween.ScaleTo(this.gameObject , new Vector3(1f , 1f , 1) , 0.5f);
+				iTween.ScaleTo(this.gameObject , Vector3.one , 0.5f);
 			}
 		}
 		
