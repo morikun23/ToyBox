@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public class HomeSceneUI : CommonUI {
+	public class HomeSceneUI : MonoBehaviour {
 
 		[Header("Buttons")]
 		[SerializeField]
