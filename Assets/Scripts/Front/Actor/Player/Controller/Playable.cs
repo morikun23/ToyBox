@@ -10,6 +10,9 @@ namespace ToyBox {
 			public bool m_run;
 			public bool m_jump;
 			public bool m_reach;
+            public bool m_ableRun = true;
+            public bool m_ableJump = true;
+            public bool m_ableReach = true;
 		}
 
 		//プレイヤーへの入力ハンドラ
