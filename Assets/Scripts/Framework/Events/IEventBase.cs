@@ -8,11 +8,11 @@ using UnityEngine;
 
 namespace ToyBox
 {
-    public interface EventBase 
+    public interface IEventBase 
     {
-        void OnStartEvent();
-        bool OnUpdateEvent();
-        void OnEndEvent();
+        void OnStart();
+        bool OnUpdate();
+        void OnEnd();
 
 
     }

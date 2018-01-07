@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ToyBox
+namespace ToyBox.Yoshiki
 {
 
-    public class PrototypeEvent : EventBase
+    public class PrototypeEvent : IEventBase
     {
-        int i = 0;
+
+        int m_count = 0;
 
         /// <summary>
         /// イベント開始時
         /// </summary>
-        public virtual void OnStartEvent()
+        public virtual void OnStart()
         {
             Debug.Log("イベント開始時");
         }
@@ -20,22 +21,22 @@ namespace ToyBox
         /// <summary>
         /// イベント処理中
         /// </summary>
-        public virtual bool OnUpdateEvent()
+        public virtual bool OnUpdate()
         {
-            Debug.Log("イベント処理中");
-            i++;
-            if(i == 100)
+            m_count++;
+
+            if(m_count >100)
             {
-                return false;
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         /// <summary>
         /// イベント終了時
         /// </summary>
-        public virtual void OnEndEvent()
+        public virtual void OnEnd()
         {
             Debug.Log("イベント終了時");
         }

@@ -6,24 +6,18 @@ namespace ToyBox.Yoshiki
 {
     public class EventTestObject : MonoBehaviour
     {
-        EventsManager m_eventManager;
+        EventManager m_eventManager;
 
         [SerializeField]
-        bool m_isCheck = false;
-
-        // Use this for initialization
-        void Start()
-        {
-
-        }
+        bool m_CanStart = false;
 
         // Update is called once per frame
         void Update()
         {
-            if(m_isCheck)
+            if(m_CanStart)
             {
-                GameObject.FindObjectOfType<EventsManager>().GetEvent(new PrototypeEvent());
-                m_isCheck = false;
+                GameObject.FindObjectOfType<EventManager>().GetEvent(new PrototypeEvent());
+                m_CanStart = false;
             }
         }
     }
