@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace ToyBox
 {
-    public interface IEventBase 
+    public interface IEvent 
     {
         void OnStart();
         bool OnUpdate();

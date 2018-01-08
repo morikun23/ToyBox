@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ToyBox.Yoshiki
 {
 
-    public class PrototypeEvent : IEventBase
+    public class PrototypeEvent : IEvent
     {
 
         int m_count = 0;

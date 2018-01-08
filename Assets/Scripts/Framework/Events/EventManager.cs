@@ -12,13 +12,16 @@ namespace ToyBox
         private Player m_player;
 
         //実行するイベント
-        protected IEventBase m_currentEvent;
+        protected IEvent m_currentEvent;
 
         //イベントの状態　　
         enum EventState
         {
             //開始時、実行中、終了時、待機
-            START, UPDATE,END,IDLE
+            START,
+            UPDATE,
+            END,
+            IDLE
         }
 
         private EventState m_eventState;
@@ -30,13 +33,13 @@ namespace ToyBox
 
         void Update()
         {
-            CurrentEvent();
+            ExecCurrentEvent();
         }
 
         /// <summary>
         /// イベントの実行
         /// </summary>
-        void CurrentEvent()
+        private void ExecCurrentEvent()
         {
 
             switch (m_eventState) {
@@ -59,10 +62,10 @@ namespace ToyBox
                 case EventState.UPDATE:
 
                     
-                    bool m_ToNextState = m_currentEvent.OnUpdate();
+                    bool toNextState = m_currentEvent.OnUpdate();
 
                     //ここで返されたのがtrueなら次に行く
-                    if (m_ToNextState) m_eventState = EventState.END;
+                    if (toNextState) m_eventState = EventState.END;
                     break;
 
                 case EventState.END:
@@ -83,19 +86,18 @@ namespace ToyBox
         /// ギミックから呼び出し
         /// </summary>
         /// <param name="arg_nextEvent">ギミックから呼び出したいイベントをセット</param>
-        public void GetEvent(IEventBase arg_nextEvent)
+        public void SetEvent(IEvent arg_nextEvent)
         {
 
             m_currentEvent = arg_nextEvent;
             m_eventState = EventState.START;
-            Debug.Log("呼び出し");
 
 
             //初期化関数に置きたいです
             m_player = GameObject.FindObjectOfType<Player>();
             if (m_player == null)
             {
-                Debug.Log("Playerが見つかりません");
+                Debug.LogError("Playerが見つかりません");
             }
 
         }
