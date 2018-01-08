@@ -35,6 +35,7 @@ namespace ToyBox {
 		}
 		
 		private void OnJumpButtonDown() {
+            if(m_player.m_inputHandle.m_ableJump)
 			m_player.m_inputHandle.m_jump = true;
 		}
 
@@ -43,8 +44,11 @@ namespace ToyBox {
 		}
 
 		private void OnLeftButtonDown() {
-			m_player.m_direction = ActorBase.Direction.LEFT;
-			m_player.m_inputHandle.m_run = true;
+            if (m_player.m_inputHandle.m_ableRun)
+            {
+                m_player.m_direction = ActorBase.Direction.LEFT;
+                m_player.m_inputHandle.m_run = true;
+            }
 		}
 
 		private void OnMoveButtonUp() {
@@ -52,8 +56,11 @@ namespace ToyBox {
 		}
 
 		private void OnRightButtonDown() {
-			m_player.m_direction = ActorBase.Direction.RIGHT;
-			m_player.m_inputHandle.m_run = true;
+            if (m_player.m_inputHandle.m_ableRun)
+            {
+                m_player.m_direction = ActorBase.Direction.RIGHT;
+                m_player.m_inputHandle.m_run = true;
+            }
 		}
 
 
