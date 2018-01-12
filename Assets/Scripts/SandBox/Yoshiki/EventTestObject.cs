@@ -7,6 +7,7 @@ namespace ToyBox.Yoshiki
     public class EventTestObject : MonoBehaviour
     {
         EventManager m_eventManager;
+        GameObject m_player;
 
         [SerializeField]
         bool m_CanStart = false;
@@ -16,7 +17,8 @@ namespace ToyBox.Yoshiki
         {
             if(m_CanStart)
             {
-                GameObject.FindObjectOfType<EventManager>().SetEvent(new PrototypeEvent());
+                m_player = GameObject.Find("Player");
+                GameObject.FindObjectOfType<EventManager>().SetEvent(new PrototypeEvent(),gameObject,m_player);
                 m_CanStart = false;
             }
         }
