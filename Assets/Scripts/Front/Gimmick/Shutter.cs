@@ -35,14 +35,14 @@ namespace ToyBox{
         public int m_num_returnID;
 
 
-        InputManager m_InputManager;
+        //InputManager m_InputManager;
 
         // Use this for initialization
         void Start () {
 			m_pos_initY = transform.position.y;
 			m_pos_endY = m_pos_initY + 2;
 
-            m_InputManager = FindObjectOfType<InputManager>();
+           // m_InputManager = FindObjectOfType<InputManager>();
         }
 		
 		// Update is called once per frame
