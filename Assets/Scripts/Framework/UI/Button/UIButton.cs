@@ -66,12 +66,22 @@ namespace ToyBox {
 		/// </summary>
 		[SerializeField]
 		private bool m_isAutoScale = true;
-		
+
+		[SerializeField,Range(0.0f,1.0f)]
+		private float m_scalePower = 0.05f;
+
 		/// <summary>
 		/// 自動でスケーリング処理をおこなう
 		/// </summary>
 		public bool IsAutoScale {
 			get { return m_isAutoScale; }
+		}
+
+		/// <summary>
+		/// AutoScaleモードでスケーリングする量
+		/// </summary>
+		public float ScalePower{
+			get{ return 1.0f - m_scalePower; }
 		}
 	}
 
@@ -115,10 +125,11 @@ namespace ToyBox {
 		/// <param name="arg_action">コールバック</param>
 		public void Initialize(ButtonAction arg_action) {
 			if (arg_action == null) {
-				Debug.LogError("[ToyBox]コールバックがNULL");
-				return;
+				Debug.LogWarning("[ToyBox]コールバックがNULL");
 			}
-			m_btnActions.Add(arg_action);
+			else {
+				m_btnActions.Add(arg_action);
+			}
 		}
 
 		/// <summary>
@@ -129,15 +140,18 @@ namespace ToyBox {
 		/// <param name="arg_action2">コールバック</param>
 		public void Initialize(ButtonAction arg_action1,ButtonAction arg_action2) {
 			if (arg_action1 == null) {
-				Debug.LogError("[ToyBox]コールバックがNULL");
-				return;
+				Debug.LogWarning("[ToyBox]コールバックがNULL");
 			}
+			else {
+				m_btnActions.Add(arg_action1);
+			}
+			
 			if (arg_action2 == null) {
-				Debug.LogError("[ToyBox]コールバックがNULL");
-				return;
+				Debug.LogWarning("[ToyBox]コールバックがNULL");
 			}
-			m_btnActions.Add(arg_action1);
-			m_btnActions.Add(arg_action2);
+			else {
+				m_btnActions.Add(arg_action2);
+			}
 		}
 
 		/// <summary>
@@ -149,20 +163,25 @@ namespace ToyBox {
 		/// <param name="arg_action3">コールバック</param>
 		public void Initialize(ButtonAction arg_action1 , ButtonAction arg_action2,ButtonAction arg_action3) {
 			if (arg_action1 == null) {
-				Debug.LogError("[ToyBox]コールバックがNULL");
-				return;
+				Debug.LogWarning("[ToyBox]コールバックがNULL");
 			}
+			else {
+				m_btnActions.Add(arg_action1);
+			}
+
 			if (arg_action2 == null) {
-				Debug.LogError("[ToyBox]コールバックがNULL");
-				return;
+				Debug.LogWarning("[ToyBox]コールバックがNULL");
 			}
+			else {
+				m_btnActions.Add(arg_action2);
+			}
+
 			if (arg_action3 == null) {
-				Debug.LogError("[ToyBox]コールバックがNULL");
-				return;
+				Debug.LogWarning("[ToyBox]コールバックがNULL");
 			}
-			m_btnActions.Add(arg_action1);
-			m_btnActions.Add(arg_action2);
-			m_btnActions.Add(arg_action3);
+			else {
+				m_btnActions.Add(arg_action3);
+			}
 		}
 
 		#region TouchActorからの継承
@@ -172,45 +191,9 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="pos"></param>
 		public sealed override void TouchStart(Vector2 pos) {
-			this.OnPressed();
-		}
-
-		/// <summary>
-		/// カーソルが押されている間の処理
-		/// </summary>
-		/// <param name="pos"></param>
-		public sealed override void TouchStay(Vector2 pos) {
-			this.OnLongPressed();
-		}
-		
-		/// <summary>
-		/// カーソルが離された時の処理
-		/// </summary>
-		/// <param name="pos"></param>
-		public sealed override void TouchEnd(Vector2 pos) {
-			OnReleased();
-		}
-
-		/// <summary>
-		/// カーソルが離された時の処理
-		/// </summary>
-		/// <param name="pos"></param>
-		public sealed override void SwipeEnd(Vector2 pos) {
-			OnReleased();
-		}
-
-		#endregion
-
-		/// <summary>
-		/// カーソルが押されたときの処理
-		/// </summary>
-		protected virtual void OnPressed() {
-
 			m_isUsing = true;
 
-			if (m_btnOption.IsAutoScale) {
-				iTween.ScaleTo(this.gameObject , new Vector3(0.95f , 0.95f , 1) , 0.5f);
-			}
+			this.OnPressed();
 
 			foreach (var action in m_btnActions.FindAll(_ => _.m_trigger == ButtonEventTrigger.OnPress)) {
 				ExecCallBack(action);
@@ -220,8 +203,22 @@ namespace ToyBox {
 		/// <summary>
 		/// カーソルが押されている間の処理
 		/// </summary>
-		protected virtual void OnLongPressed() {
+		/// <param name="pos"></param>
+		public sealed override void TouchStay(Vector2 pos) {
+			this.OnLongPressed();
 			foreach (var action in m_btnActions.FindAll(_ => _.m_trigger == ButtonEventTrigger.OnLongPress)) {
+				ExecCallBack(action);
+			}
+		}
+		
+		/// <summary>
+		/// カーソルが離された時の処理
+		/// </summary>
+		/// <param name="pos"></param>
+		public sealed override void TouchEnd(Vector2 pos) {
+			m_isUsing = false;
+			OnReleased();
+			foreach (var action in m_btnActions.FindAll(_ => _.m_trigger == ButtonEventTrigger.OnRelease)) {
 				ExecCallBack(action);
 			}
 		}
@@ -229,16 +226,39 @@ namespace ToyBox {
 		/// <summary>
 		/// カーソルが離された時の処理
 		/// </summary>
-		protected virtual void OnReleased() {
-
+		/// <param name="pos"></param>
+		public sealed override void SwipeEnd(Vector2 pos) {
 			m_isUsing = false;
-
-			if (m_btnOption.IsAutoScale) {
-				iTween.ScaleTo(this.gameObject , new Vector3(1f , 1f , 1) , 0.5f);
-			}
-
+			OnReleased();
 			foreach (var action in m_btnActions.FindAll(_ => _.m_trigger == ButtonEventTrigger.OnRelease)) {
 				ExecCallBack(action);
+			}
+		}
+
+		#endregion
+
+		/// <summary>
+		/// カーソルが押されたときの処理
+		/// </summary>
+		protected virtual void OnPressed() {
+			if (m_btnOption.IsAutoScale) {
+				iTween.ScaleTo(this.gameObject , 
+					new Vector3(m_btnOption.ScalePower , m_btnOption.ScalePower , 1) ,
+					0.5f);
+			}
+		}
+
+		/// <summary>
+		/// カーソルが押されている間の処理
+		/// </summary>
+		protected virtual void OnLongPressed() { }
+
+		/// <summary>
+		/// カーソルが離された時の処理
+		/// </summary>
+		protected virtual void OnReleased() {
+			if (m_btnOption.IsAutoScale) {
+				iTween.ScaleTo(this.gameObject , Vector3.one , 0.5f);
 			}
 		}
 		
