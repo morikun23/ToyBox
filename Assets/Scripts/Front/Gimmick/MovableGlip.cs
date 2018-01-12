@@ -42,14 +42,14 @@ namespace ToyBox {
 			ArmComponent arm = arg_player.Arm;
 
 			if (arm.m_lengthBuf.Count > 0) {
-				arm.m_transform.position = m_transform.position + (m_direction * arm.m_lengthBuf.Peek());
+				arm.m_transform.position = transform.position + (m_direction * arm.m_lengthBuf.Peek());
 			}
 			else {
 				if (m_enu_state == GripState.ENTER) {
 					m_enu_state = GripState.STAY;
 					SetAbleRelease (true);
 				}
-				arm.m_transform.position = m_transform.position;
+				arm.m_transform.position = transform.position;
 				arg_player.gameObject.transform.position = arm.m_transform.position = transform.position;
 			}
 			arg_player.m_rigidbody.velocity = Vector2.zero;

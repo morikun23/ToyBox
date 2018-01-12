@@ -3,6 +3,7 @@
 //参考：なし
 //担当：久野
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -73,7 +74,6 @@ namespace ToyBox{
 		/// <summary>
 		/// <para>このオブジェクト上で指が静止している時に継続して呼ばれる関数です。</para>
 		/// <para>Swipe後には呼ばれません。
-		/// <para>data:EventSystemからタッチ座標などの情報が格納されます。</para>
 		/// </summary>
 		protected virtual void TouchStay(){
 		}
@@ -100,6 +100,7 @@ namespace ToyBox{
 		/// </summary>
 		protected virtual void SwipeEnd(PointerEventData data){
 		}
+		
 	}
 
 }

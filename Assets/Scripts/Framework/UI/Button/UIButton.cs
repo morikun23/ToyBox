@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 namespace ToyBox {
 
@@ -190,7 +191,8 @@ namespace ToyBox {
 		/// カーソルが押されたときの処理
 		/// </summary>
 		/// <param name="pos"></param>
-		public sealed override void TouchStart(Vector2 pos) {
+		protected sealed override void TouchStart(PointerEventData data) {
+			base.TouchStart(data);
 			m_isUsing = true;
 
 			this.OnPressed();
@@ -200,22 +202,22 @@ namespace ToyBox {
 			}
 		}
 
+
 		/// <summary>
 		/// カーソルが押されている間の処理
 		/// </summary>
-		/// <param name="pos"></param>
-		public sealed override void TouchStay(Vector2 pos) {
-			this.OnLongPressed();
+		protected sealed override void TouchStay() {
+			base.TouchStay();
 			foreach (var action in m_btnActions.FindAll(_ => _.m_trigger == ButtonEventTrigger.OnLongPress)) {
 				ExecCallBack(action);
 			}
 		}
-		
+
 		/// <summary>
 		/// カーソルが離された時の処理
 		/// </summary>
-		/// <param name="pos"></param>
-		public sealed override void TouchEnd(Vector2 pos) {
+		protected sealed override void TouchEnd(PointerEventData data) {
+			base.TouchEnd(data);
 			m_isUsing = false;
 			OnReleased();
 			foreach (var action in m_btnActions.FindAll(_ => _.m_trigger == ButtonEventTrigger.OnRelease)) {
@@ -227,7 +229,8 @@ namespace ToyBox {
 		/// カーソルが離された時の処理
 		/// </summary>
 		/// <param name="pos"></param>
-		public sealed override void SwipeEnd(Vector2 pos) {
+		protected sealed override void SwipeEnd(PointerEventData data) {
+			base.SwipeEnd(data);
 			m_isUsing = false;
 			OnReleased();
 			foreach (var action in m_btnActions.FindAll(_ => _.m_trigger == ButtonEventTrigger.OnRelease)) {

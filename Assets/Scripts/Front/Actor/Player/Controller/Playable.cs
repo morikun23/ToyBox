@@ -45,7 +45,7 @@ namespace ToyBox {
 			if (arg_item) {
 				if (arg_item.IsAbleGrasp() && this.IsAbleReach()) {
 					m_playableHand.SetItemBuffer(arg_item);
-					m_playableArm.SetTargetPosition(arg_item.m_transform.position);
+					m_playableArm.SetTargetPosition(arg_item.transform.position);
 					this.m_inputHandle.m_reach = true;
 				}
 			}
