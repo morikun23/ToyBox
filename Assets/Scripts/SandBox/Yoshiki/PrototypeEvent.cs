@@ -13,7 +13,7 @@ namespace ToyBox.Yoshiki
         /// <summary>
         /// イベント開始時
         /// </summary>
-        public virtual void OnStart(GameObject arg_playerObject, GameObject arg_gimmick)
+        public virtual void OnStart(Player arg_player, GameObject arg_gimmick)
         {
             Debug.Log("イベント開始時");
         }

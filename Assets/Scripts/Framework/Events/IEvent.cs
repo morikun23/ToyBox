@@ -10,7 +10,7 @@ namespace ToyBox
 {
     public interface IEvent 
     {
-        void OnStart(GameObject arg_playerObject,GameObject arg_gimmick);
+        void OnStart(Player arg_player,GameObject arg_gimmick);
         bool OnUpdate();
         void OnEnd();
 
