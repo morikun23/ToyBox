@@ -16,7 +16,7 @@ namespace ToyBox.Yoshiki
         {
             if(m_CanStart)
             {
-                GameObject.FindObjectOfType<EventManager>().SetEvent(new PrototypeEvent());
+                GameObject.FindObjectOfType<EventManager>().SetEvent(new PrototypeEvent(),gameObject);
                 m_CanStart = false;
             }
         }

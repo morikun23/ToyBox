@@ -11,6 +11,9 @@ namespace ToyBox
         //プレイヤ―の取得
         private Player m_player;
 
+        //ギミックの取得
+        private GameObject m_gimmick;
+
         //実行するイベント
         protected IEvent m_currentEvent;
 
@@ -55,7 +58,7 @@ namespace ToyBox
                     m_player.m_inputHandle.m_ableReach = false;
 
 
-                    m_currentEvent.OnStart();
+                    m_currentEvent.OnStart(m_player,m_gimmick);
                     m_eventState = EventState.UPDATE;
                     break;
 
@@ -86,18 +89,18 @@ namespace ToyBox
         /// ギミックから呼び出し
         /// </summary>
         /// <param name="arg_nextEvent">ギミックから呼び出したいイベントをセット</param>
-        public void SetEvent(IEvent arg_nextEvent)
+        public void SetEvent(IEvent arg_nextEvent,GameObject arg_gimmick)
         {
+            m_gimmick = arg_gimmick;
 
             m_currentEvent = arg_nextEvent;
             m_eventState = EventState.START;
 
 
             //初期化関数に置きたいです
-            m_player = GameObject.FindObjectOfType<Player>();
             if (m_player == null)
             {
-                Debug.LogError("Playerが見つかりません");
+                m_player = GameObject.FindObjectOfType<Player>();
             }
 
         }
