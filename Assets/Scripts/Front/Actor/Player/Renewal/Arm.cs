@@ -10,12 +10,12 @@ namespace ToyBox.Develop {
 		/// <summary>
 		/// アームを伸ばし始めたときに実行される
 		/// </summary>
-		void OnStartLengthen();
+		void OnStartLengthen(Arm arg_arm);
 
 		/// <summary>
 		/// アームが縮み終わったときに実行される
 		/// </summary>
-		void OnEndShorten();
+		void OnEndShorten(Arm arg_arm);
 	}
 
 	public class Arm : MonoBehaviour , IHandCallBackReceiver {
@@ -144,7 +144,7 @@ namespace ToyBox.Develop {
 			m_targetDirection = arg_direction.normalized;
 			m_targetPosition = BottomPosition + m_targetDirection * Range;
 			m_currentTask = this.Lengthen;
-			m_callBackReceiver.OnStartLengthen();
+			m_callBackReceiver.OnStartLengthen(this);
 		}
 
 		/// <summary>
@@ -156,7 +156,7 @@ namespace ToyBox.Develop {
 			m_targetPosition = arg_targetPosition;
 			m_targetDirection = (arg_targetPosition - BottomPosition).normalized;
 			m_currentTask = this.Lengthen;
-			m_callBackReceiver.OnStartLengthen();
+			m_callBackReceiver.OnStartLengthen(this);
 		}
 
 		/// <summary>
@@ -200,7 +200,7 @@ namespace ToyBox.Develop {
 		private void ShortenTop() {
 			if (m_lengthBuf.Count <= 0) {
 				m_currentTask = null;
-				m_callBackReceiver.OnEndShorten();
+				m_callBackReceiver.OnEndShorten(this);
 				return;
 			}
 			
@@ -215,7 +215,7 @@ namespace ToyBox.Develop {
 		private void ShortenBottom() {
 			if (m_lengthBuf.Count <= 0) {
 				m_currentTask = null;
-				m_callBackReceiver.OnEndShorten();
+				m_callBackReceiver.OnEndShorten(this);
 				return;
 			}
 
@@ -224,16 +224,16 @@ namespace ToyBox.Develop {
 			TopPosition = m_targetPosition;
 		}
 
-		void IHandCallBackReceiver.OnCollided() {
+		void IHandCallBackReceiver.OnCollided(Hand arg_hand) {
 
 		}
 
-		void IHandCallBackReceiver.OnGrasped() {
-		
+		void IHandCallBackReceiver.OnGrasped(Hand arg_hand) {
+
 		}
 
-		void IHandCallBackReceiver.OnReleased() {
-			
+		void IHandCallBackReceiver.OnReleased(Hand arg_hand) {
+
 		}
 	}
 }

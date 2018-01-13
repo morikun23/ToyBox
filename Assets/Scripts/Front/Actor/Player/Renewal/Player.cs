@@ -158,11 +158,11 @@ namespace ToyBox.Develop {
 			m_isGrounded = false;
 		}
 
-		void IArmCallBackReceiver.OnStartLengthen() {
+		void IArmCallBackReceiver.OnStartLengthen(Arm arg_arm) {
 			m_reach = true;
 		}
 
-		void IArmCallBackReceiver.OnEndShorten() {
+		void IArmCallBackReceiver.OnEndShorten(Arm arg_arm) {
 			m_reach = false;
 		}
 	}
