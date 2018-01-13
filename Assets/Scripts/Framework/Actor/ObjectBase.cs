@@ -42,12 +42,7 @@ namespace ToyBox {
 		//自身のTransform
 		private Transform m_transformBuf;
 
-		public override void TouchStart (Vector2 pos){
-			if(player.IsAbleReach())
-				player.ReachOutFor (gameObject.GetComponent<Item>());
-
-		}
-
+		
 		/// <summary>
 		/// 自身のTransformを取得する
 		/// 純粋なtransformでの取得をすると毎度GetComponentしているので

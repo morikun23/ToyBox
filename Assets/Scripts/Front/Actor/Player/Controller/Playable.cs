@@ -10,6 +10,9 @@ namespace ToyBox {
 			public bool m_run;
 			public bool m_jump;
 			public bool m_reach;
+            public bool m_ableRun = true;
+            public bool m_ableJump = true;
+            public bool m_ableReach = true;
 		}
 
 		//プレイヤーへの入力ハンドラ
@@ -42,7 +45,7 @@ namespace ToyBox {
 			if (arg_item) {
 				if (arg_item.IsAbleGrasp() && this.IsAbleReach()) {
 					m_playableHand.SetItemBuffer(arg_item);
-					m_playableArm.SetTargetPosition(arg_item.m_transform.position);
+					m_playableArm.SetTargetPosition(arg_item.transform.position);
 					this.m_inputHandle.m_reach = true;
 				}
 			}

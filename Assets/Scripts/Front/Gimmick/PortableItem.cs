@@ -28,11 +28,11 @@ namespace ToyBox {
 			}
 
 			if (arg_player.Arm.m_lengthBuf.Count == 0) {
-				this.m_transform.position = new Vector3 (arg_player.Arm.GetTopPosition ().x,
+				this.transform.position = new Vector3 (arg_player.Arm.GetTopPosition ().x,
 					arg_player.Arm.GetTopPosition ().y + 0.5f, 0);
 				SetAbleRelease (true);
 			} else {
-				this.m_transform.position = arg_player.Arm.GetTopPosition ();
+				this.transform.position = arg_player.Arm.GetTopPosition ();
 			}
 		}
 

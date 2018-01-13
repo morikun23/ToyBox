@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ToyBox;
+using UnityEngine.EventSystems;
 
 namespace ToyBox{
 	public class HandReleaseField : TouchActor {
@@ -38,8 +39,8 @@ namespace ToyBox{
 
 		}
 
-		public override void TouchStart (Vector2 pos){
-			base.TouchStart (pos);
+		protected override void TouchStart (PointerEventData data){
+			base.TouchStart (data);
 
 			if (player == null) return;
 			if (!isAbleHandShot()) {

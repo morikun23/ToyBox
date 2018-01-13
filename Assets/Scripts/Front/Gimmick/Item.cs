@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public abstract class Item : ObjectBase {
+	public abstract class Item : MonoBehaviour {
 
 		public enum State {
 			GRABBED,

@@ -118,6 +118,11 @@ namespace ToyBox {
 		/// <returns></returns>
 		public override bool IsAbleReach() {
 
+            if(!m_inputHandle.m_ableReach)
+            {
+                return false;
+            }
+
 			if (m_arm.m_isActive) {
 				return false;
 			}
