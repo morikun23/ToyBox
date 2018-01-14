@@ -124,7 +124,7 @@ namespace ToyBox
                     && hit[i].transform.gameObject.name == "Body")
                 {
                     //死亡判定
-                    hit[i].transform.gameObject.GetComponent<PlayerComponent>().Dead();
+                    hit[i].transform.gameObject.GetComponent<Player>().Dead();
                 }
                 else if (hit[i].transform.gameObject.tag == "BrokenWall")
                 {

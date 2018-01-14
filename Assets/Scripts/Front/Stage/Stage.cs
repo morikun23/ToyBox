@@ -100,7 +100,7 @@ namespace ToyBox {
 		private IEnumerator OnUpdate() {
 			while (true) {
 				
-				yield return new WaitWhile(() => m_player.GetCurrentState() != typeof(PlayerDeadState));
+				yield return new WaitWhile(() => m_player.GetCurrentState() != typeof(Player.DeadState));
 
 				yield return OnPlayerDead();
 			}
@@ -110,10 +110,12 @@ namespace ToyBox {
             #region プレイヤーが死んだときの演出
             //死亡アニメーションが終了するまで待機
 
-            //同フレーム内でアニメーション情報の更新をするには一度アップデートしなければならない(うろ覚え)
-            m_player.m_viewer.m_animator.Update(0);
+			Animator playerAnimation = m_player.GetComponent<Animator>();
 
-            yield return new Tsubakit.WaitForAnimation(m_player.m_viewer.m_animator , 0);
+            //同フレーム内でアニメーション情報の更新をするには一度アップデートしなければならない(うろ覚え)
+            playerAnimation.Update(0);
+
+            yield return new Tsubakit.WaitForAnimation(playerAnimation , 0);
 
 			Fade fade = AppManager.Instance.m_fade;
 			fade.StartFade(new FadeOut() , Color.black , 1.0f);

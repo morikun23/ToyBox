@@ -19,11 +19,11 @@ namespace ToyBox {
 		/// ここに生成の演出を加えても良い
 		/// </summary>
 		/// <param name="arg_player"></param>
-		public virtual void Generate(PlayerComponent arg_player) {
+		public virtual void Generate(Player arg_player) {
 
 			if (arg_player == null) return;
 
-			arg_player.m_transform.position = this.transform.position;
+			arg_player.transform.position = this.transform.position;
 			arg_player.gameObject.SetActive(true);
 		}
 	}

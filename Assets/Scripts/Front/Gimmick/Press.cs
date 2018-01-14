@@ -99,7 +99,7 @@ namespace ToyBox
 
 					if (hitPlayer)
                     {
-                        Hit(hitPlayer.collider.transform.root.GetComponent<PlayerComponent>());
+                        Hit(hitPlayer.collider.transform.root.GetComponent<Player>());
 
                     }
                 }
@@ -112,7 +112,7 @@ namespace ToyBox
         //{
         //    Gizmos.DrawWireCube(m_startPosition + new Vector3(0f, -m_collider.size.y), new Vector2(1.5f, 2));
         //}
-        public void Hit(PlayerComponent arg_player)
+        public void Hit(Player arg_player)
         {
 			if(arg_player == null) { return; }
 

@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ToyBox
 {
 
-    public class Signboard : FixedItem
+    public class Signboard : ImmobilizedItem
     {
 
         //生成するオブジェクト
@@ -25,7 +25,7 @@ namespace ToyBox
         Sprite m_picture;
 
 
-        public override void OnGraspedEnter(PlayerComponent arg_player)
+        public override void OnGraspedEnter(Player arg_player)
         {
             //ダイアログ生成
             m_Prefab = Instantiate(m_diaPrefab, m_formPos, Quaternion.identity);
@@ -35,19 +35,19 @@ namespace ToyBox
             //新しい音でして
             AudioManager.Instance.QuickPlaySE("SE_Dialog_open");
 
-            m_flg_ableGrasp = false;
-            m_flg_ableReleace = false;
+			SetAbleGrasp(false);
+			SetAbleRelease(false);
         }
 
-        public override void OnGraspedStay(PlayerComponent arg_player)
+        public override void OnGraspedStay(Player arg_player)
         {
             //ダイアログ伸縮
             m_ExtendFlg = true;
-            m_flg_ableReleace = true;
+			SetAbleRelease(true);
         }
 
         
-        public override void OnGraspedExit(PlayerComponent arg_player)
+        public override void OnGraspedExit(Player arg_player)
         {
             m_ExtendFlg = false;
 
@@ -55,9 +55,8 @@ namespace ToyBox
              AudioManager.Instance.QuickPlaySE("SE_Dialog_close");
 
 
-            arg_player.Arm.m_shorten = true;
-            m_flg_ableGrasp = true;
-            m_flg_ableReleace = false;
-        }
+			SetAbleGrasp(true);
+			SetAbleRelease(false);
+		}
     }
 }

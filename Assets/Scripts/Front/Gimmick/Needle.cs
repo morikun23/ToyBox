@@ -13,7 +13,7 @@ namespace ToyBox
             if (arg_col.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 //プレイヤーを殺す何か
-                arg_col.transform.root.GetComponent<PlayerComponent>().Dead();
+                arg_col.transform.root.GetComponent<Player>().Dead();
             }
         }
 
