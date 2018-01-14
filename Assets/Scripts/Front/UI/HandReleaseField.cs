@@ -44,12 +44,13 @@ namespace ToyBox{
 
 			if (player == null) return;
 			if (!isAbleHandShot()) {
-				player.Release();
+				//player.Release();
 			}
 		}
 
 		bool isAbleHandShot(){
-			return player.IsAbleReach () && !player.m_playableHand.IsGrasping ();
+			//return player.IsAbleReach () && !player.m_playableHand.IsGrasping ();
+			return false;
 		}
 	}
 }

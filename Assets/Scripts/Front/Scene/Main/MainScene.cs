@@ -45,7 +45,6 @@ namespace ToyBox {
 				yield break;
 			}
 			m_player.gameObject.name = "Player";
-			m_player.Initialize();
 
 			m_stage.Initialize(m_player,playRoomId, this.OnPlayerGoaled);
 
@@ -54,7 +53,7 @@ namespace ToyBox {
 				yield break;
 			}
 
-			m_mainSceneUI.Initialize(m_player);
+			//m_mainSceneUI.Initialize(m_player);
 
 			AppManager.Instance.m_fade.StartFade(new FadeIn() , Color.black , 1.0f);
 
