@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ToyBox.Develop {
+namespace ToyBox {
 	public partial class Player {
-		private class IdleState : IPlayerState {
+		public class IdleState : IPlayerState {
 
 			/// <summary>
 			/// プレイヤー自身への参照
@@ -29,6 +29,7 @@ namespace ToyBox.Develop {
 			}
 			
 			IPlayerState IPlayerState.GetNextState() {
+				if (m_player.m_dead) return new DeadState(m_player);
 				if (m_player.m_reach) return new ReachState(m_player);
 				if (m_player.m_leftRun || m_player.m_rightRun) return new RunState(m_player);
 				

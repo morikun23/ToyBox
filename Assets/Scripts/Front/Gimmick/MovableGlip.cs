@@ -2,9 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ToyBox;
+using System;
 
 namespace ToyBox {
-	public class MovableGlip : FixedItem {
+	public class MovableGlip : Item {
+
+		public override GraspedReaction Reaction {
+			get {
+				return GraspedReaction.PULL_TO_ITEM;
+			}
+		}
 
 		private Vector3 m_direction;
 
@@ -15,59 +22,42 @@ namespace ToyBox {
 			EXIT
 		}
 		public GripState m_enu_state;
-
-		public override void OnGraspedEnter(PlayerComponent arg_player) {
-#if DEVELOP
-			Debug.Log("Grasped : ENTER");
-#endif
-			base.OnGraspedEnter(arg_player);
-			arg_player.Arm.m_shorten = true;
-			m_direction = ((Vector2)arg_player.Arm.m_transform.position - arg_player.Arm.m_targetPosition).normalized;
-			arg_player.m_rigidbody.isKinematic = true;
+		
+		public override void OnGraspedEnter(Player arg_player) {
 			m_enu_state = GripState.ENTER;
 
 			SetAbleGrasp (false);
 			SetAbleRelease (false);
 
-            //新しい音でございます
-            AudioManager.Instance.QuickPlaySE("SE_PlayerHand_grab");
+			//新しい音でございます
+			AudioManager.Instance.QuickPlaySE("SE_PlayerHand_grab");
+			arg_player.RigidbodyComponent.velocity = Vector2.zero;
+
+			m_enu_state = GripState.ENTER;
+
 		}
 
-		public override void OnGraspedStay(PlayerComponent arg_player) {
-
-#if DEVELOP
-			Debug.Log("Grasped : Update");
-#endif
-
-			ArmComponent arm = arg_player.Arm;
-
-			if (arm.m_lengthBuf.Count > 0) {
-				arm.m_transform.position = transform.position + (m_direction * arm.m_lengthBuf.Peek());
-			}
-			else {
-				if (m_enu_state == GripState.ENTER) {
+		public override void OnGraspedStay(Player arg_player) {
+			arg_player.RigidbodyComponent.isKinematic = true;
+			
+			if (m_enu_state == GripState.ENTER) {
+				if (!arg_player.PlayableArm.IsUsing()) {
+					SetAbleRelease(true);
 					m_enu_state = GripState.STAY;
-					SetAbleRelease (true);
 				}
-				arm.m_transform.position = transform.position;
-				arg_player.gameObject.transform.position = arm.m_transform.position = transform.position;
 			}
-			arg_player.m_rigidbody.velocity = Vector2.zero;
+			else if(m_enu_state == GripState.STAY) {
+				arg_player.PlayableArm.TopPosition = this.transform.position;
+				arg_player.PlayableArm.BottomPosition = this.transform.position;
+			}
 		}
 
-		public override void OnGraspedExit(PlayerComponent arg_player) {
-
-#if DEVELOP
-			Debug.Log("Grasped : Exit");
-#endif
+		public override void OnGraspedExit(Player arg_player) {
 			m_enu_state = GripState.Neutoral;
 			base.OnGraspedExit(arg_player);
-			arg_player.m_rigidbody.isKinematic = false;
-			arg_player.m_inputHandle.m_reach = false;
-
 			SetAbleGrasp (true);
 			SetAbleRelease (false);
-
+			arg_player.RigidbodyComponent.isKinematic = false;
 		}
 
 	}

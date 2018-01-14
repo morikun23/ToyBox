@@ -8,6 +8,7 @@ namespace ToyBox.Develop {
 		[SerializeField]
 		Player player;
 
+
 		// Use this for initialization
 		void Start() {
 
@@ -15,6 +16,7 @@ namespace ToyBox.Develop {
 
 		// Update is called once per frame
 		void Update() {
+
 			if (Input.GetKey(KeyCode.RightArrow)) {
 				player.Run(Player.Direction.RIGHT);
 			}
@@ -35,8 +37,18 @@ namespace ToyBox.Develop {
 			}
 
 			if (Input.GetMouseButtonDown(0)) {
-				player.PlayableArm.ReachOut(Vector2.up);
+
+				if (player.PlayableHand.IsGrasping) {
+					if (player.PlayableHand.GraspingItem.IsAbleRelease()) {
+						player.PlayableHand.Release();
+					}
+				}
+				else {
+					//player.PlayableArm.ReachOut(Vector2.up);
+					player.PlayableArm.ReachOutFor(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+				}
 			}
+			
 		}
 	}
 }

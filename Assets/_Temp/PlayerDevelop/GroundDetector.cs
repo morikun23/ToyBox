@@ -9,13 +9,15 @@ namespace ToyBox {
 		private GameObject m_noticeTarget;
 
 		private void OnTriggerEnter2D(Collider2D arg_collider) {
-			if(arg_collider.gameObject.layer == LayerMask.NameToLayer("Ground")) {
+			if(arg_collider.gameObject.layer == LayerMask.NameToLayer("Ground")
+				|| arg_collider.gameObject.layer == LayerMask.NameToLayer("Landable")) {
 				m_noticeTarget.SendMessage("OnGroundEnter");
 			}
 		}
 
 		private void OnTriggerExit2D(Collider2D arg_collider) {
-			if (arg_collider.gameObject.layer == LayerMask.NameToLayer("Ground")) {
+			if (arg_collider.gameObject.layer == LayerMask.NameToLayer("Ground")
+				|| arg_collider.gameObject.layer == LayerMask.NameToLayer("Landable")) {
 				m_noticeTarget.SendMessage("OnGroundExit");
 			}
 		}

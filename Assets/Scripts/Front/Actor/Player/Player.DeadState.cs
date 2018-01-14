@@ -2,32 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ToyBox.Develop {
+namespace ToyBox {
 	public partial class Player {
-		private class DeadState : IPlayerState {
+		public class DeadState : IPlayerState {
 
 			/// <summary>
 			/// プレイヤー自身への参照
 			/// </summary>
-			private Player _;
+			private Player m_player;
 
 			public DeadState(Player arg_player) {
-				_ = arg_player;
+				m_player = arg_player;
 			}
 
 			void IPlayerState.OnEnter() {
-
-			}
-
-			void IPlayerState.OnExit() {
-
+				
 			}
 
 			void IPlayerState.OnUpdate() {
 
 			}
 
+			void IPlayerState.OnExit() {
+				m_player.gameObject.SetActive(false);
+			}
+			
 			IPlayerState IPlayerState.GetNextState() {
+				if (!m_player.m_dead) return new IdleState(m_player);
 				return null;
 			}
 
