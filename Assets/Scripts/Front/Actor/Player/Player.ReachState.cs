@@ -30,6 +30,12 @@ namespace ToyBox {
 				m_player.m_animator.SetBool("Reach" , false);
 				m_player.m_rigidbody.isKinematic = false;
 				m_player.m_rigidbody.velocity = Vector2.zero;
+
+				if (m_player.m_jump) {
+					m_player.Jump(m_player.m_jumpDirection);
+					m_player.m_jump = false;
+				}
+
 			}
 			
 			IPlayerState IPlayerState.GetNextState() {
