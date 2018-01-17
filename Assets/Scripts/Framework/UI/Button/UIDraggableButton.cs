@@ -32,6 +32,15 @@ namespace ToyBox {
 			}
 		}
 
+		/// <summary>
+		/// 初期位置を取得する
+		/// </summary>
+		public Vector2 DefaultPosition {
+			get {
+				return m_defaultPosition;
+			}
+		}
+		
         /// <summary>
         /// 起動時に初期座標を登録する
         /// imageとResources内のSpriteを取得;
