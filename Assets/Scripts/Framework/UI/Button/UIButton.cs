@@ -10,7 +10,7 @@ namespace ToyBox {
 		OnRelease,
 		OnPress,
 		OnLongPress,
-        OnSwaipe
+        OnSwipe
 	}
 
 	/// <summary>
@@ -98,10 +98,10 @@ namespace ToyBox {
 
 		/// <summary>ボタンの設定</summary>
 		[SerializeField]
-		private ButtonOption m_btnOption;
+		protected ButtonOption m_btnOption;
 
 		/// <summary>このボタンが現在押されている状態である</summary>
-		private bool m_isUsing;
+		protected bool m_isUsing;
 
 		/// <summary>
 		/// ボタンの設定
