@@ -16,19 +16,10 @@ namespace ToyBox {
 		protected float m_radius = 100f;
 
 		/// <summary>初期座標</summary>
-		protected Vector2 m_defaultPosition;
+		private Vector2 m_defaultPosition;
 
 		/// <summary>初期座標から指へのベクトル</summary>
-		protected Vector2 m_defaultToFinger;
-
-        /// <summary>ボタンのImager</summary>
-        protected Image m_buttonImage;
-
-        /// <summary>射出前の通常スプライト</summary>
-        protected Sprite m_defaultSprite;
-     
-        /// <summary>射出時に変わるスプライト</summary>
-        protected Sprite m_gripSprite;
+		private Vector2 m_defaultToFinger;
 
         /// <summary>
         /// ボタンの最後の更新からの移動方向を取得する
@@ -47,10 +38,6 @@ namespace ToyBox {
         /// </summary>
         protected virtual void Awake() {
 			m_defaultPosition = transform.position;
-
-            m_buttonImage = GetComponent<Image>();
-            m_defaultSprite = Resources.Load<Sprite>("Contents/UI/Button/Textures/UiButtonGrasped");
-            m_gripSprite= Resources.Load<Sprite>("Contents/UI/Button/Textures/UiButtonGrips");
         }
 
 		#region TouchActorからの継承
@@ -87,16 +74,7 @@ namespace ToyBox {
 		/// カーソルが動いているときの処理
 		/// </summary>
 		protected virtual void OnSwipe() {
-            m_buttonImage.sprite = m_gripSprite;
+            
 		}
-
-        /// <summary>
-        /// カーソルから離した際の処理
-        /// </summary>
-        protected override void OnReleased()
-        {
-            m_buttonImage.sprite = m_defaultSprite;
-            transform.position = m_defaultPosition;
-        }
     }
 }
