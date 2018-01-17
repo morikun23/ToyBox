@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace ToyBox {
+	[AddComponentMenu("ToyBox/UI/DraggableButton")]
 	public class UIDraggableButton : UIButton {
 
 		/// <summary>移動可能範囲を有効化するか</summary>
