@@ -63,6 +63,9 @@ namespace ToyBox {
 			[Tooltip("旧射出モードを利用するか")]
 			public bool m_useAnotherReachMode;
 
+			public uint m_usingStageId = 1000;
+
+			public uint m_usingRoomId = 1;
 
 			public bool UseAnotherReachMode {
 				get {
@@ -82,9 +85,16 @@ namespace ToyBox {
 				yield break;
 			}
 
-			uint playStageId = 1000;//AppManager.Instance.user.m_temp.m_playStageId;
-			uint playRoomId = 1;//AppManager.Instance.user.m_temp.m_playRoomId;
+			uint playStageId = AppManager.Instance.user.m_temp.m_playStageId;
+			uint playRoomId = AppManager.Instance.user.m_temp.m_playRoomId;
 
+#if UNITY_EDITOR
+			if (m_debugInfo.m_isDebugMode) {
+				playStageId = m_debugInfo.m_usingStageId;
+				playRoomId = m_debugInfo.m_usingRoomId;
+			}
+#endif
+			
 			m_stage = m_stageFactory.Load(playStageId);
 
 			if(m_stage == null) {
