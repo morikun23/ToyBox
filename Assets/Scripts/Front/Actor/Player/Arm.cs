@@ -28,6 +28,9 @@ namespace ToyBox {
 		[SerializeField]
 		private LineRenderer m_lineRenderer;
 
+		[SerializeField]
+		private BoxCollider2D m_collider;
+
 		//---------------------------------------------
 			[Header("Parts")]
 		//---------------------------------------------
@@ -184,6 +187,17 @@ namespace ToyBox {
 			//角度を反映
 			m_top.transform.eulerAngles = new Vector3(0 , 0 , angle + 90f);
 
+			#endregion
+
+			#region コライダーの反映
+			m_collider.size = new Vector2(
+				Mathf.Sqrt(Mathf.Pow((TopPosition.x - BottomPosition.x) , 2) + Mathf.Pow((TopPosition.y - BottomPosition.y) , 2)) , 0.1f);
+
+			m_collider.transform.eulerAngles = new Vector3(0 , 0 ,
+				Mathf.Atan2(TopPosition.y - BottomPosition.y , TopPosition.x - BottomPosition.x) * Mathf.Rad2Deg);
+			m_collider.gameObject.transform.localPosition = new Vector3(
+				(TopPosition.x - BottomPosition.x) / 2 ,
+				(TopPosition.y - BottomPosition.y) / 2 , 0);
 			#endregion
 		}
 
