@@ -35,12 +35,8 @@ namespace ToyBox
             //新しい音でして
             AudioManager.Instance.QuickPlaySE("SE_Dialog_open");
 
-            m_flg_ableGrasp = false;
-            m_flg_ableReleace = false;
-
             //ダイアログ伸縮
             m_ExtendFlg = true;
-            m_flg_ableReleace = true;
         }
 
         public override void OnGraspedStay(PlayerComponent arg_player)
@@ -58,8 +54,6 @@ namespace ToyBox
 
 
             arg_player.Arm.m_shorten = true;
-            m_flg_ableGrasp = true;
-            m_flg_ableReleace = false;
         }
     }
 }

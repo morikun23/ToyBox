@@ -9,7 +9,7 @@ namespace ToyBox
         //オブジェクト検出フラグ
         private bool m_isRidden;
 
-        Rigidbody2D m_rigidbody2d;
+        private Rigidbody2D m_rigidbody2d;
 
         [SerializeField]
         private float m_moveSpeed = 0.05f;
