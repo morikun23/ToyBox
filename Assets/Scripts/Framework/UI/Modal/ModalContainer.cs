@@ -13,9 +13,9 @@ namespace ToyBox {
 
 	}
 
-	public class ModalContainer {
+	public static class ModalContainer {
 
 		/// <summary>メッセージモーダルのプレハブ</summary>
-		public static readonly GameObject MESSAGE_MODAL = Resources.Load<GameObject>(ResourcePath.MODAL_PATH);
+		public static readonly GameObject MESSAGE_MODAL = Resources.Load<GameObject>(ResourcePath.MESSAGE_MODAL_PATH);
 	}
 }

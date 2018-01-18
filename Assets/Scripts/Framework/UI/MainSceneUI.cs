@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ToyBox {
-	public class MainSceneUI : CommonUI {
+	public class MainSceneUI : MonoBehaviour {
 
 		[Header("Buttons")]
 		[SerializeField]
@@ -18,11 +18,14 @@ namespace ToyBox {
 		[SerializeField]
 		UIButton m_debugButton;
 
+        [SerializeField]
+        UIButton m_neoButton;
+
 
 		private Playable m_player;
 
 		public void Initialize(Playable arg_player) {
-
+            
 			m_player = arg_player;
 			m_jumpButton.Initialize(new ButtonAction(ButtonEventTrigger.OnPress , this.OnJumpButtonDown),
 				new ButtonAction(ButtonEventTrigger.OnRelease,this.OnJumpButtonUp));
@@ -32,6 +35,8 @@ namespace ToyBox {
 				new ButtonAction(ButtonEventTrigger.OnRelease , this.OnMoveButtonUp));
 
 			m_debugButton.Initialize(new ButtonAction(ButtonEventTrigger.OnRelease , this.OnDebugButton));
+
+            m_neoButton.Initialize(new ButtonAction(ButtonEventTrigger.OnRelease, this.OnNeoButtonUp));
 		}
 		
 		private void OnJumpButtonDown() {
@@ -75,5 +80,12 @@ namespace ToyBox {
 				}
 			}
 		}
-	}
+        private void OnNeoButtonUp()
+        {
+            if (m_player.m_inputHandle.m_ableReach)
+            {
+                m_player.m_inputHandle.m_ableReach = true;
+            }
+        }
+    }
 }

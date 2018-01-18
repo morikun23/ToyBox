@@ -87,9 +87,15 @@ namespace ToyBox {
 
 		/// <summary>アーム稼働フラグ</summary>
 		private bool m_reach;
-
+		
 		/// <summary>死亡フラグ</summary>
 		private bool m_dead;
+
+		/// <summary>ジャンプフラグ</summary>
+		private bool m_jump;
+
+		/// <summary>ジャンプする方向</summary>
+		private Vector2 m_jumpDirection;
 
 		/// <summary>アイテム処理用コルーチン</summary>
 		private Coroutine m_itemCoroutine;
@@ -201,22 +207,25 @@ namespace ToyBox {
 		/// <summary>
 		/// 自身のジャンプ力でジャンプする
 		/// </summary>
-		public void Jump() {
-			this.Jump(m_jumpPower);
+		public void Jump(Vector2 arg_direction) {
+			this.Jump(arg_direction , m_jumpPower);
 		}
 
 		/// <summary>
 		/// 指定されたジャンプ力でジャンプする
 		/// </summary>
 		/// <param name="arg_jumpPower">ジャンプ力</param>
-		public void Jump(float arg_jumpPower) {
-			if (m_isGrounded) {
+		public void Jump(Vector2 arg_direction , float arg_jumpPower) {
 
+			arg_direction.Normalize();
+
+			if (m_isGrounded) {
 				AudioManager.Instance.QuickPlaySE("SE_Player_jump");
 
 				//気持ちよくジャンプさせるため重力加速度をリセットする
 				m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x , 0);
-				m_rigidbody.AddForce(Vector2.up * arg_jumpPower);
+				m_rigidbody.AddForce(arg_direction * arg_jumpPower);
+				
 			}
 		}
 
@@ -304,7 +313,13 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_hand"></param>
 		void IHandCallBackReceiver.OnCollided(Hand arg_hand) {
-			return;
+
+			Vector2 direction = (PlayableArm.TopPosition - (Vector2)transform.position).normalized;
+
+			if (direction.y < 0) {
+				m_jump = true;
+				m_jumpDirection = -direction;
+			}
 		}
 
 		/// <summary>

@@ -32,10 +32,7 @@ namespace ToyBox.Develop {
 				player.Stop(Player.Direction.LEFT);
 			}
 
-			if (Input.GetKeyDown(KeyCode.Space)) {
-				player.Jump();
-			}
-
+		
 			if (Input.GetMouseButtonDown(0)) {
 
 				if (player.PlayableHand.IsGrasping) {

@@ -9,7 +9,8 @@ namespace ToyBox {
 	public enum ButtonEventTrigger {
 		OnRelease,
 		OnPress,
-		OnLongPress
+		OnLongPress,
+        OnSwipe
 	}
 
 	/// <summary>
@@ -93,14 +94,14 @@ namespace ToyBox {
 	public class UIButton : TouchActor {
 		
 		/// <summary>コールバック</summary>
-		private readonly List<ButtonAction> m_btnActions = new List<ButtonAction>();
+		protected readonly List<ButtonAction> m_btnActions = new List<ButtonAction>();
 
 		/// <summary>ボタンの設定</summary>
 		[SerializeField]
-		private ButtonOption m_btnOption;
+		protected ButtonOption m_btnOption;
 
 		/// <summary>このボタンが現在押されている状態である</summary>
-		private bool m_isUsing;
+		protected bool m_isUsing;
 
 		/// <summary>
 		/// ボタンの設定
@@ -269,7 +270,7 @@ namespace ToyBox {
 		/// ボタンが押されたときの処理
 		/// コールバックを実行する
 		/// </summary>
-		private void ExecCallBack(ButtonAction arg_action) {
+		protected void ExecCallBack(ButtonAction arg_action) {
 
 			if (arg_action == null) return;
 

@@ -62,44 +62,48 @@ namespace ToyBox{
 			}
 		}
 
-		/// <summary>
-		/// <para>このオブジェクトがタッチされた時に１度だけ呼ばれる関数です。</para>
-		/// <para>継承先でBaseの関数を呼ぶ必要があります。
-		/// <para>data:EventSystemからタッチ座標などの情報が格納されます。</para>
-		/// </summary>
-		protected virtual void TouchStart(PointerEventData data){
+        /// <summary>
+        /// <para>このオブジェクトがタッチされた時に１度だけ呼ばれる関数です。</para>
+        /// <para>継承先でBaseの関数を呼ぶ必要があります。</para>
+        /// <para>data:EventSystemからタッチ座標などの情報が格納されます。</para>
+        /// </summary>
+        protected virtual void TouchStart(PointerEventData data){
 			m_flg_touchKeep = true;
 		}
 
-		/// <summary>
-		/// <para>このオブジェクト上で指が静止している時に継続して呼ばれる関数です。</para>
-		/// <para>Swipe後には呼ばれません。
-		/// </summary>
-		protected virtual void TouchStay(){
+        /// <summary>
+        /// <para>このオブジェクト上で指が静止している時に継続して呼ばれる関数です。</para>
+        /// <para>Swipe後には呼ばれません。</para>
+        /// </summary>
+        protected virtual void TouchStay(){
 		}
-			
-		/// <summary>
-		/// <para>スワイプ中に継続して呼ばれる関数です。</para>
-		/// <para>継承先でBaseの関数を呼ぶ必要があります。
-		/// <para>data:EventSystemからタッチ座標などの情報が格納されます。</para>
-		/// </summary>
-		protected virtual void Swipe(PointerEventData data){
+
+        /// <summary>
+        /// <para>スワイプ中に継続して呼ばれる関数です。</para>
+        /// <para>継承先でBaseの関数を呼ぶ必要があります。    </para>
+        /// <para>data:EventSystemからタッチ座標などの情報が格納されます。</para>
+        /// </summary>
+        protected virtual void Swipe(PointerEventData data){
 			m_flg_touchKeep = false;
 		}
 
-		/// <summary>
-		/// <para>１度も指を動かさずに指を離した際に１度だけ呼ばれる関数です。</para>
-		/// <para>data:EventSystemからタッチ座標などの情報が格納されます。</para>
-		/// </summary>
-		protected virtual void TouchEnd(PointerEventData data){
-		}
-			
-		/// <summary>
-		/// <para>スワイプ後に指を離した際に１度だけ呼ばれる関数です。</para>
-		/// <para>data:EventSystemからタッチ座標などの情報が格納されます。</para>
-		/// </summary>
-		protected virtual void SwipeEnd(PointerEventData data){
-		}
+        /// <summary>
+        /// <para>１度も指を動かさずに指を離した際に１度だけ呼ばれる関数です。</para>
+        /// /// <para>継承先でBaseの関数を呼ぶ必要があります。</para>
+        /// <para>data:EventSystemからタッチ座標などの情報が格納されます。</para>
+        /// </summary>
+        protected virtual void TouchEnd(PointerEventData data){
+            m_flg_touchKeep = false;
+        }
+
+        /// <summary>
+        /// <para>スワイプ後に指を離した際に１度だけ呼ばれる関数です。</para>
+        /// /// <para>継承先でBaseの関数を呼ぶ必要があります。</para>
+        /// <para>data:EventSystemからタッチ座標などの情報が格納されます。</para>
+        /// </summary>
+        protected virtual void SwipeEnd(PointerEventData data){
+            m_flg_touchKeep = false;
+        }
 		
 	}
 
