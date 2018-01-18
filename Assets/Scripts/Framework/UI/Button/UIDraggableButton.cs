@@ -8,6 +8,10 @@ namespace ToyBox {
 	[AddComponentMenu("ToyBox/UI/DraggableButton")]
 	public class UIDraggableButton : UIButton {
 
+		/// <summary>スクリーン座標を変換する際に基準とするカメラ</summary>
+		[SerializeField,Tooltip("MainCamera以外を基準とする場合に設定が必要")]
+		private Camera m_targetCamera;
+
 		/// <summary>移動可能範囲を有効化するか</summary>
 		[SerializeField,Tooltip("移動可能範囲を有効にするか")]
 		protected bool m_isEnableRange = false;
@@ -29,7 +33,7 @@ namespace ToyBox {
         /// </summary>
         public Vector2 Direction {
 			get {
-				return m_defaultToFinger;
+				return m_defaultToFinger.normalized;
 			}
 		}
 
@@ -48,26 +52,28 @@ namespace ToyBox {
         /// </summary>
         protected virtual void Awake() {
 			m_defaultPosition = transform.position;
+			if(m_targetCamera == null) {
+				m_targetCamera = Camera.main;
+			}
         }
 
 		#region TouchActorからの継承
 		protected sealed override void Swipe(PointerEventData data) {
 
-			data.position = Camera.main.ScreenToWorldPoint(data.position);
+			data.position = m_targetCamera.ScreenToWorldPoint(data.position);
 
 			if (!m_isEnableRange) {
 				transform.position = data.position;
 				m_defaultToFinger = data.delta;
-				return;
 			}
+			else {
+				Vector2 vec = (data.position - m_defaultPosition);
 
-			Vector2 vec = (data.position - m_defaultPosition);
-			if (vec.magnitude > m_radius) {
-				vec = vec.normalized * m_radius;
+				vec = Vector2.ClampMagnitude(vec , m_radius);
+
+				m_defaultToFinger = vec;
+				transform.position = m_defaultPosition + m_defaultToFinger;
 			}
-
-			m_defaultToFinger = vec;
-			transform.position = m_defaultPosition + m_defaultToFinger;
 
 			base.Swipe(data);
 			base.m_isUsing = true;
@@ -78,6 +84,12 @@ namespace ToyBox {
 				base.ExecCallBack(action);
 			}
 		}
+
+		protected override void TouchEnd(PointerEventData data) {
+			base.SwipeEnd(data);
+			m_defaultToFinger = Vector2.zero;
+		}
+
 		#endregion
 
 		/// <summary>
