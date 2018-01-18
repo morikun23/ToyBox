@@ -47,7 +47,7 @@ namespace ToyBox {
 		private bool m_isReachMode;
 
 		[SerializeField]
-		private LineRenderer line;
+		private LineRenderer m_armReachLine;
 
 		//-------------------------------------------
 		//	デバッグ機能
@@ -217,12 +217,25 @@ namespace ToyBox {
 		private void OnArmButtonStay() {
 			if (!m_isReachMode) return;
 			if (m_armButton.Direction == Vector2.zero) {
-				line.enabled = false;
+				if (m_armReachLine != null) {
+					m_armReachLine.gameObject.SetActive(false);
+				}
 			}
 			else {
-				line.enabled = true;
-				line.SetPosition(0 , m_player.PlayableArm.BottomPosition);
-				line.SetPosition(1 , m_player.PlayableArm.BottomPosition + (m_armButton.Direction * m_player.PlayableArm.Range));
+				if (m_armReachLine != null) {
+					m_armReachLine.gameObject.SetActive(true);
+					m_armReachLine.SetPosition(0 , (Vector3)m_player.PlayableArm.BottomPosition + Vector3.back * 5f);
+					RaycastHit2D hitInfo = Physics2D.Raycast(m_player.PlayableArm.BottomPosition , m_armButton.Direction , m_player.PlayableArm.Range , 1 << LayerMask.NameToLayer("Ground") | 1 << LayerMask.NameToLayer("Item"));
+
+					if (hitInfo) {
+						m_armReachLine.transform.position = hitInfo.point;
+					}
+					else {
+						m_armReachLine.transform.position = (Vector3)m_player.PlayableArm.BottomPosition + (Vector3)(m_armButton.Direction * m_player.PlayableArm.Range);
+					}
+
+					m_armReachLine.SetPosition(1 , m_armReachLine.transform.position + Vector3.back * 5f);
+				}
 			}
 		}
 
@@ -232,10 +245,14 @@ namespace ToyBox {
 		private void OnArmButtonUp() {
 			if (!m_isReachMode) return;
 			if (m_armButton.Direction != Vector2.zero) {
-				m_player.PlayableArm.ReachOut(m_armButton.Direction);
-				//m_reachDirectionBuf = Vector2.zero;
+				if (!m_player.PlayableArm.IsUsing()) {
+					m_player.PlayableArm.ReachOutFor(m_armReachLine.gameObject.transform.position);
+				}
 			}
-			line.enabled = false;
+			m_isReachMode = false;
+			if (m_armReachLine != null) {
+				m_armReachLine.gameObject.SetActive(false);
+			}
 		}
 	}
 }
