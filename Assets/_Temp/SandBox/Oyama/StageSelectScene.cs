@@ -42,6 +42,12 @@ namespace ToyBox
         private bool m_isChangingScrollView;
         private SelectSceneState m_whenChangesState;
 
+        private const string BUTTON_SPRITE_PATH = "Contents/StageSelect/Textures/BD_Player";
+
+        private bool m_isStageSelect;
+        private bool m_isHalfPointSelect;
+        private bool m_isBack;
+
         public override IEnumerator OnEnter()
         {
             //ステージの踏破具合などを取得
@@ -80,7 +86,7 @@ namespace ToyBox
                             CreateHalfPointButtons(AppManager.Instance.user.m_temp.m_playStageId);
 
                             //戻るボタン、ステージセレクトボタンを一時的に押せなくする
-                            m_stageSelectSceneUI.SetInputEnable(LayerType.Front, false);
+                            //m_stageSelectSceneUI.SetInputEnable(LayerType.Front, false);
 
                             m_state = SelectSceneState.BackGroundMoving;
                         }
@@ -112,7 +118,7 @@ namespace ToyBox
                         if (!m_isChangingScrollView)
                         {
                             //レイヤーの押せなくなっている状態を解除
-                            m_stageSelectSceneUI.SetInputEnable(LayerType.Front, true);
+                            //m_stageSelectSceneUI.SetInputEnable(LayerType.Front, true);
 
                             //BackGroundMovingから呼ばれたのなら、中間地点を選ぶステートへ
                             if (m_whenChangesState == SelectSceneState.BackGroundMoving)
@@ -136,7 +142,7 @@ namespace ToyBox
                         if (m_stageSelectSceneUI.IsBackButtonSelected())
                         {
                             //戻るボタン、ステージセレクトボタンを一時的に押せなくする
-                            m_stageSelectSceneUI.SetInputEnable(LayerType.Front, false);
+                            //m_stageSelectSceneUI.SetInputEnable(LayerType.Front, false);
 
                             //スクロールを入れ変える
                             ChangingScrollView(m_stageSelectScrollView, m_halfPointSelectScrollView);
@@ -266,6 +272,35 @@ namespace ToyBox
             {
                 Destroy(m_halfPointContent.transform.GetChild(i).gameObject);
             }
+        }
+
+
+        public void OnBackSelectedPress()
+        {
+            m_isBack = true;
+        }
+
+        public void OnBackSelectedRelease()
+        {
+            m_isBack = false;
+
+        }
+
+        public void OnStageSelectedPress(object arg_stageId)
+        {
+            uint id = uint.Parse(arg_stageId.ToString());
+
+            AppManager.Instance.user.m_temp.m_playStageId = id;
+
+            m_isStageSelect = true;
+
+        }
+
+        public void OnStageSelectedRelease()
+        {
+
+            m_isStageSelect = false;
+
         }
 
     }

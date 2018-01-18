@@ -5,18 +5,8 @@ using UnityEngine;
 namespace ToyBox
 {
 
-    public class StageSelectSceneUI : CommonUI
+    public class StageSelectSceneUI : MonoBehaviour
     {
-
-        [Header("Buttons")]
-        [SerializeField]
-        UIButton m_back;
-
-        [SerializeField]
-        UIButton m_stage1;
-
-        [SerializeField]
-        UIButton m_stage2;
 
         private const string BUTTON_SPRITE_PATH = "Contents/StageSelect/Textures/BD_Player";
 
@@ -29,14 +19,7 @@ namespace ToyBox
 		/// </summary>
 		public void Initialize()
         {
-            m_back.Initialize(new ButtonAction(ButtonEventTrigger.OnPress, this.OnBackSelectedPress)
-                              , new ButtonAction(ButtonEventTrigger.OnRelease, this.OnBackSelectedRelease));
-
-            m_stage1.Initialize(new ButtonAction(ButtonEventTrigger.OnPress, this.OnStageSelectedPress, (uint)1000)
-                              , new ButtonAction(ButtonEventTrigger.OnRelease, this.OnStageSelectedRelease));
-
-            m_stage2.Initialize(new ButtonAction(ButtonEventTrigger.OnPress, this.OnStageSelectedPress, (uint)2000)
-                              , new ButtonAction(ButtonEventTrigger.OnRelease, this.OnStageSelectedRelease));
+            
         }
 
         private void OnBackSelectedPress()
