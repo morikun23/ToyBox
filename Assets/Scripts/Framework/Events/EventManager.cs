@@ -17,6 +17,18 @@ namespace ToyBox
         //実行するイベント
         protected IEvent m_currentEvent;
 
+		//Mainシーンへの参照
+		private MainScene m_mainSceneManager;
+
+		private MainScene MainSceneManager {
+			get {
+				if (m_mainSceneManager == null) {
+					m_mainSceneManager = FindObjectOfType<MainScene>();
+				}
+				return m_mainSceneManager;
+			}
+		}
+
         //イベントの状態　　
         enum EventState
         {
@@ -52,10 +64,8 @@ namespace ToyBox
 
                 case EventState.START:
 
-                    //プレイヤーが動けないようにする
-                    //m_player.m_inputHandle.m_ableRun = false;
-                    //m_player.m_inputHandle.m_ableJump = false;
-                    //m_player.m_inputHandle.m_ableReach = false;
+					//プレイヤーが動けないようにする
+					MainSceneManager.IsEnableInput = false;
 
 
                     m_currentEvent.OnStart(m_player,m_gimmick);
@@ -75,9 +85,7 @@ namespace ToyBox
                     m_currentEvent.OnEnd();
                     m_eventState = EventState.IDLE;
 
-                    //m_player.m_inputHandle.m_ableRun = true;
-                    //m_player.m_inputHandle.m_ableJump = true;
-                    //m_player.m_inputHandle.m_ableReach = true;
+					MainSceneManager.IsEnableInput = true;
 
                     break;
             }

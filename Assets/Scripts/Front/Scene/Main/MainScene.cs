@@ -49,6 +49,15 @@ namespace ToyBox {
 		[SerializeField]
 		private LineRenderer m_armReachLine;
 
+		/// <summary>
+		/// シーン内のUIに入力を受け付けるか
+		/// </summary>
+		public bool IsEnableInput {
+			get { return m_isEnableInput; }
+			set { m_isEnableInput = value; }
+		}
+
+
 		//-------------------------------------------
 		//	デバッグ機能
 		//-------------------------------------------
