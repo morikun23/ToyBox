@@ -10,7 +10,7 @@ namespace ToyBox
     {
 
         //生成するオブジェクト
-        public GameObject m_diaPrefab;
+        public GameObject m_dialogPrefab;
 
         //生成したオブジェクト格納用
         private GameObject m_Prefab;
@@ -22,13 +22,13 @@ namespace ToyBox
         public bool m_ExtendFlg = true;
 
         [SerializeField]
-        Sprite m_picture;
+        private Sprite m_picture;
 
 
         public override void OnGraspedEnter(Player arg_player)
         {
             //ダイアログ生成
-            m_Prefab = Instantiate(m_diaPrefab, m_formPos, Quaternion.identity);
+            m_Prefab = Instantiate(m_dialogPrefab, m_formPos, Quaternion.identity);
             m_Prefab.transform.Find("Picture").GetComponent<SpriteRenderer>().sprite = m_picture;
             m_Prefab.GetComponent<TutorialDialog>().Init(this);
 
