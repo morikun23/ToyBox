@@ -7,33 +7,33 @@ namespace ToyBox
     public class BeltConver : MonoBehaviour
     {
         //オブジェクト検出フラグ
-        bool colFlg;
+        private bool m_isRidden;
 
-        Rigidbody2D body;
+        private Rigidbody2D m_rigidbody2d;
 
-        public float m_MoveSpeed=0.05f;
+        public float m_moveSpeed=0.05f;
 
         void OnCollisionEnter2D(Collision2D col)
         {
             //触れたオブジェクトのRigitbody取得
-            body = col.gameObject.GetComponent<Rigidbody2D>();
+            m_rigidbody2d = col.gameObject.GetComponent<Rigidbody2D>();
 
             //ベルコンに乗った瞬間true
-            colFlg = true;
+            m_isRidden = true;
         }
 
-        void OnCollisionExit2D(Collision2D col)
+        void OnCollisionExit2D(Collision2D arg_col)
         {
             //離れてfalse
-            colFlg = false;
+            m_isRidden = false;
         }
 
         void UpdateByFrame()
         {
             //ベルコンに乗ってる間は移動
-            if (colFlg == true)
+            if (m_isRidden == true)
             {
-                body.transform.position += new Vector3(m_MoveSpeed, 0, 0);
+                m_rigidbody2d.transform.position += new Vector3(m_moveSpeed, 0, 0);
             }
         }
 
@@ -44,7 +44,7 @@ namespace ToyBox
 
         void OnDisable()
         {
-            colFlg = false;
+            m_isRidden = false;
         }
     }
 }

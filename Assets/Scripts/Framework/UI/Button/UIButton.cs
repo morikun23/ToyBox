@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace ToyBox {
 
@@ -71,6 +72,16 @@ namespace ToyBox {
 
 		[SerializeField,Range(0.0f,1.0f)]
 		private float m_scalePower = 0.05f;
+		
+		/// <summary>
+		/// ボタンが押されたときにColorを変えるか
+		/// </summary>
+		[SerializeField]
+		private bool m_isAutoColor = false;
+
+		/// <summary>参照するImageコンポーネント</summary>
+		[SerializeField]
+		private Image m_image;
 
 		/// <summary>
 		/// 自動でスケーリング処理をおこなう
@@ -82,9 +93,24 @@ namespace ToyBox {
 		/// <summary>
 		/// AutoScaleモードでスケーリングする量
 		/// </summary>
-		public float ScalePower{
+		public float ScalePower {
 			get{ return 1.0f - m_scalePower; }
 		}
+
+		/// <summary>
+		/// 自動でSpriteのカラーリングを行う
+		/// </summary>
+		public bool IsAutoColor {
+			get { return m_isAutoColor; }
+		}
+	
+		/// <summary>
+		/// Imageコンポーネント
+		/// </summary>
+		public Image ImageComponent {
+			get { return m_image; }
+		}
+
 	}
 
 	/// <summary>
@@ -192,7 +218,7 @@ namespace ToyBox {
 		/// カーソルが押されたときの処理
 		/// </summary>
 		/// <param name="pos"></param>
-		protected sealed override void TouchStart(PointerEventData data) {
+		protected override void TouchStart(PointerEventData data) {
 			base.TouchStart(data);
 			m_isUsing = true;
 
@@ -207,7 +233,7 @@ namespace ToyBox {
 		/// <summary>
 		/// カーソルが押されている間の処理
 		/// </summary>
-		protected sealed override void TouchStay() {
+		protected override void TouchStay() {
 			base.TouchStay();
 			foreach (var action in m_btnActions.FindAll(_ => _.m_trigger == ButtonEventTrigger.OnLongPress)) {
 				ExecCallBack(action);
@@ -217,7 +243,7 @@ namespace ToyBox {
 		/// <summary>
 		/// カーソルが離された時の処理
 		/// </summary>
-		protected sealed override void TouchEnd(PointerEventData data) {
+		protected override void TouchEnd(PointerEventData data) {
 			base.TouchEnd(data);
 			m_isUsing = false;
 			OnReleased();
@@ -230,7 +256,7 @@ namespace ToyBox {
 		/// カーソルが離された時の処理
 		/// </summary>
 		/// <param name="pos"></param>
-		protected sealed override void SwipeEnd(PointerEventData data) {
+		protected override void SwipeEnd(PointerEventData data) {
 			base.SwipeEnd(data);
 			m_isUsing = false;
 			OnReleased();
@@ -250,6 +276,9 @@ namespace ToyBox {
 					new Vector3(m_btnOption.ScalePower , m_btnOption.ScalePower , 1) ,
 					0.5f);
 			}
+			if (m_btnOption.IsAutoColor) {
+				m_btnOption.ImageComponent.color = Color.gray;
+			}
 		}
 
 		/// <summary>
@@ -263,6 +292,9 @@ namespace ToyBox {
 		protected virtual void OnReleased() {
 			if (m_btnOption.IsAutoScale) {
 				iTween.ScaleTo(this.gameObject , Vector3.one , 0.5f);
+			}
+			if (m_btnOption.IsAutoColor) {
+				m_btnOption.ImageComponent.color = Color.white;
 			}
 		}
 		

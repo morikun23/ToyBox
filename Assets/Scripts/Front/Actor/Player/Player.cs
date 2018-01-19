@@ -163,8 +163,7 @@ namespace ToyBox {
 		/// <summary>
 		/// Update by Unity
 		/// </summary>
-		void FixedUpdate() {
-			
+		void Update() {
 			IPlayerState nextState = m_currentState.GetNextState();
 			if (nextState != null) {
 				StateTransition(nextState);
@@ -188,9 +187,7 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_direction">移動方向</param>
 		public void Run(Direction arg_direction) {
-			if(GetCurrentState() == typeof(RunState)) {
-				m_currentDirection = arg_direction;
-			}
+			m_currentDirection = arg_direction;
 			if (arg_direction == Direction.LEFT) m_leftRun = true;
 			else if (arg_direction == Direction.RIGHT) m_rightRun = true;
 		}
@@ -220,12 +217,12 @@ namespace ToyBox {
 			arg_direction.Normalize();
 
 			if (m_isGrounded) {
-				AudioManager.Instance.QuickPlaySE("SE_Player_jump");
-
-				//気持ちよくジャンプさせるため重力加速度をリセットする
-				m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x , 0);
-				m_rigidbody.AddForce(arg_direction * arg_jumpPower);
-				
+				if (Vector2.Angle(Vector2.up , arg_direction) <= 60) {
+					AudioManager.Instance.QuickPlaySE("SE_Player_jump");
+					//気持ちよくジャンプさせるため重力加速度をリセットする
+					m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x , 0);
+					m_rigidbody.AddForce(arg_direction * arg_jumpPower);
+				}
 			}
 		}
 

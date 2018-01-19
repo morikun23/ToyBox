@@ -119,7 +119,7 @@ namespace ToyBox {
 					if(item.IsAbleGrasp()) this.Grasp(item);
 				}
 			}
-			else if(arg_collider.gameObject.layer == LayerMask.NameToLayer("Ground")) {
+			else {
 				this.Collided();
 			}
 		}

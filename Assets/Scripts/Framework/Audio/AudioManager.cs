@@ -141,8 +141,8 @@ namespace ToyBox {
 				return;
 			}
 			if (m_activeAudioSources.ContainsKey(arg_tag)) {
-				Debug.LogError("[ToyBox]Tag名が重複しています:" + "<color=red>" + arg_tag + "</color>");
-				return;
+				Debug.LogWarning("[ToyBox]Tag名が重複したため上書きしました:" + "<color=red>" + arg_tag + "</color>");
+				ReleaseSE(arg_tag);
 			}
 
 			AudioSource audioSource = this.GetAudioSourceFromPool();
@@ -158,7 +158,7 @@ namespace ToyBox {
 		/// <param name="arg_loop">ループするか</param>
 		public void PlaySE(string arg_tag,bool arg_loop = false) {
 			if (!m_activeAudioSources.ContainsKey(arg_tag)) {
-				Debug.LogError("[ToyBox]指定されたTagで登録されたSEが見つかりません:" + "<color=red>" + arg_tag + "</color>");
+				Debug.LogWarning("[ToyBox]指定されたTagで登録されたSEが見つかりません:" + "<color=red>" + arg_tag + "</color>");
 				return;
 			}
 
@@ -174,7 +174,7 @@ namespace ToyBox {
 		/// <param name="arg_tag">登録名</param>
 		public void StopSE(string arg_tag) {
 			if (!m_activeAudioSources.ContainsKey(arg_tag)) {
-				Debug.LogError("[ToyBox]指定されたTagで登録されたSEが見つかりません:" + "<color=red>" + arg_tag + "</color>");
+				Debug.LogWarning("[ToyBox]指定されたTagで登録されたSEが見つかりません:" + "<color=red>" + arg_tag + "</color>");
 				return;
 			}
 
@@ -188,7 +188,7 @@ namespace ToyBox {
 		/// <param name="arg_tag">登録名</param>
 		public void ReleaseSE(string arg_tag) {
 			if (!m_activeAudioSources.ContainsKey(arg_tag)) {
-				Debug.LogError("[ToyBox]指定されたTagで登録されたSEが見つかりません:" + "<color=red>" + arg_tag + "</color>");
+				Debug.LogWarning("[ToyBox]指定されたTagで登録されたSEが見つかりません:" + "<color=red>" + arg_tag + "</color>");
 				return;
 			}
 
