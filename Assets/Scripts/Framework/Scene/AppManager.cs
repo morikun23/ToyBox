@@ -38,6 +38,9 @@ namespace ToyBox {
 		//ユーザー情報
 		private UserData m_user;
 		public UserData user { get { return m_user; } }
+		[SerializeField]
+		private ToyBoxNCMB m_NCMB;
+		public ToyBoxNCMB NCMB {get { return m_NCMB;}}
 
 		/// <summary>
 		/// 初期起動

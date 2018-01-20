@@ -36,14 +36,14 @@ namespace ToyBox {
 		/// 保存されたデータを取得する
 		/// </summary>
 		public void Load() {
-			//TODO:NiftyもしくはPlayerPrefsで値の保存を実装する
+			m_id = PlayerPrefs.GetInt ("UserId");
 		}
 
 		/// <summary>
 		/// データを保存する
 		/// </summary>
 		public void Save() {
-			//TODO:NiftyもしくはPlayerPrefsで値の保存を実装する
+			
 		}
 	}
 }
