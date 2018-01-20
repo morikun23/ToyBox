@@ -21,32 +21,31 @@ namespace ToyBox {
 			m_collider = GetComponent<BoxCollider2D>();
 		}
 
-#if FALSE
-		private void OnTriggerEnter2D(Collider2D arg_collider) {
-			if(arg_collider.gameObject.layer == LayerMask.NameToLayer("Ground")
-				|| arg_collider.gameObject.layer == LayerMask.NameToLayer("Landable")) {
-				m_noticeTarget.SendMessage("OnGroundEnter");
-			}
-		}
+		//private void OnTriggerEnter2D(Collider2D arg_collider) {
+		//	if(arg_collider.gameObject.layer == LayerMask.NameToLayer("Ground")
+		//		|| arg_collider.gameObject.layer == LayerMask.NameToLayer("Landable")) {
+		//		m_noticeTarget.SendMessage("OnGroundEnter");
+		//	}
+		//}
 
-		private void OnTriggerExit2D(Collider2D arg_collider) {
+		//private void OnTriggerExit2D(Collider2D arg_collider) {
 
-			Debug.Log(arg_collider.gameObject.name);
+		//	Debug.Log(arg_collider.gameObject.name);
 
-			if(!Physics2D.IsTouchingLayers(m_collider , 1 << LayerMask.NameToLayer("Ground"))) {
-				if (arg_collider.gameObject.layer == LayerMask.NameToLayer("Ground")
-					|| arg_collider.gameObject.layer == LayerMask.NameToLayer("Landable")) {
-					m_noticeTarget.SendMessage("OnGroundExit");
-				}
-			}
-		}
-#endif
+		//	if(!Physics2D.IsTouchingLayers(m_collider , 1 << LayerMask.NameToLayer("Ground"))) {
+		//		if (arg_collider.gameObject.layer == LayerMask.NameToLayer("Ground")
+		//			|| arg_collider.gameObject.layer == LayerMask.NameToLayer("Landable")) {
+		//			m_noticeTarget.SendMessage("OnGroundExit");
+		//		}
+		//	}
+		//}
+
 
 		private void FixedUpdate() {
 
 			RaycastHit2D hitInfo = Physics2D.BoxCast(
 				transform.position , m_collider.bounds.size ,
-				0 , Vector2.zero , 0 , 1 << LayerMask.NameToLayer("Ground"));
+				0 , Vector2.zero , 0 , 1 << LayerMask.NameToLayer("Ground") | 1 << LayerMask.NameToLayer("Landable"));
 
 			GroundState prevState;
 

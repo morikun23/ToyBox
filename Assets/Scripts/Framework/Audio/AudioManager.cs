@@ -210,32 +210,30 @@ namespace ToyBox {
 				return;
 			}
 
-			AudioSource audioSource = GetAudioSourceFromPool();
-			audioSource.enabled = true;
-			audioSource.clip = m_seBuffer[arg_clipName];
-			StartCoroutine(PlayAndRelease(audioSource));
+			//ユニーク（唯一）な名前にするために現在時刻 + ランダムな数字で登録する
+			string seName = arg_clipName + System.DateTime.Now.Hour +
+				System.DateTime.Now.Minute + System.DateTime.Now.Second + System.DateTime.Now.Millisecond +
+				UnityEngine.Random.Range(0 , 255);
+
+			RegisterSE(seName , arg_clipName);
+			StartCoroutine(PlayAndRelease(seName));
 		}
 
 		/// <summary>
 		/// SEを再生させる
 		/// SEの再生が終了したらプールへ戻す
 		/// </summary>
-		/// <param name="arg_audioSource">再生させるAudioSource</param>
+		/// <param name="arg_tag">登録名</param>
 		/// <returns></returns>
-		private IEnumerator PlayAndRelease(AudioSource arg_audioSource) {
-			arg_audioSource.volume = m_option.seVolume;
-			arg_audioSource.loop = false;
+		private IEnumerator PlayAndRelease(string arg_tag) {
 
-			//ユニーク（唯一）な名前にするために現在時刻で登録する
-			string seName = arg_audioSource.clip.name + System.DateTime.Now + System.DateTime.Now.Millisecond;
-			m_activeAudioSources.Add(seName , arg_audioSource);
-			arg_audioSource.Play();
+			AudioSource quickAudio = m_activeAudioSources[arg_tag];
 
-			yield return new WaitWhile(() => arg_audioSource.isPlaying);
+			PlaySE(arg_tag);
 
-			arg_audioSource.enabled = false;
-			m_sePool.Enqueue(arg_audioSource);
-			m_activeAudioSources.Remove(seName);
+			//再生終了後、自動で解放をおこなう
+			yield return new WaitWhile(() => quickAudio.isPlaying);
+			ReleaseSE(arg_tag);
 		}
 
 		/// <summary>

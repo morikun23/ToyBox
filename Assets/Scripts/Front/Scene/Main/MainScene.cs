@@ -171,12 +171,12 @@ namespace ToyBox {
 			#region ボタンの初期化
 
 			m_leftButton.Initialize(
-				new ButtonAction(ButtonEventTrigger.OnPress , this.OnMoveButtonDown , (int)Player.Direction.LEFT) ,
+				new ButtonAction(ButtonEventTrigger.OnLongPress , this.OnMoveButtonDown , (int)Player.Direction.LEFT) ,
 				new ButtonAction(ButtonEventTrigger.OnRelease , this.OnMoveButtonUp , (int)Player.Direction.LEFT)
 			);
 
 			m_rightButton.Initialize(
-				new ButtonAction(ButtonEventTrigger.OnPress , this.OnMoveButtonDown , (int)Player.Direction.RIGHT) ,
+				new ButtonAction(ButtonEventTrigger.OnLongPress , this.OnMoveButtonDown , (int)Player.Direction.RIGHT) ,
 				new ButtonAction(ButtonEventTrigger.OnRelease , this.OnMoveButtonUp , (int)Player.Direction.RIGHT)
 			);
 
