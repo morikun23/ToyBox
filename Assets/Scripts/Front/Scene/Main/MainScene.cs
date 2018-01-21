@@ -231,21 +231,45 @@ namespace ToyBox {
 			AudioManager.Instance.ReleaseSE("Foot");
 
 
-			//クリア時間をサーバーに送信
-			ArrayList table = new ArrayList ();
-			switch (m_debugInfo.m_usingStageId) {
+			//クリアデータをサーバーに送信
+			ArrayList timeList = new ArrayList ();
+			ArrayList deathList = new ArrayList ();
+			switch (AppManager.Instance.user.m_temp.m_playStageId) {
 			case 1000:
-				table = AppManager.Instance.user.m_temp.m_dic_stage1 ["GoalTime"] as ArrayList;
-				table.Add (m_cnt_elapsedTime);
-				AppManager.Instance.user.m_temp.m_dic_stage1 ["GoalTime"] = table;
+				//クリア時間
+				timeList = AppManager.Instance.user.m_temp.m_dic_stage1 ["GoalTime"] as ArrayList;
+				if (System.Convert.ToSingle(timeList [0]) == 0) {
+					timeList [0] = m_cnt_elapsedTime;
+				} else {
+					timeList.Add (m_cnt_elapsedTime);
+				}
+				AppManager.Instance.user.m_temp.m_dic_stage1 ["GoalTime"] = timeList;
+				//死亡回数
+				if (AppManager.Instance.user.m_temp.m_dic_stage1.ContainsKey("DeathCount")) {
+					deathList = AppManager.Instance.user.m_temp.m_dic_stage1 ["DeathCount"] as ArrayList;
+				}
+				deathList.Add (AppManager.Instance.user.m_temp.m_cnt_death);
+				AppManager.Instance.user.m_temp.m_dic_stage1 ["DeathCount"] = deathList;
 				break;
 			case 2000:
-				table = AppManager.Instance.user.m_temp.m_dic_stage1 ["GoalTime"] as ArrayList;
-				table.Add (m_cnt_elapsedTime);
-				AppManager.Instance.user.m_temp.m_dic_stage2 ["GoalTime"] = table;
+				//クリア時間
+				timeList = AppManager.Instance.user.m_temp.m_dic_stage2 ["GoalTime"] as ArrayList;
+				if (System.Convert.ToSingle(timeList [0]) == 0) {
+					timeList [0] = m_cnt_elapsedTime;
+				} else {
+					timeList.Add (m_cnt_elapsedTime);
+				}
+				AppManager.Instance.user.m_temp.m_dic_stage2 ["GoalTime"] = timeList;
+				//死亡回数
+				if (AppManager.Instance.user.m_temp.m_dic_stage2.ContainsKey("DeathCount")) {
+					deathList = AppManager.Instance.user.m_temp.m_dic_stage2 ["DeathCount"] as ArrayList;
+				}
+				deathList.Add (AppManager.Instance.user.m_temp.m_cnt_death);
+				AppManager.Instance.user.m_temp.m_dic_stage2 ["DeathCount"] = deathList;
 				break;
 			}
 			AppManager.Instance.NCMB.Save ();
+			AppManager.Instance.user.DataInitalize ();
 
 
 			//TODO:今後リザルトシーンではなくホーム画面に移動する

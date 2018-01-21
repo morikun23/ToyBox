@@ -31,6 +31,9 @@ namespace ToyBox {
 			//各ステージの詳細データ
 			public Dictionary<string,object> m_dic_stage1 = new Dictionary<string,object>();
 			public Dictionary<string,object> m_dic_stage2 = new Dictionary<string,object>();
+		
+			//死亡回数
+			public int m_cnt_death;
 		}
 
 		/// <summary>一時保存データ</summary>
@@ -48,6 +51,15 @@ namespace ToyBox {
 		/// </summary>
 		public void Save() {
 			
+		}
+
+		/// <summary>
+		/// 一時保存データを初期化する
+		/// </summary>
+		public void DataInitalize(){
+			this.m_temp.m_cnt_death = 0;
+			this.m_temp.m_playStageId = 0;
+			this.m_temp.m_playRoomId = 0;
 		}
 	}
 }

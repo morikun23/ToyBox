@@ -87,6 +87,10 @@ namespace ToyBox{
 								list.Add(0);
 								dic["GoalTime"] = list;
 								m_NCMB_ ["data_Stage1"] = dic;
+								dic = new Dictionary<string, object>();
+								list = new ArrayList();
+								list.Add(0);
+								dic["GoalTime"] = list;
 								m_NCMB_ ["data_Stage2"] = dic;
 
 
@@ -103,6 +107,10 @@ namespace ToyBox{
 								m_flg_accept = true;
 
 								Debug.Log("アカウントを作成しました");
+
+								//取得したデータはDictionary型で保持
+								AppManager.Instance.user.m_temp.m_dic_stage1 = m_NCMB_["data_Stage1"] as Dictionary<string,object>;
+								AppManager.Instance.user.m_temp.m_dic_stage2 = m_NCMB_["data_Stage2"] as Dictionary<string,object>;
 
 							}
 						});
@@ -135,7 +143,7 @@ namespace ToyBox{
 								//取得したデータに置き換え
 								m_NCMB_.ObjectId = obj.ObjectId;
 								m_flg_accept = true;
-								Debug.Log("ユーザーデータを読み込みました : ");
+								Debug.Log("ユーザーデータを読み込みました");
 
 								//取得したデータはDictionary型で保持
 								AppManager.Instance.user.m_temp.m_dic_stage1 = m_NCMB_["data_Stage1"] as Dictionary<string,object>;
