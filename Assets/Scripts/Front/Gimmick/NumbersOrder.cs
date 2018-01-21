@@ -38,12 +38,10 @@ namespace ToyBox
 
         public void Match()
         {
-            Debug.Log("hit");
-            Debug.Log(count);
+
             count++;
             if (count == m_objectCount.Length) 
             {
-                Debug.Log("クリア");
                 //クリアした際の処理
 
                 //新しい音でして
@@ -57,8 +55,6 @@ namespace ToyBox
         {
             if (count != 0)
             {
-
-                Debug.Log("out");
                 count = 0;
 
                 for (int i = 0; i < m_objectCount.Length; i++)
