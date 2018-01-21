@@ -234,40 +234,21 @@ namespace ToyBox {
 			//クリアデータをサーバーに送信
 			ArrayList timeList = new ArrayList ();
 			ArrayList deathList = new ArrayList ();
-			switch (AppManager.Instance.user.m_temp.m_playStageId) {
-			case 1000:
-				//クリア時間
-				timeList = AppManager.Instance.user.m_temp.m_dic_stage1 ["GoalTime"] as ArrayList;
-				if (System.Convert.ToSingle(timeList [0]) == 0) {
-					timeList [0] = m_cnt_elapsedTime;
-				} else {
-					timeList.Add (m_cnt_elapsedTime);
-				}
-				AppManager.Instance.user.m_temp.m_dic_stage1 ["GoalTime"] = timeList;
-				//死亡回数
-				if (AppManager.Instance.user.m_temp.m_dic_stage1.ContainsKey("DeathCount")) {
-					deathList = AppManager.Instance.user.m_temp.m_dic_stage1 ["DeathCount"] as ArrayList;
-				}
-				deathList.Add (AppManager.Instance.user.m_temp.m_cnt_death);
-				AppManager.Instance.user.m_temp.m_dic_stage1 ["DeathCount"] = deathList;
-				break;
-			case 2000:
-				//クリア時間
-				timeList = AppManager.Instance.user.m_temp.m_dic_stage2 ["GoalTime"] as ArrayList;
-				if (System.Convert.ToSingle(timeList [0]) == 0) {
-					timeList [0] = m_cnt_elapsedTime;
-				} else {
-					timeList.Add (m_cnt_elapsedTime);
-				}
-				AppManager.Instance.user.m_temp.m_dic_stage2 ["GoalTime"] = timeList;
-				//死亡回数
-				if (AppManager.Instance.user.m_temp.m_dic_stage2.ContainsKey("DeathCount")) {
-					deathList = AppManager.Instance.user.m_temp.m_dic_stage2 ["DeathCount"] as ArrayList;
-				}
-				deathList.Add (AppManager.Instance.user.m_temp.m_cnt_death);
-				AppManager.Instance.user.m_temp.m_dic_stage2 ["DeathCount"] = deathList;
-				break;
+			//		クリア時間
+			timeList = AppManager.Instance.user.m_temp.m_dic_[(int)(AppManager.Instance.user.m_temp.m_playStageId / 1000) - 1]["GoalTime"] as ArrayList;
+			if (System.Convert.ToSingle(timeList [0]) == 0) {
+				timeList [0] = m_cnt_elapsedTime;
+			} else {
+				timeList.Add (m_cnt_elapsedTime);
 			}
+			AppManager.Instance.user.m_temp.m_dic_[(int)(AppManager.Instance.user.m_temp.m_playStageId / 1000) - 1]["GoalTime"] = timeList;
+			//		死亡回数
+			if (AppManager.Instance.user.m_temp.m_dic_[(int)(AppManager.Instance.user.m_temp.m_playStageId / 1000) - 1].ContainsKey("DeathCount")) {
+				deathList = AppManager.Instance.user.m_temp.m_dic_[(int)(AppManager.Instance.user.m_temp.m_playStageId / 1000) - 1] ["DeathCount"] as ArrayList;
+			}
+			deathList.Add (AppManager.Instance.user.m_temp.m_cnt_death);
+			AppManager.Instance.user.m_temp.m_dic_[(int)(AppManager.Instance.user.m_temp.m_playStageId / 1000) - 1] ["DeathCount"] = deathList;
+
 			AppManager.Instance.NCMB.Save ();
 			AppManager.Instance.user.DataInitalize ();
 

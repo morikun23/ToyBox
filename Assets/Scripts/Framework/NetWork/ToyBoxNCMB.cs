@@ -109,8 +109,9 @@ namespace ToyBox{
 								Debug.Log("アカウントを作成しました");
 
 								//取得したデータはDictionary型で保持
-								AppManager.Instance.user.m_temp.m_dic_stage1 = m_NCMB_["data_Stage1"] as Dictionary<string,object>;
-								AppManager.Instance.user.m_temp.m_dic_stage2 = m_NCMB_["data_Stage2"] as Dictionary<string,object>;
+								AppManager.Instance.user.m_temp.m_dic_.Add(m_NCMB_["data_Stage1"] as Dictionary<string,object>);
+								AppManager.Instance.user.m_temp.m_dic_.Add(m_NCMB_["data_Stage2"] as Dictionary<string,object>);
+								//AppManager.Instance.user.m_temp.m_dic_stage2 = m_NCMB_["data_Stage2"] as Dictionary<string,object>;
 
 							}
 						});
@@ -146,9 +147,8 @@ namespace ToyBox{
 								Debug.Log("ユーザーデータを読み込みました");
 
 								//取得したデータはDictionary型で保持
-								AppManager.Instance.user.m_temp.m_dic_stage1 = m_NCMB_["data_Stage1"] as Dictionary<string,object>;
-								AppManager.Instance.user.m_temp.m_dic_stage2 = m_NCMB_["data_Stage2"] as Dictionary<string,object>;
-
+								AppManager.Instance.user.m_temp.m_dic_.Add(m_NCMB_["data_Stage1"] as Dictionary<string,object>);
+								AppManager.Instance.user.m_temp.m_dic_.Add(m_NCMB_["data_Stage2"] as Dictionary<string,object>);
 							}
 						});
 					}
@@ -159,8 +159,8 @@ namespace ToyBox{
 		//各データ内容を確定してセーブ
 		public void Save(){
 			if(m_flg_accept){
-				m_NCMB_ ["data_Stage1"] = AppManager.Instance.user.m_temp.m_dic_stage1;
-				m_NCMB_ ["data_Stage2"] = AppManager.Instance.user.m_temp.m_dic_stage2;
+				m_NCMB_ ["data_Stage1"] = AppManager.Instance.user.m_temp.m_dic_[0];
+				m_NCMB_ ["data_Stage2"] = AppManager.Instance.user.m_temp.m_dic_[1];
 				m_NCMB_.SaveAsync ();
 			}
 		}

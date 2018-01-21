@@ -17,6 +17,9 @@ namespace ToyBox {
 		/// <summary>BGMの設定音量</summary>
 		public float m_bgmVolume;
 
+		/// <summary>現状実装されているステージ数</summary>
+		public float NUM_COMPLETE_STAGE = 2;
+
 		/// <summary>
 		/// ユーザー情報の一時保存用
 		/// ローカルでは値を保持するが、保存対象には含まれないもの
@@ -29,8 +32,8 @@ namespace ToyBox {
 			public uint m_playRoomId;
 
 			//各ステージの詳細データ
-			public Dictionary<string,object> m_dic_stage1 = new Dictionary<string,object>();
-			public Dictionary<string,object> m_dic_stage2 = new Dictionary<string,object>();
+			public List<Dictionary<string,object>> m_dic_ = new List<Dictionary<string, object>>();
+			//public Dictionary<string,object> m_dic_stage2 = new Dictionary<string,object>();
 		
 			//死亡回数
 			public int m_cnt_death;
