@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 namespace ToyBox {
 	public class MainScene : ToyBox.Scene , IArmCallBackReceiver , IHandCallBackReceiver {
@@ -75,6 +76,13 @@ namespace ToyBox {
 			get { return m_isEnableInput; }
 			set { m_isEnableInput = value; }
 		}
+
+
+		//------------------------------------------
+		[Header("Network")]
+		//------------------------------------------
+		/// <summary>経過時間</summary>
+		private float m_cnt_elapsedTime;
 
 
 		//-------------------------------------------
@@ -192,6 +200,12 @@ namespace ToyBox {
 
 			#endregion
 
+			#region データ取得開始
+			StartCoroutine(AddTime());
+
+			#endregion
+
+
 			yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
 			IsEnableInput = true;
 		}
@@ -215,6 +229,24 @@ namespace ToyBox {
 			AudioManager.Instance.StopBGM();
 			AudioManager.Instance.StopSE("Foot");
 			AudioManager.Instance.ReleaseSE("Foot");
+
+
+			//クリア時間をサーバーに送信
+			ArrayList table = new ArrayList ();
+			switch (m_debugInfo.m_usingStageId) {
+			case 1000:
+				table = AppManager.Instance.user.m_temp.m_dic_stage1 ["GoalTime"] as ArrayList;
+				table.Add (m_cnt_elapsedTime);
+				AppManager.Instance.user.m_temp.m_dic_stage1 ["GoalTime"] = table;
+				break;
+			case 2000:
+				table = AppManager.Instance.user.m_temp.m_dic_stage1 ["GoalTime"] as ArrayList;
+				table.Add (m_cnt_elapsedTime);
+				AppManager.Instance.user.m_temp.m_dic_stage2 ["GoalTime"] = table;
+				break;
+			}
+			AppManager.Instance.NCMB.Save ();
+
 
 			//TODO:今後リザルトシーンではなくホーム画面に移動する
 			SceneManager.LoadScene("Result");
@@ -397,5 +429,15 @@ namespace ToyBox {
 		}
 		#endregion
 
+
+
+		IEnumerator AddTime(){
+			while(!m_isAbleSceneTransition){
+				m_cnt_elapsedTime += Time.deltaTime;
+				yield return null;
+			}
+		}
+
 	}
+
 }

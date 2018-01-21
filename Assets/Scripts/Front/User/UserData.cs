@@ -27,6 +27,10 @@ namespace ToyBox {
 
 			/// <summary>これからプレイする小部屋の番号</summary>
 			public uint m_playRoomId;
+
+			//各ステージの詳細データ
+			public Dictionary<string,object> m_dic_stage1 = new Dictionary<string,object>();
+			public Dictionary<string,object> m_dic_stage2 = new Dictionary<string,object>();
 		}
 
 		/// <summary>一時保存データ</summary>

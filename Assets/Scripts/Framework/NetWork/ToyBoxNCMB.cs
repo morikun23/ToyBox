@@ -30,7 +30,7 @@ namespace ToyBox{
 
 		//ユーザーデータ格納用
 		public NCMBObject m_NCMB_ = new NCMBObject("UserData");
-		public Dictionary<string,object> m_dic = new Dictionary<string,object>();
+
 
 		//ユーザーデータ検索用
 		NCMBQuery<NCMBObject> m_NCQ_ = new NCMBQuery<NCMBObject>("UserData");
@@ -83,8 +83,11 @@ namespace ToyBox{
 								m_NCMB_ ["UserId"] = AppManager.Instance.user.m_id;
 								//初期化
 								Dictionary<string,object> dic = new Dictionary<string,object>();
-								dic["NewAcount!!"] = "Hello!";
-								m_NCMB_ ["ToyBoxData"] = dic;
+								ArrayList list = new ArrayList();
+								list.Add(0);
+								dic["GoalTime"] = list;
+								m_NCMB_ ["data_Stage1"] = dic;
+								m_NCMB_ ["data_Stage2"] = dic;
 
 
 								//現状をセーブ
@@ -135,7 +138,8 @@ namespace ToyBox{
 								Debug.Log("ユーザーデータを読み込みました : ");
 
 								//取得したデータはDictionary型で保持
-								m_dic = m_NCMB_["ToyBoxData"] as Dictionary<string,object>;
+								AppManager.Instance.user.m_temp.m_dic_stage1 = m_NCMB_["data_Stage1"] as Dictionary<string,object>;
+								AppManager.Instance.user.m_temp.m_dic_stage2 = m_NCMB_["data_Stage2"] as Dictionary<string,object>;
 
 							}
 						});
@@ -147,7 +151,8 @@ namespace ToyBox{
 		//各データ内容を確定してセーブ
 		public void Save(){
 			if(m_flg_accept){
-				m_NCMB_ ["ToyBoxData"] = m_dic;
+				m_NCMB_ ["data_Stage1"] = AppManager.Instance.user.m_temp.m_dic_stage1;
+				m_NCMB_ ["data_Stage2"] = AppManager.Instance.user.m_temp.m_dic_stage2;
 				m_NCMB_.SaveAsync ();
 			}
 		}
