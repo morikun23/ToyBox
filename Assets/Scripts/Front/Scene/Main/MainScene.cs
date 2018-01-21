@@ -234,20 +234,21 @@ namespace ToyBox {
 			//クリアデータをサーバーに送信
 			ArrayList timeList = new ArrayList ();
 			ArrayList deathList = new ArrayList ();
+			int selectedStage = (int)(AppManager.Instance.user.m_temp.m_playStageId / 1000) - 1;
 			//		クリア時間
-			timeList = AppManager.Instance.user.m_temp.m_dic_[(int)(AppManager.Instance.user.m_temp.m_playStageId / 1000) - 1]["GoalTime"] as ArrayList;
+			timeList = AppManager.Instance.user.m_temp.m_dic_[selectedStage]["GoalTime"] as ArrayList;
 			if (System.Convert.ToSingle(timeList [0]) == 0) {
 				timeList [0] = m_cnt_elapsedTime;
 			} else {
 				timeList.Add (m_cnt_elapsedTime);
 			}
-			AppManager.Instance.user.m_temp.m_dic_[(int)(AppManager.Instance.user.m_temp.m_playStageId / 1000) - 1]["GoalTime"] = timeList;
+			AppManager.Instance.user.m_temp.m_dic_[selectedStage]["GoalTime"] = timeList;
 			//		死亡回数
-			if (AppManager.Instance.user.m_temp.m_dic_[(int)(AppManager.Instance.user.m_temp.m_playStageId / 1000) - 1].ContainsKey("DeathCount")) {
-				deathList = AppManager.Instance.user.m_temp.m_dic_[(int)(AppManager.Instance.user.m_temp.m_playStageId / 1000) - 1] ["DeathCount"] as ArrayList;
+			if (AppManager.Instance.user.m_temp.m_dic_[selectedStage].ContainsKey("DeathCount")) {
+				deathList = AppManager.Instance.user.m_temp.m_dic_[selectedStage] ["DeathCount"] as ArrayList;
 			}
 			deathList.Add (AppManager.Instance.user.m_temp.m_cnt_death);
-			AppManager.Instance.user.m_temp.m_dic_[(int)(AppManager.Instance.user.m_temp.m_playStageId / 1000) - 1] ["DeathCount"] = deathList;
+			AppManager.Instance.user.m_temp.m_dic_[selectedStage] ["DeathCount"] = deathList;
 
 			AppManager.Instance.NCMB.Save ();
 			AppManager.Instance.user.DataInitalize ();
