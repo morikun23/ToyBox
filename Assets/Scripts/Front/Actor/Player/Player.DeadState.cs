@@ -16,7 +16,7 @@ namespace ToyBox {
 			}
 
 			void IPlayerState.OnEnter() {
-				m_player.AnimatorComponent.Play("Dead");
+				m_player.AnimatorComponent.Play("Dead.Die");
 				m_player.AnimatorComponent.SetBool("Dead" , true);
 			}
 
