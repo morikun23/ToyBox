@@ -273,6 +273,8 @@ namespace ToyBox {
 
 		private IEnumerator AwakeArm(Vector2 arg_targetDirection) {
 
+			AppManager.Instance.m_timeManager.Pause();
+
 			m_animator.Play("Reach.Open");
 			m_animator.SetBool("Reach" , true);
 			m_animator.Update(0);
@@ -291,6 +293,7 @@ namespace ToyBox {
 			yield return new Tsubakit.WaitForAnimation(m_animator , 0);
 
 			m_reach = false;
+			AppManager.Instance.m_timeManager.Resume();
 		}
 
 		//---------------------------------------------------
@@ -327,7 +330,6 @@ namespace ToyBox {
 		/// <param name="arg_arm"></param>
 		void IArmCallBackReceiver.OnStartLengthen(Arm arg_arm) {
 			m_hand.gameObject.SetActive(true);
-			AppManager.Instance.m_timeManager.Pause();
 		}
 
 		/// <summary>
@@ -337,9 +339,9 @@ namespace ToyBox {
 		/// <param name="arg_arm"></param>
 		void IArmCallBackReceiver.OnEndShorten(Arm arg_arm) {
 			m_hand.gameObject.SetActive(false);
-			AppManager.Instance.m_timeManager.Resume();
 			if (m_hand.GraspingItem) {
 				if (m_hand.GraspingItem.Reaction == Item.GraspedReaction.PULL_TO_ITEM) {
+					AppManager.Instance.m_timeManager.Resume();
 					return;
 				}
 			}
