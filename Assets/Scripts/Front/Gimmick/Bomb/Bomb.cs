@@ -120,11 +120,14 @@ namespace ToyBox
 
             for (int i = 0; i < hit.Count; i++)
             {
-                if (hit[i].transform.gameObject.layer == LayerMask.NameToLayer("Player")
-                    && hit[i].transform.gameObject.name == "Body")
+                if (hit[i].transform.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                    //死亡判定
-                    hit[i].transform.gameObject.GetComponent<Player>().Dead();
+					Player playerInfo = hit[i].transform.gameObject.GetComponent<Player>();
+					//死亡判定
+					if (playerInfo) {
+						playerInfo.Dead();
+						continue;
+					}
                 }
                 else if (hit[i].transform.gameObject.tag == "BrokenWall")
                 {
