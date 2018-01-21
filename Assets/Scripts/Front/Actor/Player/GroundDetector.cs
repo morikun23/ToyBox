@@ -10,7 +10,7 @@ namespace ToyBox {
 			AIR
 		}
 
-		private GroundState m_currentGroundState;
+		private GroundState m_currentGroundState = GroundState.AIR;
 
 		[SerializeField]
 		private GameObject m_noticeTarget;
