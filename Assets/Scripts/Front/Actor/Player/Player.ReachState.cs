@@ -16,8 +16,6 @@ namespace ToyBox {
 			}
 
 			void IPlayerState.OnEnter() {
-				m_player.m_animator.SetBool("Reach" , true);
-
 				m_player.m_rigidbody.isKinematic = true;
 				m_player.m_rigidbody.velocity = Vector2.zero;
 			}
@@ -27,7 +25,6 @@ namespace ToyBox {
 			}
 
 			void IPlayerState.OnExit() {
-				m_player.m_animator.SetBool("Reach" , false);
 				m_player.m_rigidbody.isKinematic = false;
 				m_player.m_rigidbody.velocity = Vector2.zero;
 

@@ -128,6 +128,8 @@ namespace ToyBox {
 				//プレイヤーのリスタート
 				PlayerGenerate();
 
+				yield return new WaitForSeconds(0.5f);
+
 				fade.StartFade(new FadeIn() , Color.black , 1.0f);
 				yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
 

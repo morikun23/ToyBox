@@ -338,7 +338,7 @@ namespace ToyBox {
 			//不整合のためボタンが傾いていない場合はアームを伸ばさない
 			if (m_armReachButton.Direction != Vector2.zero) {
 				if (!m_player.PlayableArm.IsUsing()) {
-					m_player.PlayableArm.ReachOutFor(m_armReachLine.transform.position);
+					m_player.ReachOut(m_armReachButton.Direction);
 				}
 			}
 
