@@ -242,13 +242,23 @@ namespace ToyBox {
 			} else {
 				timeList.Add (m_cnt_elapsedTime);
 			}
+			//		最大10件までの登録にする
+			if(timeList.Count == 11){
+				timeList.RemoveAt (0);
+			}
 			AppManager.Instance.user.m_temp.m_dic_[selectedStage]["GoalTime"] = timeList;
+
 			//		死亡回数
 			if (AppManager.Instance.user.m_temp.m_dic_[selectedStage].ContainsKey("DeathCount")) {
 				deathList = AppManager.Instance.user.m_temp.m_dic_[selectedStage] ["DeathCount"] as ArrayList;
 			}
 			deathList.Add (AppManager.Instance.user.m_temp.m_cnt_death);
+			//		最大10件までの登録にする
+			if(deathList.Count == 11){
+				deathList.RemoveAt (0);
+			}
 			AppManager.Instance.user.m_temp.m_dic_[selectedStage] ["DeathCount"] = deathList;
+
 
 			AppManager.Instance.NCMB.Save ();
 			AppManager.Instance.user.DataInitalize ();

@@ -33,7 +33,6 @@ namespace ToyBox {
 
 			//各ステージの詳細データ
 			public List<Dictionary<string,object>> m_dic_ = new List<Dictionary<string, object>>();
-			//public Dictionary<string,object> m_dic_stage2 = new Dictionary<string,object>();
 		
 			//死亡回数
 			public int m_cnt_death;
