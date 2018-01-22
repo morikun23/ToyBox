@@ -83,6 +83,21 @@ namespace ToyBox {
 			
 		}
 
+		/// <summary>
+		/// ゲーム開始確認モーダルを表示する
+		/// </summary>
+		/// <param name="arg_message">表示内容</param>
+		/// <param name="arg_onGamePlay">ゲーム開始ボタン</param>
+		/// <param name="arg_callBack">モーダル表示終了後コールバック</param>
+		public void PopupGameReadyModal(string arg_message ,System.Action arg_onGamePlay, System.Action arg_callBack = null) {
+
+			GameReadyModal modal = InstantiateModal(m_modalContainer["GameReadyModal"]) as GameReadyModal;
+
+			modal.m_message = arg_message;
+			modal.m_playAction = arg_onGamePlay;
+			modal.Show(arg_callBack);
+
+		}
 
 		/// <summary>
 		/// モーダルを生成する
