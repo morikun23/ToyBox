@@ -50,10 +50,6 @@ namespace ToyBox {
 		UIButton m_optionButton;
 
 
-		/// <summary>入力可能かどうか</summary>
-		[SerializeField]
-		private bool m_isEnableInput;
-
 		//-------------------------------------------
 			[Header("Stage")]
 		//-------------------------------------------
@@ -67,15 +63,6 @@ namespace ToyBox {
 
 		/// <summary>シーン遷移フラグ</summary>
 		private bool m_isAbleSceneTransition;
-
-		/// <summary>
-		/// シーン内のUIに入力を受け付けるか
-		/// </summary>
-		public bool IsEnableInput {
-			get { return m_isEnableInput; }
-			set { m_isEnableInput = value; }
-		}
-
 
 		//-------------------------------------------
 		//	デバッグ機能
@@ -193,7 +180,6 @@ namespace ToyBox {
 			#endregion
 
 			yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
-			IsEnableInput = true;
 		}
 
 		/// <summary>
