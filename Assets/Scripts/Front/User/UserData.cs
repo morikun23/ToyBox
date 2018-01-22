@@ -18,7 +18,7 @@ namespace ToyBox {
 		public float m_bgmVolume;
 
 		/// <summary>現状実装されているステージ数</summary>
-		public float NUM_COMPLETE_STAGE = 2;
+		public const float NUM_COMPLETE_STAGE = 2;
 
 		/// <summary>
 		/// ユーザー情報の一時保存用
@@ -30,20 +30,25 @@ namespace ToyBox {
 
 			/// <summary>これからプレイする小部屋の番号</summary>
 			public uint m_playRoomId;
+
 			/// <summary>今遊んでいる小部屋の番号</summary>
 			public uint m_playingRoomId;
 
-
-			//各ステージの詳細データ
+			/// <summary>各ステージの詳細データ</summary>
 			public List<Dictionary<string,object>> m_dic_ = new List<Dictionary<string, object>>();
-			//選択中ステージの小部屋の詳細データ
+
+			/// <summary>選択中ステージの小部屋の詳細データ</summary>
 			public List<Dictionary<string,object>> m_dic_room = new List<Dictionary<string, object>>();
-			//小部屋での経過時間
+
+			/// <summary>小部屋での経過時間</summary>
 			public float m_num_roomWaitTime;
 
-
-			//死亡回数
+			/// <summary>死亡回数</summary>
 			public int m_cnt_death;
+
+			///<summary>PlayerがUIで操作可能かどうか</summary>
+			public bool m_isTouchUI = true;
+
 		}
 
 		/// <summary>一時保存データ</summary>

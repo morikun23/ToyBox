@@ -51,10 +51,6 @@ namespace ToyBox {
 		UIButton m_optionButton;
 
 
-		/// <summary>入力可能かどうか</summary>
-		[SerializeField]
-		private bool m_isEnableInput;
-
 		//-------------------------------------------
 			[Header("Stage")]
 		//-------------------------------------------
@@ -69,21 +65,11 @@ namespace ToyBox {
 		/// <summary>シーン遷移フラグ</summary>
 		private bool m_isAbleSceneTransition;
 
-		/// <summary>
-		/// シーン内のUIに入力を受け付けるか
-		/// </summary>
-		public bool IsEnableInput {
-			get { return m_isEnableInput; }
-			set { m_isEnableInput = value; }
-		}
-
-
 		//------------------------------------------
-		[Header("Network")]
+			[Header("Network")]
 		//------------------------------------------
 		/// <summary>経過時間</summary>
 		private float m_cnt_elapsedTime;
-
 
 		//-------------------------------------------
 		//	デバッグ機能
@@ -206,7 +192,6 @@ namespace ToyBox {
 
 
 			yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
-			IsEnableInput = true;
 		}
 
 		/// <summary>
@@ -307,7 +292,8 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_object"></param>
 		private void OnMoveButtonDown(object arg_object) {
-			if (!IsEnableInput) return;
+			if (!AppManager.Instance.user.m_temp.m_isTouchUI ||
+				m_player.PlayableArm.IsUsing()) return;
 
 			if (m_player.GetCurrentState() == typeof(Player.ReachState)) return;
 
@@ -332,7 +318,8 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_object"></param>
 		private void OnMoveButtonUp(object arg_object) {
-			if (!IsEnableInput) return;
+			if (!AppManager.Instance.user.m_temp.m_isTouchUI ||
+				m_player.PlayableArm.IsUsing()) return;
 
 			int direction = (int)arg_object;
 
@@ -348,7 +335,8 @@ namespace ToyBox {
 		/// 射出モードを開始する
 		/// </summary>
 		private void OnArmReachButtonDown() {
-			if (!IsEnableInput) return;
+			if (!AppManager.Instance.user.m_temp.m_isTouchUI ||
+				m_player.PlayableArm.IsUsing()) return;
 			m_isReachMode = true;
 		}
 
@@ -358,7 +346,8 @@ namespace ToyBox {
 		/// </summary>
 		private void OnArmReachButtonStay() {
 
-			if (!IsEnableInput) return;
+			if (!AppManager.Instance.user.m_temp.m_isTouchUI ||
+				m_player.PlayableArm.IsUsing()) return;
 			if (!m_isReachMode) return;
 			if (m_armReachLine == null) return;
 
@@ -393,13 +382,14 @@ namespace ToyBox {
 		/// </summary>
 		private void OnArmReachButtonUp() {
 
-			if (!IsEnableInput) return;
+			if (!AppManager.Instance.user.m_temp.m_isTouchUI ||
+				m_player.PlayableArm.IsUsing()) return;
 			if (!m_isReachMode) return;
 
 			//不整合のためボタンが傾いていない場合はアームを伸ばさない
 			if (m_armReachButton.Direction != Vector2.zero) {
 				if (!m_player.PlayableArm.IsUsing()) {
-					m_player.PlayableArm.ReachOutFor(m_armReachLine.transform.position);
+					m_player.ReachOut(m_armReachButton.Direction);
 				}
 			}
 
@@ -416,7 +406,7 @@ namespace ToyBox {
 		/// </summary>
 		private void OnArmReleaseButton() {
 
-			if (!IsEnableInput) return;
+			if (!AppManager.Instance.user.m_temp.m_isTouchUI) return;
 
 			if (m_player.PlayableHand.IsGrasping) {
 				if (m_player.PlayableHand.GraspingItem.IsAbleRelease()) {
