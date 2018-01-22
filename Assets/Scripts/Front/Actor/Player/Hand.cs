@@ -36,6 +36,9 @@ namespace ToyBox {
 		/// <summary>コールバックを受け取る対象</summary>
 		private readonly List<IHandCallBackReceiver> m_callBackReceivers = new List<IHandCallBackReceiver>();
 
+		/// <summary>あたり判定検出済みフラグ</summary>
+		private bool m_isDetected;
+
 		/// <summary>
 		/// 現在掴んでいるアイテム
 		/// ※読み取り専用
@@ -64,6 +67,7 @@ namespace ToyBox {
 		private void OnEnable() {
 			m_grapingItem = null;
 			m_isGrasping = false;
+			m_isDetected = false;
 		}
 
 		/// <summary>
@@ -113,6 +117,9 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_collider"></param>
 		private void OnTriggerEnter2D(Collider2D arg_collider) {
+
+			if (m_isDetected) return;
+
 			if (arg_collider.gameObject.layer == LayerMask.NameToLayer("Item")) {
 				if (!m_isGrasping) {
 					Item item = arg_collider.GetComponent<Item>();
@@ -122,6 +129,8 @@ namespace ToyBox {
 			else {
 				this.Collided();
 			}
+
+			m_isDetected = true;
 		}
 
 	}
