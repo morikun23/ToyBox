@@ -5,12 +5,23 @@ using UnityEngine;
 namespace ToyBox {
 	public abstract class ModalController : MonoBehaviour {
 
+		/// <summary>デフォルトのバックボタン</summary>
 		[SerializeField]
 		private UIButton m_exitButton;
-		
-		//コールバック（モーダルが閉じたときに実行する）
-		private System.Action m_callback;
-		
+
+		/// <summary>バックボタンを押したときのコールバック</summary>
+		private System.Action m_exitCallback;
+
+		[SerializeField]
+		protected GameObject m_modalObject;
+
+		[SerializeField]
+		public GameObject ModalObject {
+			get {
+				return m_modalObject;
+			}
+		}
+
 		/// <summary>Start関数は継承禁止</summary>
 		protected void Start() { }
 
@@ -31,14 +42,15 @@ namespace ToyBox {
 		/// <param name="arg_callBack"></param>
 		public void Show(System.Action arg_callBack) {
 
-			this.gameObject.SetActive(true);
+			ModalObject.SetActive(true);
 			this.transform.localScale = Vector3.zero;
-			this.m_callback = arg_callBack;
+			this.m_exitCallback = arg_callBack;
 
-			iTween.ScaleTo(this.gameObject , iTween.Hash(
+			iTween.ScaleTo(ModalObject , iTween.Hash(
 				"scale" , Vector3.one ,
 				"time" , 0.25f ,
-				"oncomplete" , "OnActive"
+				"oncomplete" , "OnActive" ,
+				"oncompletetarget" , this.gameObject
 				));
 
 			if (m_exitButton != null) {
@@ -55,10 +67,11 @@ namespace ToyBox {
 		/// モーダルを閉じる
 		/// </summary>
 		public void Hide() {
-			iTween.ScaleTo(this.gameObject , iTween.Hash(
+			iTween.ScaleTo(ModalObject , iTween.Hash(
 				"scale" , Vector3.zero ,
 				"time" , 0.25f ,
-				"oncomplete" , "OnRemoved"
+				"oncomplete" , "OnRemoved",
+				"oncompletetarget", this.gameObject
 				));
 		}
 
@@ -67,8 +80,8 @@ namespace ToyBox {
 		/// コールバックを通知する
 		/// </summary>
 		private void OnRemoved() {
-			if(m_callback != null) {
-				m_callback();
+			if(m_exitCallback != null) {
+				m_exitCallback();
 			}
 			Destroy(this.gameObject);
 		}
