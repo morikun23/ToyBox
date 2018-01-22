@@ -38,6 +38,9 @@ namespace ToyBox
         [SerializeField]
         private Button[] m_stageSelectButton;
 
+        [SerializeField]
+        private Image m_screenImage;
+
         //中間地点を選ぶボタン郡の親になるオブジェ
         //m_halfPointSelectScrollView内のContentというオブジェがこれに当たる
         private GameObject m_halfPointContent;
@@ -69,6 +72,9 @@ namespace ToyBox
         //ボタンのSprite
         private Sprite m_trueSprite;
         private Sprite m_falseSprite;
+
+        //モーダルで表示するメッセージ
+        private string m_modalMessage;
 
         public override IEnumerator OnEnter()
         {
@@ -125,7 +131,9 @@ namespace ToyBox
                 }
 
             }
-            
+
+            AudioManager.Instance.RegisterBGM("BGM_StageSelect");
+            AudioManager.Instance.PlayBGM(1.5f);
 
             AppManager.Instance.m_fade.StartFade(new FadeIn(), Color.black, 1.0f);
             yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
@@ -313,7 +321,10 @@ namespace ToyBox
                 GameObject button = Instantiate(buttonPrefab, m_halfPointContent.transform);
                 button.name = button.transform.Find("Text").GetComponent<Text>().text = (i + 1).ToString();//見栄え上、名前は０からでなく１からにする
 
-                button.GetComponent<Button>().onClick.AddListener(() => { OnStageSelectedPress(m_stageSelectButtonInfo[i]); });
+                //OnClickへの関数の登録をfor文の中で行う場合、変数を一時的に保存しとく必要がある
+                int temp = i;
+
+                button.GetComponent<Button>().onClick.AddListener(() => { OnHalfPointSelectedPress(temp); });
 
                 Image image = button.GetComponent<Image>();
 
@@ -370,8 +381,14 @@ namespace ToyBox
 
             uint id = uint.Parse(info.m_stageNumber.ToString());
 
+            //ステージの決定
             AppManager.Instance.user.m_temp.m_playStageId = id;
-            
+
+            //画像の変更
+            m_screenImage.sprite = info.m_screenSprite;
+
+            //モーダルで表示するステージ名の変更
+            m_modalMessage = info.m_stageName;
 
             m_isStageSelect = true;
 
@@ -385,7 +402,11 @@ namespace ToyBox
         {
             uint id = uint.Parse(arg_number.ToString());
 
+            //中間地点の決定
             AppManager.Instance.user.m_temp.m_playRoomId = id;
+
+            //モーダルの表示
+            UIManager.Instance.PopupMessageModal(m_modalMessage);
 
             m_isHalfPointSelect = true;
 
