@@ -16,7 +16,8 @@ namespace ToyBox {
 			}
 
 			void IPlayerState.OnEnter() {
-				
+				m_player.AnimatorComponent.Play("Dead.Die");
+				m_player.AnimatorComponent.SetBool("Dead" , true);
 			}
 
 			void IPlayerState.OnUpdate() {
@@ -24,7 +25,7 @@ namespace ToyBox {
 			}
 
 			void IPlayerState.OnExit() {
-				m_player.gameObject.SetActive(false);
+				m_player.AnimatorComponent.SetBool("Dead" , false);
 			}
 			
 			IPlayerState IPlayerState.GetNextState() {

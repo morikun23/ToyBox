@@ -38,9 +38,9 @@ namespace ToyBox
 
             //  両者の比率を出してスプライトのローカル座標系に反映
             transform.localScale = new Vector3(m_worldScreenWidth / m_width, m_worldScreenHeight / m_height);
-            m_endSize = transform.localScale;
+            m_endSize = transform.localScale - new Vector3(transform.localScale.x / 5, transform.localScale.y / 5, 0);
 
-            transform.localScale = new Vector3(0, m_endSize.y - (m_endSize.y / 20), 1);
+            transform.localScale = new Vector3(0, m_endSize.y, 1);
         }
 
         //ダイアログを一定値まで伸縮
