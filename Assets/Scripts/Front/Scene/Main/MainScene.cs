@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 namespace ToyBox {
 	public class MainScene : ToyBox.Scene , IArmCallBackReceiver , IHandCallBackReceiver {
@@ -63,6 +64,12 @@ namespace ToyBox {
 
 		/// <summary>シーン遷移フラグ</summary>
 		private bool m_isAbleSceneTransition;
+
+		//------------------------------------------
+			[Header("Network")]
+		//------------------------------------------
+		/// <summary>経過時間</summary>
+		private float m_cnt_elapsedTime;
 
 		//-------------------------------------------
 		//	デバッグ機能
@@ -179,6 +186,11 @@ namespace ToyBox {
 
 			#endregion
 
+			#region データ取得開始
+			StartCoroutine(AddTime());
+			#endregion
+
+
 			yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
 		}
 
@@ -188,7 +200,21 @@ namespace ToyBox {
 		/// <returns></returns>
 		public override IEnumerator OnUpdate() {
 			//フラグが立つまでシーン遷移を実行しない
-			yield return new WaitWhile(() => !m_isAbleSceneTransition);
+			while(!m_isAbleSceneTransition){
+
+				//小部屋毎のデータを記録
+//				string selectStage = "data_Stage" +
+//                 (int)(AppManager.Instance.user.m_temp.m_playStageId / 1000) +
+//                 "-" +
+//                 AppManager.Instance.user.m_temp.m_playingRoomId;
+
+				uint selectRoom = AppManager.Instance.user.m_temp.m_playingRoomId;
+				AppManager.Instance.user.m_temp.m_dic_room [(int)selectRoom - 1] ["Time"] = AppManager.Instance.user.m_temp.m_num_roomWaitTime;
+
+				Debug.Log (AppManager.Instance.user.m_temp.m_dic_room [(int)selectRoom - 1] ["Time"]);
+
+				yield return null;
+			}
 		}
 		
 		/// <summary>
@@ -201,6 +227,40 @@ namespace ToyBox {
 			AudioManager.Instance.StopBGM();
 			AudioManager.Instance.StopSE("Foot");
 			AudioManager.Instance.ReleaseSE("Foot");
+
+
+			//クリアデータをサーバーに送信
+			ArrayList timeList = new ArrayList ();
+			ArrayList deathList = new ArrayList ();
+			int selectedStage = (int)(AppManager.Instance.user.m_temp.m_playStageId / 1000) - 1;
+			//		クリア時間
+			timeList = AppManager.Instance.user.m_temp.m_dic_[selectedStage]["GoalTime"] as ArrayList;
+			if (System.Convert.ToSingle(timeList [0]) == 0) {
+				timeList [0] = m_cnt_elapsedTime;
+			} else {
+				timeList.Add (m_cnt_elapsedTime);
+			}
+			//		最大10件までの登録にする
+			if(timeList.Count == 11){
+				timeList.RemoveAt (0);
+			}
+			AppManager.Instance.user.m_temp.m_dic_[selectedStage]["GoalTime"] = timeList;
+
+			//		死亡回数
+			if (AppManager.Instance.user.m_temp.m_dic_[selectedStage].ContainsKey("DeathCount")) {
+				deathList = AppManager.Instance.user.m_temp.m_dic_[selectedStage] ["DeathCount"] as ArrayList;
+			}
+			deathList.Add (AppManager.Instance.user.m_temp.m_cnt_death);
+			//		最大10件までの登録にする
+			if(deathList.Count == 11){
+				deathList.RemoveAt (0);
+			}
+			AppManager.Instance.user.m_temp.m_dic_[selectedStage] ["DeathCount"] = deathList;
+
+
+			AppManager.Instance.NCMB.Save ();
+			AppManager.Instance.user.DataInitalize ();
+
 
 			//TODO:今後リザルトシーンではなくホーム画面に移動する
 			SceneManager.LoadScene("Result");
@@ -388,5 +448,16 @@ namespace ToyBox {
 		}
 		#endregion
 
+
+
+		IEnumerator AddTime(){
+			while(!m_isAbleSceneTransition){
+				m_cnt_elapsedTime += Time.deltaTime;
+				AppManager.Instance.user.m_temp.m_num_roomWaitTime += Time.deltaTime;
+				yield return null;
+			}
+		}
+
 	}
+
 }
