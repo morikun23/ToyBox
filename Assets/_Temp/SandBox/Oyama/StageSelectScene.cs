@@ -40,6 +40,7 @@ namespace ToyBox
 
         [SerializeField]
         private Image m_screenImage;
+        private Sprite m_screenBase;
 
         //中間地点を選ぶボタン郡の親になるオブジェ
         //m_halfPointSelectScrollView内のContentというオブジェがこれに当たる
@@ -95,8 +96,11 @@ namespace ToyBox
 
             m_falseSprite = Resources.Load<Sprite>("Contents/StageSelect/Textures/SP_HalfPointButton_False");
 
+            //スクリーンで最初に使われている画像を取得
+            m_screenBase = m_screenImage.sprite;
+
             //ステージ選択ボタンの初期化
-            for(int i = 0; i < m_stageSelectButton.Length; i++)
+            for (int i = 0; i < m_stageSelectButton.Length; i++)
             {
                 StageSelectButtonInfo temp = new StageSelectButtonInfo();
 
@@ -234,6 +238,9 @@ namespace ToyBox
                             ChangingScrollView(m_stageSelectScrollView, m_halfPointSelectScrollView);
                             m_state = SelectSceneState.ChangingView;
 
+                            //スクリーン画像を最初の画像に戻す
+                            m_screenImage.sprite = m_screenBase;
+
                             m_isBack = false;
                         }
 
@@ -368,6 +375,7 @@ namespace ToyBox
         /// </summary>
         public void OnBackSelectedPress()
         {
+            AudioManager.Instance.QuickPlaySE("SE_StageSelectButton");
             m_isBack = true;
         }
 
@@ -377,6 +385,8 @@ namespace ToyBox
         /// <param name="arg_info">ボタンを押した際の情報の集まり</param>
         public void OnStageSelectedPress(object arg_info)
         {
+            AudioManager.Instance.QuickPlaySE("SE_StageSelectButton");
+
             StageSelectButtonInfo info = arg_info as StageSelectButtonInfo;
 
             uint id = uint.Parse(info.m_stageNumber.ToString());
@@ -400,6 +410,8 @@ namespace ToyBox
         /// <param name="arg_number">どの中間地点か</param>
         public void OnHalfPointSelectedPress(int arg_number)
         {
+            AudioManager.Instance.QuickPlaySE("SE_StageSelectButton");
+
             uint id = uint.Parse(arg_number.ToString());
 
             //中間地点の決定
