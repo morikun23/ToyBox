@@ -27,6 +27,9 @@ namespace ToyBox {
 
 			/// <summary>これからプレイする小部屋の番号</summary>
 			public uint m_playRoomId;
+
+			///<summary>PlayerがUIで操作可能かどうか</summary>
+			public bool m_isTouchUI = true;
 		}
 
 		/// <summary>一時保存データ</summary>
