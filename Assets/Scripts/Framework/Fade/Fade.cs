@@ -88,6 +88,7 @@ namespace ToyBox {
 		public void Fill(Color arg_color) {
 			m_fadeInfo.m_fadeObject.color = arg_color;
 			m_fadeInfo.m_currentAlpha = 1;
+				
 		}
 
 		public bool IsFading() {

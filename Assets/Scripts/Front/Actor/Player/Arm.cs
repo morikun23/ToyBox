@@ -152,6 +152,8 @@ namespace ToyBox {
 		/// </summary>
 		private void Update() {
 
+
+
 			if (m_currentTask != null) {
 				m_currentTask();
 			}
@@ -265,13 +267,17 @@ namespace ToyBox {
 		/// <returns></returns>
 		private IEnumerator OnLengthenFinished() {
 
+			AudioManager.Instance.StopSE("extend");
+
 			//当たり判定のコールバックを受け取るために一度待機させる
 			yield return new WaitForEndOfFrame();
 			
 			//コールバックを受け取らなかったら強制的に腕を縮める
 			if(!m_itemGrasped) {
 				m_currentTask = this.ShortenTop;
+				AudioManager.Instance.PlaySE("extend",true);
 			}
+
 		}
 
 		/// <summary>
@@ -283,6 +289,7 @@ namespace ToyBox {
 
 			if (m_currentLength <= 0) {
 				//縮みきった
+				AudioManager.Instance.StopSE("extend");
 				m_currentLength = 0;
 				TopPosition = BottomPosition;
 				m_currentTask = null;
@@ -306,6 +313,7 @@ namespace ToyBox {
 
 			if (m_currentLength <= 0) {
 				//縮みきった
+				AudioManager.Instance.StopSE("extend");
 				m_currentLength = 0;
 				BottomPosition = TargetPosition;
 				m_currentTask = null;
@@ -357,16 +365,22 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_hand"></param>
 		void IHandCallBackReceiver.OnGrasped(Hand arg_hand) {
-
+			AudioManager.Instance.StopSE("extend");
 			m_itemGrasped = true;
 
 			TargetPosition = arg_hand.GraspingItem.transform.position;
 			TopPosition = TargetPosition;
 
 			switch (arg_hand.GraspingItem.Reaction) {
-				case Item.GraspedReaction.PULL_TO_ITEM:		m_currentTask = this.ShortenBottom;	break;
+				case Item.GraspedReaction.PULL_TO_ITEM:		
+				m_currentTask = this.ShortenBottom;	
+				AudioManager.Instance.PlaySE("extend",true);
+				break;
 				case Item.GraspedReaction.REST_ARM:			m_currentTask = this.Rest;			break;
-				case Item.GraspedReaction.PULL_TO_PLAYER:	m_currentTask = this.ShortenTop;	break;
+				case Item.GraspedReaction.PULL_TO_PLAYER:
+				m_currentTask = this.ShortenTop;
+				AudioManager.Instance.PlaySE("extend",true);
+				break;
 			}
 		}
 
@@ -380,7 +394,10 @@ namespace ToyBox {
 
 			switch (arg_hand.GraspingItem.Reaction) {
 				case Item.GraspedReaction.PULL_TO_ITEM:		m_currentTask = null;				break;
-				case Item.GraspedReaction.REST_ARM:			m_currentTask = this.ShortenTop;	break;
+				case Item.GraspedReaction.REST_ARM:
+				m_currentTask = this.ShortenTop;
+				AudioManager.Instance.PlaySE("extend",true);
+				break;
 				case Item.GraspedReaction.PULL_TO_PLAYER:	m_currentTask = null;				break;
 			}
 		}
