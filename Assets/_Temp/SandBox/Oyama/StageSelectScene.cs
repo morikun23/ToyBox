@@ -51,8 +51,7 @@ namespace ToyBox
             StageSelect,
             BackGroundMoving,
             ChangingView,
-            SelectHalfPoint,
-            ModalIndicate
+            SelectHalfPoint
         }
 
         private SelectSceneState m_state;
@@ -67,7 +66,6 @@ namespace ToyBox
 
         //各ボタンの制御用
         private bool m_isStageSelect;
-        private bool m_isHalfPointSelect;
         private bool m_isBack;
 
         //ボタンのSprite
@@ -76,6 +74,9 @@ namespace ToyBox
 
         //モーダルで表示するメッセージ
         private string m_modalMessage;
+
+        //シーン遷移を判断するstring
+        private string m_sceneString;
 
         public override IEnumerator OnEnter()
         {
@@ -136,6 +137,8 @@ namespace ToyBox
 
             }
 
+            m_sceneString = "";
+
             AudioManager.Instance.RegisterBGM("BGM_StageSelect");
             AudioManager.Instance.PlayBGM(1.5f);
 
@@ -174,6 +177,11 @@ namespace ToyBox
                             //タイトルシーンへ戻りますか？
 
                             m_isBack = false;
+
+                            //モーダルの表示
+                            UIManager.Instance.PopupGameReadyModal("タイトルへ戻りますか？", () => {
+                                m_sceneString = "Title";
+                            });
                         }
 
                         break;
@@ -217,16 +225,7 @@ namespace ToyBox
 
                     //中間地点を選ぶ
                     case SelectSceneState.SelectHalfPoint:
-
-                        //中間地点ボタンが選ばれたら
-                        if (m_isHalfPointSelect)
-                        {
-                            //中間地点の登録
-
-                            //ステートを遷移
-
-                        }
-
+                        
                         //戻るボタンが押されたら遷移
                         if (m_isBack)
                         {
@@ -246,28 +245,23 @@ namespace ToyBox
 
                         break;
 
-                    //モーダルによるはい・いいえ
-                    case SelectSceneState.ModalIndicate:
-
-                        //はいが選ばれたらメインシーンに遷移したい。。。
-
-                        break;
 
                 }
 
+                //遷移するシーンが決まったら遷移する
+                if (m_sceneString == "Main" || m_sceneString == "Title") yield break;
                 yield return null;
 
             }
 
         }
 
-
         public override IEnumerator OnExit()
         {
 
             AppManager.Instance.m_fade.StartFade(new FadeOut(), Color.black, 1.0f);
             yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
-            SceneManager.LoadScene("Main");
+            SceneManager.LoadScene(m_sceneString);
         }
 
 
@@ -398,7 +392,7 @@ namespace ToyBox
             m_screenImage.sprite = info.m_screenSprite;
 
             //モーダルで表示するステージ名の変更
-            m_modalMessage = info.m_stageName;
+            m_modalMessage = info.m_stageName + "\n";
 
             m_isStageSelect = true;
 
@@ -416,11 +410,16 @@ namespace ToyBox
 
             //中間地点の決定
             AppManager.Instance.user.m_temp.m_playRoomId = id;
+            
+            //モーダルで表示するステージ名の変更
+            //すでに一度文字列の変更が加わっているのなら、処理しない
+            if(m_modalMessage.IndexOf("番目の小部屋でよろしいですか？") == -1)
+            m_modalMessage = m_modalMessage + "の\n" + (id+1) + "番目の小部屋でよろしいですか？";
 
             //モーダルの表示
-            UIManager.Instance.PopupMessageModal(m_modalMessage);
-
-            m_isHalfPointSelect = true;
+            UIManager.Instance.PopupGameReadyModal(m_modalMessage,() => {
+                m_sceneString = "Main";
+            });
 
         }
 
