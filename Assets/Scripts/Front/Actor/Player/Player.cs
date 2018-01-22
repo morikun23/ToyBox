@@ -218,6 +218,7 @@ namespace ToyBox {
 
 			if (m_isGrounded) {
 				if (Vector2.Angle(Vector2.up , arg_direction) <= 60) {
+					m_animator.SetTrigger("Jump");
 					AudioManager.Instance.QuickPlaySE("SE_Player_jump");
 					//気持ちよくジャンプさせるため重力加速度をリセットする
 					m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x , 0);
@@ -254,7 +255,47 @@ namespace ToyBox {
 				m_currentState.OnEnter();
 			}
 		}
-		
+
+		/// <summary>
+		/// 自身を射出状態に遷移させアームを起動させる
+		/// プレイヤーのアニメーションを再生させるためのラッパー関数
+		/// </summary>
+		public void ReachOut(Vector2 arg_targetDirection) {
+
+			//不整合防止のためすでに射出状態であれば受け付けない
+			if (m_reach) return;
+
+			m_reach = true;
+
+			StartCoroutine(AwakeArm(arg_targetDirection));
+		}
+
+
+		private IEnumerator AwakeArm(Vector2 arg_targetDirection) {
+
+			AppManager.Instance.m_timeManager.Pause();
+
+			m_animator.Play("Reach.Open");
+			m_animator.SetBool("Reach" , true);
+			m_animator.Update(0);
+
+			yield return new Tsubakit.WaitForAnimation(m_animator , 0);
+			m_arm.ReachOut(arg_targetDirection);
+		}
+
+		private IEnumerator AsleepArm() {
+			
+			m_animator.Play("Reach.Close");
+			m_animator.SetBool("Reach" , false);
+
+			m_animator.Update(0);
+
+			yield return new Tsubakit.WaitForAnimation(m_animator , 0);
+
+			m_reach = false;
+			AppManager.Instance.m_timeManager.Resume();
+		}
+
 		//---------------------------------------------------
 		//　以下、外部からのコールバック
 		//　※今後、コールバックなどを追加するときは以下に追加すること
@@ -270,7 +311,6 @@ namespace ToyBox {
 			if(m_rigidbody.velocity.y > 0)  return;
 
 			m_animator.SetBool("OnGround" , true);
-			m_animator.SetBool("OnAir" , false);
 			m_isGrounded = true;
 		}
 
@@ -280,7 +320,6 @@ namespace ToyBox {
 		/// </summary>
 		private void OnGroundExit() {
 			m_animator.SetBool("OnGround" , false);
-			m_animator.SetBool("OnAir" , true);
 			m_isGrounded = false;
 		}
 
@@ -290,7 +329,6 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_arm"></param>
 		void IArmCallBackReceiver.OnStartLengthen(Arm arg_arm) {
-			m_reach = true;
 			m_hand.gameObject.SetActive(true);
 		}
 
@@ -300,8 +338,14 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_arm"></param>
 		void IArmCallBackReceiver.OnEndShorten(Arm arg_arm) {
-			m_reach = false;
 			m_hand.gameObject.SetActive(false);
+			if (m_hand.GraspingItem) {
+				if (m_hand.GraspingItem.Reaction == Item.GraspedReaction.PULL_TO_ITEM) {
+					AppManager.Instance.m_timeManager.Resume();
+					return;
+				}
+			}
+			StartCoroutine(AsleepArm());
 		}
 
 		/// <summary>
@@ -329,10 +373,11 @@ namespace ToyBox {
 			m_itemCoroutine = StartCoroutine(this.OnGraspStay(arg_hand.GraspingItem));
 
 			switch (arg_hand.GraspingItem.Reaction) {
-				case Item.GraspedReaction.PULL_TO_ITEM:
-				case Item.GraspedReaction.REST_ARM:		 m_animator.SetBool("Fix" , true); break;
+				case Item.GraspedReaction.PULL_TO_ITEM: m_animator.SetBool("Fix" , true);break;
+				case Item.GraspedReaction.REST_ARM:	break;
 				case Item.GraspedReaction.PULL_TO_PLAYER: m_animator.SetBool("Carry" , true); break;
 			}
+			
 		}
 
 		/// <summary>
@@ -346,7 +391,10 @@ namespace ToyBox {
 
 			switch (arg_hand.GraspingItem.Reaction) {
 				case Item.GraspedReaction.PULL_TO_ITEM:
-				case Item.GraspedReaction.REST_ARM: m_animator.SetBool("Fix" , false); break;
+					m_animator.SetBool("Fix" , false);
+					StartCoroutine(AsleepArm());
+					break;
+				case Item.GraspedReaction.REST_ARM: break;
 				case Item.GraspedReaction.PULL_TO_PLAYER: m_animator.SetBool("Carry" , false); break;
 			}
 		}
