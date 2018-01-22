@@ -202,7 +202,6 @@ namespace ToyBox {
 
 			#region データ取得開始
 			StartCoroutine(AddTime());
-
 			#endregion
 
 
@@ -216,7 +215,21 @@ namespace ToyBox {
 		/// <returns></returns>
 		public override IEnumerator OnUpdate() {
 			//フラグが立つまでシーン遷移を実行しない
-			yield return new WaitWhile(() => !m_isAbleSceneTransition);
+			while(!m_isAbleSceneTransition){
+
+				//小部屋毎のデータを記録
+//				string selectStage = "data_Stage" +
+//                 (int)(AppManager.Instance.user.m_temp.m_playStageId / 1000) +
+//                 "-" +
+//                 AppManager.Instance.user.m_temp.m_playingRoomId;
+
+				uint selectRoom = AppManager.Instance.user.m_temp.m_playingRoomId;
+				AppManager.Instance.user.m_temp.m_dic_room [(int)selectRoom - 1] ["Time"] = AppManager.Instance.user.m_temp.m_num_roomWaitTime;
+
+				Debug.Log (AppManager.Instance.user.m_temp.m_dic_room [(int)selectRoom - 1] ["Time"]);
+
+				yield return null;
+			}
 		}
 		
 		/// <summary>
@@ -450,6 +463,7 @@ namespace ToyBox {
 		IEnumerator AddTime(){
 			while(!m_isAbleSceneTransition){
 				m_cnt_elapsedTime += Time.deltaTime;
+				AppManager.Instance.user.m_temp.m_num_roomWaitTime += Time.deltaTime;
 				yield return null;
 			}
 		}

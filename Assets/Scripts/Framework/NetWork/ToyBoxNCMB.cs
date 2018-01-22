@@ -56,7 +56,9 @@ namespace ToyBox{
 
 		}
 
-		//ID発行
+		/// <summary>
+		/// IDを発行する
+		/// </summary>
 		void CreateUserID(){
 
 			//検索条件を0でない値にセット
@@ -111,7 +113,6 @@ namespace ToyBox{
 								//取得したデータはDictionary型で保持
 								AppManager.Instance.user.m_temp.m_dic_.Add(m_NCMB_["data_Stage1"] as Dictionary<string,object>);
 								AppManager.Instance.user.m_temp.m_dic_.Add(m_NCMB_["data_Stage2"] as Dictionary<string,object>);
-								//AppManager.Instance.user.m_temp.m_dic_stage2 = m_NCMB_["data_Stage2"] as Dictionary<string,object>;
 
 							}
 						});
@@ -121,7 +122,9 @@ namespace ToyBox{
 
 		}
 
-		//IDを検索して取得
+		/// <summary>
+		/// IDを検索して取得
+		/// </summary>
 		void GetUserId(){
 			m_num_id = PlayerPrefs.GetInt ("UserId");
 
@@ -156,7 +159,9 @@ namespace ToyBox{
 			});
 		}
 
-		//各データ内容を確定してセーブ
+		/// <summary>
+		/// 各データ内容を確定してセーブ
+		/// </summary>
 		public void Save(){
 			if(m_flg_accept){
 				m_NCMB_ ["data_Stage1"] = AppManager.Instance.user.m_temp.m_dic_[0];
@@ -165,7 +170,9 @@ namespace ToyBox{
 			}
 		}
 
-		//データが書き込める状況かどうかを返す
+		/// <summary>
+		/// データが書き込める状況かどうかを返す
+		/// </summary>
 		public bool IsAbleNCMBWrrite(){
 			return m_flg_accept;
 		}

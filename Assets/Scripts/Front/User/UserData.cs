@@ -30,10 +30,18 @@ namespace ToyBox {
 
 			/// <summary>これからプレイする小部屋の番号</summary>
 			public uint m_playRoomId;
+			/// <summary>今遊んでいる小部屋の番号</summary>
+			public uint m_playingRoomId;
+
 
 			//各ステージの詳細データ
 			public List<Dictionary<string,object>> m_dic_ = new List<Dictionary<string, object>>();
-		
+			//選択中ステージの小部屋の詳細データ
+			public List<Dictionary<string,object>> m_dic_room = new List<Dictionary<string, object>>();
+			//小部屋での経過時間
+			public float m_num_roomWaitTime;
+
+
 			//死亡回数
 			public int m_cnt_death;
 		}
@@ -62,6 +70,8 @@ namespace ToyBox {
 			this.m_temp.m_cnt_death = 0;
 			this.m_temp.m_playStageId = 0;
 			this.m_temp.m_playRoomId = 0;
+			this.m_temp.m_num_roomWaitTime = 0;
+			this.m_temp.m_dic_room = new List<Dictionary<string, object>>();
 		}
 	}
 }

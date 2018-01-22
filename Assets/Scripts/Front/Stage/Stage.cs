@@ -155,6 +155,8 @@ namespace ToyBox {
 
 			//カメラを移動させる
 			CameraPosController.Instance.SetTargetAndStart((int)m_activePlayroom.Id);
+
+			UpdatePlayingRoom (m_activePlayroom.Id);
 		}
 
 
@@ -172,7 +174,8 @@ namespace ToyBox {
 
 			m_activePlayroom = arg_nextRoom;
 			this.SetRoomActive(m_activePlayroom);
-			
+
+			UpdatePlayingRoom (m_activePlayroom.Id);
 		}
 
 		/// <summary>
@@ -231,6 +234,25 @@ namespace ToyBox {
 
 		public void StashData() {
 			AppManager.Instance.user.m_temp.m_playRoomId = (uint)m_currentStartPoint.m_id;
+		}
+
+		/// <summary>
+		/// 今遊んでいる部屋番号を更新する
+		/// </summary>
+		public void UpdatePlayingRoom(uint arg_id){
+			AppManager.Instance.user.m_temp.m_playingRoomId = arg_id;
+
+			//選択した部屋のデータを取れるようにListを拡張する
+			if (AppManager.Instance.user.m_temp.m_dic_room.Count < arg_id) {
+				for(int i = 0;i < arg_id - AppManager.Instance.user.m_temp.m_dic_room.Count;i ++){
+					AppManager.Instance.user.m_temp.m_dic_room.Add(new Dictionary<string, object>());
+				}
+				AppManager.Instance.user.m_temp.m_num_roomWaitTime = 0;
+			} else {
+				ArrayList list = AppManager.Instance.user.m_temp.m_dic_room [(int)arg_id - 1] ["Time"] as ArrayList;
+				Debug.Log (list);
+				AppManager.Instance.user.m_temp.m_num_roomWaitTime = System.Convert.ToSingle(AppManager.Instance.user.m_temp.m_dic_room [(int)arg_id - 1] ["Time"]);
+			}
 		}
 
 	}
