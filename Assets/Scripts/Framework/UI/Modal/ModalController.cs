@@ -49,7 +49,8 @@ namespace ToyBox {
 			iTween.ScaleTo(ModalObject , iTween.Hash(
 				"scale" , Vector3.one ,
 				"time" , 0.25f ,
-				"oncomplete" , "OnActive"
+				"oncomplete" , "OnActive" ,
+				"oncompletetarget" , this.gameObject
 				));
 
 			if (m_exitButton != null) {
