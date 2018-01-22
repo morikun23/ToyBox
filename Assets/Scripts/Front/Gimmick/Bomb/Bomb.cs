@@ -71,10 +71,7 @@ namespace ToyBox
             {
                 m_anime.Play("Bomb");
                 m_anime.Update(0);
-
-                //再生中のアニメ「Bomb」の再生時間を読み取って、その時間後に爆破エフェクト&接触判定を取って壁を壊したい
-                //Invoke("Explosion", m_anime.GetCurrentAnimatorStateInfo(0).length);
-
+              
                 m_EffectTotalTime = m_anime.GetCurrentAnimatorStateInfo(0).length;
 
                 m_startExplosionFlag = true;
@@ -113,7 +110,7 @@ namespace ToyBox
 
             List<RaycastHit2D> hit = new List<RaycastHit2D>();
 
-            foreach (var col in Physics2D.CircleCastAll(transform.position, rad, Vector3.forward, Mathf.Infinity))
+            foreach (var col in Physics2D.CircleCastAll(transform.position, rad, Vector3.forward, Mathf.Infinity,1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Ground")))
             {
                 hit.Add(col);
             }
@@ -123,8 +120,9 @@ namespace ToyBox
                 if (hit[i].transform.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
 					Player playerInfo = hit[i].transform.gameObject.GetComponent<Player>();
-					//死亡判定
-					if (playerInfo) {
+
+                    //死亡判定
+					if (playerInfo && hit[i].transform.name == "Player") {
 						playerInfo.Dead();
 						continue;
 					}
