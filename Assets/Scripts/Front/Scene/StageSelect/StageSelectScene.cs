@@ -180,6 +180,7 @@ namespace ToyBox
 
                             //モーダルの表示
                             UIManager.Instance.PopupGameReadyModal("タイトルへ戻りますか？", () => {
+                                AudioManager.Instance.QuickPlaySE("SE_StageSelectButton");
                                 m_sceneString = "Title";
                             });
                         }
@@ -258,9 +259,10 @@ namespace ToyBox
 
         public override IEnumerator OnExit()
         {
-
+            
             AppManager.Instance.m_fade.StartFade(new FadeOut(), Color.black, 1.0f);
             yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
+            AudioManager.Instance.StopBGM();
             SceneManager.LoadScene(m_sceneString);
         }
 
@@ -418,6 +420,7 @@ namespace ToyBox
 
             //モーダルの表示
             UIManager.Instance.PopupGameReadyModal(m_modalMessage,() => {
+                AudioManager.Instance.QuickPlaySE("SE_OnTransitionMain");
                 m_sceneString = "Main";
             });
 
