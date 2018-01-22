@@ -64,8 +64,8 @@ namespace ToyBox
 
                 case EventState.START:
 
-					//プレイヤーが動けないようにする
-					MainSceneManager.IsEnableInput = false;
+					//プレイヤーがUI操作をできないようにする
+					AppManager.Instance.user.m_temp.m_isTouchUI = false;
 
 
                     m_currentEvent.OnStart(m_player,m_gimmick);
@@ -85,9 +85,9 @@ namespace ToyBox
                     m_currentEvent.OnEnd();
                     m_eventState = EventState.IDLE;
 
-					MainSceneManager.IsEnableInput = true;
+					AppManager.Instance.user.m_temp.m_isTouchUI = true;
 
-                    break;
+					break;
             }
         }
         

@@ -235,6 +235,7 @@ namespace ToyBox {
 		public void Dead() {
 			AudioManager.Instance.QuickPlaySE("SE_Player_Dead_02");
 			m_dead = true;
+			AppManager.Instance.user.m_temp.m_isTouchUI = false;
 		}
 
 		/// <summary>
@@ -242,6 +243,7 @@ namespace ToyBox {
 		/// </summary>
 		public void Revive() {
 			m_dead = false;
+			AppManager.Instance.user.m_temp.m_isTouchUI = true;
 		}
 		
 		/// <summary>
@@ -276,7 +278,6 @@ namespace ToyBox {
 
 
 		private IEnumerator AwakeArm(Vector2 arg_targetDirection) {
-
 			AppManager.Instance.m_timeManager.Pause();
 
 			m_animator.Play("Reach.Open");
