@@ -147,6 +147,8 @@ namespace ToyBox {
 			m_arm.AddCallBackReceiver(this);
 			m_hand.AddCallBackReceiver(this);
 			m_hand.AddCallBackReceiver(m_arm);
+
+			AudioManager.Instance.RegisterSE("extend","SE_PlayerHand_extend");
 		}
 
 		/// <summary>
@@ -219,7 +221,7 @@ namespace ToyBox {
 			if (m_isGrounded) {
 				if (Vector2.Angle(Vector2.up , arg_direction) <= 60) {
 					m_animator.SetTrigger("Jump");
-					AudioManager.Instance.QuickPlaySE("SE_Player_jump");
+					AudioManager.Instance.QuickPlaySE("SE_Player_Jump");
 					//気持ちよくジャンプさせるため重力加速度をリセットする
 					m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x , 0);
 					m_rigidbody.AddForce(arg_direction * arg_jumpPower);
@@ -231,6 +233,7 @@ namespace ToyBox {
 		/// プレイヤーを死亡させる
 		/// </summary>
 		public void Dead() {
+			AudioManager.Instance.QuickPlaySE("SE_Player_Dead_02");
 			m_dead = true;
 		}
 
@@ -261,13 +264,14 @@ namespace ToyBox {
 		/// プレイヤーのアニメーションを再生させるためのラッパー関数
 		/// </summary>
 		public void ReachOut(Vector2 arg_targetDirection) {
-
+			AudioManager.Instance.QuickPlaySE("SE_LidOpen");
 			//不整合防止のためすでに射出状態であれば受け付けない
 			if (m_reach) return;
 
 			m_reach = true;
 
 			StartCoroutine(AwakeArm(arg_targetDirection));
+			AudioManager.Instance.PlaySE("extend",true);
 		}
 
 
@@ -284,7 +288,7 @@ namespace ToyBox {
 		}
 
 		private IEnumerator AsleepArm() {
-			
+			AudioManager.Instance.StopSE ("extend");
 			m_animator.Play("Reach.Close");
 			m_animator.SetBool("Reach" , false);
 
@@ -329,6 +333,7 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_arm"></param>
 		void IArmCallBackReceiver.OnStartLengthen(Arm arg_arm) {
+			
 			m_hand.gameObject.SetActive(true);
 		}
 
@@ -338,6 +343,7 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_arm"></param>
 		void IArmCallBackReceiver.OnEndShorten(Arm arg_arm) {
+			
 			m_hand.gameObject.SetActive(false);
 			if (m_hand.GraspingItem) {
 				if (m_hand.GraspingItem.Reaction == Item.GraspedReaction.PULL_TO_ITEM) {
