@@ -281,32 +281,7 @@ namespace ToyBox {
 			StartCoroutine(AwakeArm(arg_targetDirection));
 			AudioManager.Instance.PlaySE("extend",true);
 		}
-
-
-		private IEnumerator AwakeArm(Vector2 arg_targetDirection) {
-			AppManager.Instance.m_timeManager.Pause();
-
-			m_animator.Play("Reach.Open");
-			m_animator.SetBool("Reach" , true);
-			m_animator.Update(0);
-
-			yield return new Tsubakit.WaitForAnimation(m_animator , 0);
-			m_arm.ReachOut(arg_targetDirection);
-		}
-
-		private IEnumerator AsleepArm() {
-			AudioManager.Instance.StopSE ("extend");
-			m_animator.Play("Reach.Close");
-			m_animator.SetBool("Reach" , false);
-
-			m_animator.Update(0);
-
-			yield return new Tsubakit.WaitForAnimation(m_animator , 0);
-
-			m_reach = false;
-			AppManager.Instance.m_timeManager.Resume();
-		}
-
+		
 		//---------------------------------------------------
 		//　以下、外部からのコールバック
 		//　※今後、コールバックなどを追加するときは以下に追加すること
@@ -340,7 +315,6 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_arm"></param>
 		void IArmCallBackReceiver.OnStartLengthen(Arm arg_arm) {
-			
 			m_hand.gameObject.SetActive(true);
 		}
 

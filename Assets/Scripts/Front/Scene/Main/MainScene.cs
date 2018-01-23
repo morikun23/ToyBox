@@ -439,11 +439,24 @@ namespace ToyBox {
 		void IHandCallBackReceiver.OnGrasped(Hand arg_hand) {
 			m_armReleaseButton.gameObject.SetActive(true);
 			m_armReachButton.gameObject.SetActive(false);
+			switch (arg_hand.GraspingItem.Reaction) {
+				case Item.GraspedReaction.PULL_TO_ITEM: break;
+				case Item.GraspedReaction.PULL_TO_PLAYER: break;
+				case Item.GraspedReaction.REST_ARM:
+				AppManager.Instance.m_timeManager.Resume(); break;
+			}
 		}
 
 		void IHandCallBackReceiver.OnReleased(Hand arg_hand) {
 			m_armReleaseButton.gameObject.SetActive(false);
 			m_armReachButton.gameObject.SetActive(true);
+
+			switch (arg_hand.GraspingItem.Reaction) {
+				case Item.GraspedReaction.PULL_TO_ITEM: break;
+				case Item.GraspedReaction.PULL_TO_PLAYER: break;
+				case Item.GraspedReaction.REST_ARM:
+				AppManager.Instance.m_timeManager.Pause(); break;
+			}
 		}
 		#endregion
 
