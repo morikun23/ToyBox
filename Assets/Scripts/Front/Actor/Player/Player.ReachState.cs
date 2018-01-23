@@ -11,27 +11,20 @@ namespace ToyBox {
 			/// </summary>
 			private Player m_player;
 
-			/// <summary>状態遷移時の加速度のバッファ</summary>
-			private Vector2 m_velocityBuf;
-
 			public ReachState(Player arg_player) {
 				m_player = arg_player;
 			}
 
 			void IPlayerState.OnEnter() {
 				m_player.m_rigidbody.isKinematic = true;
-				m_velocityBuf = m_player.m_rigidbody.velocity;
-				m_player.m_rigidbody.velocity = Vector2.zero;
 			}
 
 			void IPlayerState.OnUpdate() {
-
+				m_player.m_rigidbody.velocity = Vector2.zero;
 			}
 
 			void IPlayerState.OnExit() {
-
 				m_player.m_rigidbody.isKinematic = false;
-				m_player.m_rigidbody.velocity = m_velocityBuf;
 
 				if (m_player.m_jump) {
 					m_player.Jump(m_player.m_jumpDirection);
@@ -48,7 +41,12 @@ namespace ToyBox {
 
 		}
 
+		/// <summary>加速度のバッファ</summary>
+		private Vector2 m_velocityBuf;
+
 		private IEnumerator AwakeArm(Vector2 arg_targetDirection) {
+			m_velocityBuf = this.m_rigidbody.velocity;
+			m_rigidbody.velocity = Vector2.zero;
 			AppManager.Instance.m_timeManager.Pause();
 
 			m_animator.Play("Reach.Open");
@@ -68,6 +66,11 @@ namespace ToyBox {
 			m_animator.Update(0);
 
 			yield return new Tsubakit.WaitForAnimation(m_animator , 0);
+
+			this.m_rigidbody.velocity = m_velocityBuf;
+
+			//不整合防止のためバッファを空にする
+			m_velocityBuf = Vector2.zero;
 
 			m_reach = false;
 			AppManager.Instance.m_timeManager.Resume();

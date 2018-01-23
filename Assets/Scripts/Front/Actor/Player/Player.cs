@@ -341,7 +341,7 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_hand"></param>
 		void IHandCallBackReceiver.OnCollided(Hand arg_hand) {
-
+			
 			Vector2 direction = (PlayableArm.TopPosition - (Vector2)transform.position).normalized;
 
 			if (direction.y < 0) {
@@ -356,6 +356,9 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_hand"></param>
 		void IHandCallBackReceiver.OnGrasped(Hand arg_hand) {
+
+			m_velocityBuf = Vector2.zero;
+
 			arg_hand.GraspingItem.OnGraspedEnter(this);
 			m_itemCoroutine = StartCoroutine(this.OnGraspStay(arg_hand.GraspingItem));
 
@@ -384,6 +387,7 @@ namespace ToyBox {
 				case Item.GraspedReaction.REST_ARM: break;
 				case Item.GraspedReaction.PULL_TO_PLAYER: m_animator.SetBool("Carry" , false); break;
 			}
+
 		}
 
 		/// <summary>
