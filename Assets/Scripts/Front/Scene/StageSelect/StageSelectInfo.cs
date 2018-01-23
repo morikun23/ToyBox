@@ -37,7 +37,7 @@ namespace ToyBox
             //とりあえず最初の小部屋だけ解放
             for (int i = 1; i < m_openStageCount + 1; i++)
             {
-                m_arrivalRoomCount[STAGE + i] = 0;
+                m_arrivalRoomCount[STAGE + i] = 1;
             }
 
 

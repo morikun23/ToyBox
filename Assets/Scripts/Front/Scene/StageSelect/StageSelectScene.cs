@@ -139,6 +139,9 @@ namespace ToyBox
 
             m_sceneString = "";
 
+            m_stageSelectScrollView.SetActive(false);
+            m_stageSelectScrollView.SetActive(true);
+
             AudioManager.Instance.RegisterBGM("BGM_StageSelect");
             AudioManager.Instance.PlayBGM(1.5f);
 
@@ -319,10 +322,10 @@ namespace ToyBox
             //到達率をInfoから取得
             int arrivalCount = m_stageSelectInfo.GetArrivalRoomCount(stageNumber);
 
-            for (int i = 0; i < m_stageSelectInfo.GetTotalRoomCount(stageNumber); i++)
+            for (int i = 1; i <= m_stageSelectInfo.GetTotalRoomCount(stageNumber); i++)
             {
                 GameObject button = Instantiate(buttonPrefab, m_halfPointContent.transform);
-                button.name = button.transform.Find("Text").GetComponent<Text>().text = (i + 1).ToString();//見栄え上、名前は０からでなく１からにする
+                button.name = button.transform.Find("Text").GetComponent<Text>().text = i.ToString();//見栄え上、名前は０からでなく１からにする
 
                 //OnClickへの関数の登録をfor文の中で行う場合、変数を一時的に保存しとく必要がある
                 int temp = i;
@@ -331,8 +334,8 @@ namespace ToyBox
 
                 Image image = button.GetComponent<Image>();
 
-                //生成されたのが一個目のボタンなら
-                if (i == 0)
+                //最初の小部屋は解放
+                if (i == 1)
                 {
                     image.sprite = m_trueSprite;
 
@@ -416,7 +419,7 @@ namespace ToyBox
             //モーダルで表示するステージ名の変更
             //すでに一度文字列の変更が加わっているのなら、処理しない
             if(m_modalMessage.IndexOf("番目の小部屋でよろしいですか？") == -1)
-            m_modalMessage = m_modalMessage + "の\n" + (id+1) + "番目の小部屋でよろしいですか？";
+            m_modalMessage = m_modalMessage + "の\n" + id + "番目の小部屋でよろしいですか？";
 
             //モーダルの表示
             UIManager.Instance.PopupGameReadyModal(m_modalMessage,() => {
