@@ -211,8 +211,6 @@ namespace ToyBox {
 				uint selectRoom = AppManager.Instance.user.m_temp.m_playingRoomId;
 				AppManager.Instance.user.m_temp.m_dic_room [(int)selectRoom - 1] ["Time"] = AppManager.Instance.user.m_temp.m_num_roomWaitTime;
 
-				Debug.Log (AppManager.Instance.user.m_temp.m_dic_room [(int)selectRoom - 1] ["Time"]);
-
 				yield return null;
 			}
 		}
