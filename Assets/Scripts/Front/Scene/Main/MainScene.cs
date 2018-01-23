@@ -256,6 +256,10 @@ namespace ToyBox {
 				}
 				AppManager.Instance.user.m_temp.m_dic_[selectedStage] ["DeathCount"] = deathList;
 
+				//		クリア(遊んだステージ)
+				AppManager.Instance.user.m_temp.m_dic_[selectedStage] ["Clear"] = true;
+
+
 
 				AppManager.Instance.NCMB.Save ();
 			}
