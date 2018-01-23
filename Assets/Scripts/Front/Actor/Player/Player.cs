@@ -236,6 +236,7 @@ namespace ToyBox {
 			AudioManager.Instance.QuickPlaySE("SE_Player_Dead_02");
 			m_dead = true;
 			AppManager.Instance.user.m_temp.m_isTouchUI = false;
+			AppManager.Instance.user.m_temp.m_cnt_death += 1;
 		}
 
 		/// <summary>
