@@ -113,7 +113,7 @@ namespace ToyBox {
 
 				#region プレイヤーが死んだときの演出
 				//死亡アニメーションが終了するまで待機
-
+				UpdatePlayingRoom (m_activePlayroom.Id);
 				Animator playerAnimation = m_player.AnimatorComponent;
 
 				//同フレーム内でアニメーション情報の更新をするには一度アップデートしなければならない(うろ覚え)
@@ -222,7 +222,7 @@ namespace ToyBox {
 				AppManager.Instance.user.m_temp.m_num_roomWaitTime = 0;
 			} else {
 				ArrayList list = AppManager.Instance.user.m_temp.m_dic_room [(int)arg_id - 1] ["Time"] as ArrayList;
-				Debug.Log (list);
+				//Debug.Log (arg_id);
 				AppManager.Instance.user.m_temp.m_num_roomWaitTime = System.Convert.ToSingle(AppManager.Instance.user.m_temp.m_dic_room [(int)arg_id - 1] ["Time"]);
 			}
 		}
