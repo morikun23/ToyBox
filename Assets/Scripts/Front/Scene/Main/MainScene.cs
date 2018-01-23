@@ -261,9 +261,8 @@ namespace ToyBox {
 			AppManager.Instance.NCMB.Save ();
 			AppManager.Instance.user.DataInitalize ();
 
-
-			//TODO:今後リザルトシーンではなくホーム画面に移動する
-			SceneManager.LoadScene("Result");
+            
+			SceneManager.LoadScene("Home");
 		}
 
 		/// <summary>
