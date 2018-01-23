@@ -244,6 +244,11 @@ namespace ToyBox {
 		/// </summary>
 		public void Revive() {
 			m_dead = false;
+			m_leftRun = false;
+			m_rightRun = false;
+			m_jump = false;
+			m_reach = false;
+
 			AppManager.Instance.user.m_temp.m_isTouchUI = true;
 		}
 		

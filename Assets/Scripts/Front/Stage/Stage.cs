@@ -192,7 +192,7 @@ namespace ToyBox {
 		private void OnRoomEnter(PlayRoom arg_nextRoom) {
 
 			if (arg_nextRoom == m_activePlayroom) return;
-
+			UpdatePlayingRoom (m_activePlayroom.Id);
 			//スムーズなカメラ遷移を開始させる
 			CameraPosController.Instance.SetTargetAndStart((int)arg_nextRoom.Id);
 			
@@ -221,8 +221,8 @@ namespace ToyBox {
 				}
 				AppManager.Instance.user.m_temp.m_num_roomWaitTime = 0;
 			} else {
-				ArrayList list = AppManager.Instance.user.m_temp.m_dic_room [(int)arg_id - 1] ["Time"] as ArrayList;
-				//Debug.Log (arg_id);
+				//ArrayList list = AppManager.Instance.user.m_temp.m_dic_room [(int)arg_id - 1] ["Time"] as ArrayList;
+				Debug.Log (AppManager.Instance.user.m_temp.m_num_roomWaitTime);
 				AppManager.Instance.user.m_temp.m_num_roomWaitTime = System.Convert.ToSingle(AppManager.Instance.user.m_temp.m_dic_room [(int)arg_id - 1] ["Time"]);
 			}
 		}
