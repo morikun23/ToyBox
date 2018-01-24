@@ -22,8 +22,6 @@ namespace ToyBox
 
         const string STAGE = "STAGE";
 
-        const int MAX_STAGE_COUNT = 4;
-
         //初期化
         public void Initialize()
         {
