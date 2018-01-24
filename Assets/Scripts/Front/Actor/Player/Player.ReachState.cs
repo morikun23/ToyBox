@@ -44,6 +44,27 @@ namespace ToyBox {
 		/// <summary>加速度のバッファ</summary>
 		private Vector2 m_velocityBuf;
 
+		/// <summary>
+		/// 自身を射出状態に遷移させアームを起動させる
+		/// プレイヤーのアニメーションを再生させるためのラッパー関数
+		/// </summary>
+		public void ReachOut(Vector2 arg_targetDirection) {
+			AudioManager.Instance.QuickPlaySE("SE_LidOpen");
+			//不整合防止のためすでに射出状態であれば受け付けない
+			if (m_reach) return;
+
+			m_reach = true;
+
+			StartCoroutine(AwakeArm(arg_targetDirection));
+			AudioManager.Instance.PlaySE("extend" , true);
+		}
+
+		/// <summary>
+		/// 自身を射出状態に切り替える
+		/// アニメーションによる処理の待機をおこなう
+		/// </summary>
+		/// <param name="arg_targetDirection"></param>
+		/// <returns></returns>
 		private IEnumerator AwakeArm(Vector2 arg_targetDirection) {
 			m_velocityBuf = this.m_rigidbody.velocity;
 			m_rigidbody.velocity = Vector2.zero;
@@ -57,6 +78,11 @@ namespace ToyBox {
 			m_arm.ReachOut(arg_targetDirection);
 		}
 
+		/// <summary>
+		/// 自身の射出状態を終了する
+		/// アニメーションによる処理の待機をおこなう
+		/// </summary>
+		/// <returns></returns>
 		private IEnumerator AsleepArm() {
 
 			AudioManager.Instance.StopSE("extend");

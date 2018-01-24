@@ -34,5 +34,24 @@ namespace ToyBox {
 			}
 
 		}
+
+		/// <summary>
+		/// プレイヤーを死亡させる
+		/// </summary>
+		public void Dead() {
+			AudioManager.Instance.QuickPlaySE("SE_Player_Dead_02");
+			m_dead = true;
+			AppManager.Instance.user.m_temp.m_isTouchUI = false;
+			AppManager.Instance.user.m_temp.m_cnt_death += 1;
+		}
+
+		/// <summary>
+		/// プレイヤーの死亡状態を解除する
+		/// </summary>
+		public void Revive() {
+			
+
+			AppManager.Instance.user.m_temp.m_isTouchUI = true;
+		}
 	}
 }
