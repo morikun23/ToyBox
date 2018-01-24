@@ -27,11 +27,19 @@ namespace ToyBox
         {
 
             //ToDo:ユーザーがどのステージまで解放しているか、どのステージのどこまで到達しているかをNiftyから取得
-            //今は適当に
-            m_openStageCount = 2;
 
-            //きめうち
-            m_totalRoomCount[STAGE + 1] = 9;
+            //Niftyから、ステージの到達率を取得
+
+            //ステージ１は最初から解放
+            m_openStageCount = 1;
+
+            //ステージ１がクリア済みなら２も解放
+            if (AppManager.Instance.user.m_temp.m_dic_[0].ContainsKey("Clear"))
+                m_openStageCount++;
+
+
+                //きめうち
+                m_totalRoomCount[STAGE + 1] = 9;
             m_totalRoomCount[STAGE + 2] = 13;
 
             //とりあえず最初の小部屋だけ解放
