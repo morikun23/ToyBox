@@ -229,8 +229,19 @@ namespace ToyBox {
 				m_currentState.OnEnter();
 			}
 		}
-		
-		
+
+		/// <summary>
+		/// 掴んでいるアイテムの処理を実行する
+		/// </summary>
+		/// <param name="arg_item"></param>
+		/// <returns></returns>
+		private IEnumerator OnGraspStay(Item arg_item) {
+			while (true) {
+				arg_item.OnGraspedStay(this);
+				yield return null;
+			}
+		}
+
 		//---------------------------------------------------
 		//　以下、外部からのコールバック
 		//　※今後、コールバックなどを追加するときは以下に追加すること
@@ -341,18 +352,6 @@ namespace ToyBox {
 				case Item.GraspedReaction.PULL_TO_PLAYER: m_animator.SetBool("Carry" , false); break;
 			}
 
-		}
-
-		/// <summary>
-		/// アイテムの処理を実行する
-		/// </summary>
-		/// <param name="arg_item"></param>
-		/// <returns></returns>
-		private IEnumerator OnGraspStay(Item arg_item) {
-			while (true) {
-				arg_item.OnGraspedStay(this);
-				yield return null;
-			}
 		}
 	}
 }
