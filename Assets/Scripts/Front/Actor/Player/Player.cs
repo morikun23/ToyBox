@@ -292,7 +292,7 @@ namespace ToyBox {
 		void IHandCallBackReceiver.OnCollided(Hand arg_hand) {
 
 			//空中ジャンプは不可
-			if (m_isGrounded) return;
+			if (!m_isGrounded) return;
 
 			Vector2 direction = (PlayableArm.TopPosition - (Vector2)transform.position).normalized;
 			if (Vector2.Angle(Vector2.up , direction) >= 60) {
