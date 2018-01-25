@@ -87,5 +87,24 @@ namespace ToyBox {
 			}
 
 		}
+
+		/// <summary>
+		/// 指定方向へ移動を開始する
+		/// </summary>
+		/// <param name="arg_direction">移動方向</param>
+		public void Run(Direction arg_direction) {
+			m_currentDirection = arg_direction;
+			if (arg_direction == Direction.LEFT) m_leftRun = true;
+			else if (arg_direction == Direction.RIGHT) m_rightRun = true;
+		}
+
+		/// <summary>
+		/// 指定方向への移動を終了する
+		/// </summary>
+		/// <param name="arg_direction">終了させる移動方向</param>
+		public void Stop(Direction arg_direction) {
+			if (arg_direction == Direction.LEFT) m_leftRun = false;
+			else if (arg_direction == Direction.RIGHT) m_rightRun = false;
+		}
 	}
 }

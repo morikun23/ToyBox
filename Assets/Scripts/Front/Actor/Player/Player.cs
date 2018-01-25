@@ -185,22 +185,11 @@ namespace ToyBox {
 		}
 
 		/// <summary>
-		/// 指定方向へ移動を開始する
+		/// 現在の向きを取得する
 		/// </summary>
-		/// <param name="arg_direction">移動方向</param>
-		public void Run(Direction arg_direction) {
-			m_currentDirection = arg_direction;
-			if (arg_direction == Direction.LEFT) m_leftRun = true;
-			else if (arg_direction == Direction.RIGHT) m_rightRun = true;
-		}
-
-		/// <summary>
-		/// 指定方向への移動を終了する
-		/// </summary>
-		/// <param name="arg_direction">終了させる移動方向</param>
-		public void Stop(Direction arg_direction) {
-			if (arg_direction == Direction.LEFT) m_leftRun = false;
-			else if (arg_direction == Direction.RIGHT) m_rightRun = false;
+		/// <returns></returns>
+		public Direction GetCurrentDirection() {
+			return m_currentDirection;
 		}
 
 		/// <summary>
@@ -218,40 +207,14 @@ namespace ToyBox {
 
 			arg_direction.Normalize();
 
-			if (m_isGrounded) {
-				if (Vector2.Angle(Vector2.up , arg_direction) <= 60) {
-					m_animator.SetTrigger("Jump");
-					AudioManager.Instance.QuickPlaySE("SE_Player_Jump");
-					//気持ちよくジャンプさせるため重力加速度をリセットする
-					m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x , 0);
-					m_rigidbody.AddForce(arg_direction * arg_jumpPower);
-				}
-			}
+			m_animator.SetTrigger("Jump");
+			AudioManager.Instance.QuickPlaySE("SE_Player_Jump");
+			//気持ちよくジャンプさせるため重力加速度をリセットする
+			m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x , 0);
+			m_rigidbody.AddForce(arg_direction * arg_jumpPower);
+			
 		}
 
-		/// <summary>
-		/// プレイヤーを死亡させる
-		/// </summary>
-		public void Dead() {
-			AudioManager.Instance.QuickPlaySE("SE_Player_Dead_02");
-			m_dead = true;
-			AppManager.Instance.user.m_temp.m_isTouchUI = false;
-			AppManager.Instance.user.m_temp.m_cnt_death += 1;
-		}
-
-		/// <summary>
-		/// プレイヤーの死亡状態を解除する
-		/// </summary>
-		public void Revive() {
-			m_dead = false;
-			m_leftRun = false;
-			m_rightRun = false;
-			m_jump = false;
-			m_reach = false;
-
-			AppManager.Instance.user.m_temp.m_isTouchUI = true;
-		}
-		
 		/// <summary>
 		/// ステートの遷移を行う
 		/// </summary>
@@ -268,20 +231,17 @@ namespace ToyBox {
 		}
 
 		/// <summary>
-		/// 自身を射出状態に遷移させアームを起動させる
-		/// プレイヤーのアニメーションを再生させるためのラッパー関数
+		/// 掴んでいるアイテムの処理を実行する
 		/// </summary>
-		public void ReachOut(Vector2 arg_targetDirection) {
-			AudioManager.Instance.QuickPlaySE("SE_LidOpen");
-			//不整合防止のためすでに射出状態であれば受け付けない
-			if (m_reach) return;
-
-			m_reach = true;
-
-			StartCoroutine(AwakeArm(arg_targetDirection));
-			AudioManager.Instance.PlaySE("extend",true);
+		/// <param name="arg_item"></param>
+		/// <returns></returns>
+		private IEnumerator OnGraspStay(Item arg_item) {
+			while (true) {
+				arg_item.OnGraspedStay(this);
+				yield return null;
+			}
 		}
-		
+
 		//---------------------------------------------------
 		//　以下、外部からのコールバック
 		//　※今後、コールバックなどを追加するときは以下に追加すること
@@ -341,12 +301,16 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_hand"></param>
 		void IHandCallBackReceiver.OnCollided(Hand arg_hand) {
-			
-			Vector2 direction = (PlayableArm.TopPosition - (Vector2)transform.position).normalized;
 
-			if (direction.y < 0) {
-				m_jump = true;
-				m_jumpDirection = -direction;
+			//空中ジャンプは不可
+			if (!m_isGrounded) return;
+
+			Vector2 direction = (PlayableArm.TopPosition - (Vector2)transform.position).normalized;
+			if (Vector2.Angle(Vector2.up , direction) >= 60) {
+				if (direction.y < 0) {
+					m_jump = true;
+					m_jumpDirection = -direction;
+				}
 			}
 		}
 
@@ -388,18 +352,6 @@ namespace ToyBox {
 				case Item.GraspedReaction.PULL_TO_PLAYER: m_animator.SetBool("Carry" , false); break;
 			}
 
-		}
-
-		/// <summary>
-		/// アイテムの処理を実行する
-		/// </summary>
-		/// <param name="arg_item"></param>
-		/// <returns></returns>
-		private IEnumerator OnGraspStay(Item arg_item) {
-			while (true) {
-				arg_item.OnGraspedStay(this);
-				yield return null;
-			}
 		}
 	}
 }
