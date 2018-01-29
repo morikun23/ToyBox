@@ -76,7 +76,14 @@ namespace ToyBox {
 		
 		/// <summary>コールバックを受け取る対象</summary>
 		private readonly List<IArmCallBackReceiver> m_callBackReceivers = new List<IArmCallBackReceiver>();
-		
+
+		/// <summary>
+		/// ジャンプに影響させる腕の長さの割合
+		/// 腕の長さ * JUMP_POWER_RATE = 押し出される距離
+		/// </summary>
+		[SerializeField]
+		private float m_jumpPowerRate = 0.5f;
+
 		/// <summary>
 		/// 射程距離
 		/// </summary>
@@ -152,8 +159,6 @@ namespace ToyBox {
 		/// </summary>
 		private void Update() {
 
-
-
 			if (m_currentTask != null) {
 				m_currentTask();
 			}
@@ -208,18 +213,7 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_direction">腕を伸ばす方向</param>
 		public void ReachOut(Vector2 arg_direction) {
-
-			//使用中の場合は実行しない
-			if (this.IsUsing()) return;
-
-			this.gameObject.SetActive(true);
-
-			arg_direction.Normalize();
-			TargetPosition = BottomPosition + arg_direction * Range;
-			m_currentTask = this.Lengthen;
-			foreach (IArmCallBackReceiver receiver in m_callBackReceivers) {
-				receiver.OnStartLengthen(this);
-			}
+			this.ReachOutFor(BottomPosition + arg_direction.normalized * Range);
 		}
 
 		/// <summary>
@@ -235,16 +229,16 @@ namespace ToyBox {
 			this.gameObject.SetActive(true);
 
 			TargetPosition = arg_targetPosition;
-			m_currentTask = this.Lengthen;
+			m_currentTask = this.LengthenTop;
 			foreach (IArmCallBackReceiver receiver in m_callBackReceivers) {
 				receiver.OnStartLengthen(this);
 			}
 		}
 
 		/// <summary>
-		/// 腕を伸ばす
+		/// 腕の先端を伸ばす
 		/// </summary>
-		private void Lengthen() {
+		private void LengthenTop() {
 			
 			m_currentLength += m_reachSpeed;
 			
@@ -260,7 +254,48 @@ namespace ToyBox {
 
 			TopPosition = BottomPosition + m_targetDirection * m_currentLength;
 		}
-		
+
+		/// <summary>
+		/// 腕の根元を伸ばす
+		/// </summary>
+		private void LengthenBottom() {
+
+			//BottomPositionにより、親の座標も動いてしまうので調整させる
+			Vector2 topPos = TopPosition;
+
+			float targetLength = (TargetPosition - TopPosition).magnitude;
+
+			m_currentLength += m_reachSpeed;
+
+			#region めり込み防止
+			RaycastHit2D hitInfo = Physics2D.BoxCast(transform.position ,
+				Vector2.one * 0.5f , 0 , m_targetDirection , m_reachSpeed ,
+				1 << LayerMask.NameToLayer("Ground"));
+
+			if (hitInfo) {
+				//衝突した
+				targetLength = m_currentLength = (BottomPosition - TopPosition).magnitude;
+				TargetPosition = BottomPosition;
+			}
+			#endregion
+
+			if (m_currentLength >= targetLength) {
+				//伸ばしきった
+				BottomPosition = TargetPosition;
+
+				#region 縮めるために必要
+				TargetPosition = TopPosition = topPos;
+				m_currentLength = targetLength;
+				m_currentTask = ShortenTop;
+				#endregion
+				return;
+			}
+
+			BottomPosition = TopPosition + m_targetDirection * m_currentLength;
+			//BottomPositionにより、親の座標も動いてしまうので調整
+			TopPosition = topPos;
+		}
+
 		/// <summary>
 		/// 腕を伸ばし終わったあとの処理
 		/// </summary>
@@ -357,7 +392,15 @@ namespace ToyBox {
 		/// </summary>
 		/// <param name="arg_hand"></param>
 		void IHandCallBackReceiver.OnCollided(Hand arg_hand) {
+
 			m_currentTask = this.ShortenTop;
+
+			//ジャンプ
+			Vector2 direction = (TopPosition - (Vector2)transform.position).normalized;
+			if (Vector2.Angle(Vector2.down , direction) <= 45) {
+				TargetPosition = BottomPosition - m_targetDirection * ((Range - m_currentLength) * m_jumpPowerRate);
+				this.m_currentTask = LengthenBottom;
+			}
 		}
 
 		/// <summary>
@@ -373,14 +416,18 @@ namespace ToyBox {
 
 			switch (arg_hand.GraspingItem.Reaction) {
 				case Item.GraspedReaction.PULL_TO_ITEM:		
-				m_currentTask = this.ShortenBottom;	
-				AudioManager.Instance.PlaySE("extend",true);
-				break;
-				case Item.GraspedReaction.REST_ARM:			m_currentTask = this.Rest;			break;
+					m_currentTask = this.ShortenBottom;	
+					AudioManager.Instance.PlaySE("extend",true);
+					break;
+
+				case Item.GraspedReaction.REST_ARM:
+					m_currentTask = this.Rest;
+					break;
+
 				case Item.GraspedReaction.PULL_TO_PLAYER:
-				m_currentTask = this.ShortenTop;
-				AudioManager.Instance.PlaySE("extend",true);
-				break;
+					m_currentTask = this.ShortenTop;
+					AudioManager.Instance.PlaySE("extend",true);
+					break;
 			}
 		}
 
@@ -393,12 +440,18 @@ namespace ToyBox {
 			m_itemGrasped = false;
 
 			switch (arg_hand.GraspingItem.Reaction) {
-				case Item.GraspedReaction.PULL_TO_ITEM:		m_currentTask = null;				break;
+				case Item.GraspedReaction.PULL_TO_ITEM:
+					m_currentTask = null;
+					break;
+
 				case Item.GraspedReaction.REST_ARM:
-				m_currentTask = this.ShortenTop;
-				AudioManager.Instance.PlaySE("extend",true);
-				break;
-				case Item.GraspedReaction.PULL_TO_PLAYER:	m_currentTask = null;				break;
+					m_currentTask = this.ShortenTop;
+					AudioManager.Instance.PlaySE("extend",true);
+					break;
+
+				case Item.GraspedReaction.PULL_TO_PLAYER:
+					m_currentTask = null;
+					break;
 			}
 		}
 	}
