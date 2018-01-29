@@ -89,7 +89,7 @@ namespace ToyBox {
 		/// <param name="arg_message">表示内容</param>
 		/// <param name="arg_onGamePlay">ゲーム開始ボタン</param>
 		/// <param name="arg_callBack">モーダル表示終了後コールバック</param>
-		public void PopupGameReadyModal(string arg_message ,System.Action arg_onGamePlay, System.Action arg_callBack = null) {
+		public void PopupGameReadyModal(string arg_message ,System.Action arg_onGamePlay,System.Action arg_callBack = null) {
 
 			GameReadyModal modal = InstantiateModal(m_modalContainer["GameReadyModal"]) as GameReadyModal;
 
@@ -97,6 +97,18 @@ namespace ToyBox {
 			modal.m_playAction = arg_onGamePlay;
 			modal.Show(arg_callBack);
 
+		}
+
+		/// <summary>
+		/// ネット再接続モーダルを表示する
+		/// </summary>
+		/// <param name="arg_onOKPush">Argument on OK push.</param>
+		/// <param name="arg_callBack">Argument call back.</param>
+		public void PopupNetworkErrorModal(System.Action arg_onOK){
+			NetworkErrorModal modal = InstantiateModal (m_modalContainer["NetworkErrorModal"]) as NetworkErrorModal;
+
+			modal.m_playAction = arg_onOK;
+			modal.Show (arg_onOK);
 		}
 
 		/// <summary>

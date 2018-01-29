@@ -51,7 +51,7 @@ namespace ToyBox{
 				Debug.Log ("IDがローカルで見つかりました。サーバーと接続…");
 			}
 
-			m_NCMB_.SaveAsync ();
+			this.Save();
 			PlayerPrefs.Save ();
 
 		}
@@ -66,6 +66,10 @@ namespace ToyBox{
 			//検索し、リスト化して処理実行
 			m_NCQ_server.FindAsync ((List<NCMBObject> objList, NCMBException e) => {
 				if (e != null) {
+					if(e != null){
+						//再接続用モーダルを表示
+						UIManager.Instance.PopupNetworkErrorModal(()=>{this.Start();});
+					}
 					//検索失敗時の処理
 				} else {
 					//検索成功時、見つかったObjを変数として保持
@@ -97,8 +101,18 @@ namespace ToyBox{
 
 
 								//現状をセーブ
-								m_NCMB_.SaveAsync ();
-								m_NCMB_server.SaveAsync ();
+								m_NCMB_.SaveAsync ((NCMBException g) => {
+									if(g != null){
+										//再接続用モーダルを表示
+										UIManager.Instance.PopupNetworkErrorModal(()=>{this.Start();});
+									}
+								});
+								m_NCMB_server.SaveAsync ((NCMBException h) => {
+									if(h != null){
+										//再接続用モーダルを表示
+										UIManager.Instance.PopupNetworkErrorModal(()=>{this.Start();});
+									}
+								});
 
 								//ローカルにユーザーIdを保存
 								PlayerPrefs.SetInt ("UserId", AppManager.Instance.user.m_id);
@@ -114,7 +128,13 @@ namespace ToyBox{
 								AppManager.Instance.user.m_temp.m_dic_.Add(m_NCMB_["data_Stage1"] as Dictionary<string,object>);
 								AppManager.Instance.user.m_temp.m_dic_.Add(m_NCMB_["data_Stage2"] as Dictionary<string,object>);
 
+							}else{
+								if(f != null){
+									//再接続用モーダルを表示
+									UIManager.Instance.PopupNetworkErrorModal(()=>{this.Start();});
+								}
 							}
+
 						});
 					}
 				}
@@ -132,29 +152,27 @@ namespace ToyBox{
 			m_NCQ_.WhereEqualTo ("UserId", AppManager.Instance.user.m_id);
 			//検索し、リスト化して処理実行
 			m_NCQ_.FindAsync ((List<NCMBObject> objList ,NCMBException e) => {
-				if (objList.Count == 0) {
+				if(e != null) {
+					Debug.Log(e.Message);
+					//再接続用モーダルを表示
+					UIManager.Instance.PopupNetworkErrorModal(()=>{this.Start();});
+				}else if (objList.Count == 0) {
 					//検索失敗時の処理
 					Debug.Log("IDがサーバーにみつかりません、不明なユーザーです");
 					Debug.Log("新規ユーザーとして認識します。");
 					CreateUserID();
 				} else {
-					//検索成功時、見つかったObjを変数として保持
-					foreach (NCMBObject obj in objList) {
-						//オブジェクトの新規作成をなかったことにして、代わりにサーバーからデータを取得
-						m_NCMB_.DeleteAsync((NCMBException g) =>{
-							if(g == null){
-								m_NCMB_ = obj;
-								//取得したデータに置き換え
-								m_NCMB_.ObjectId = obj.ObjectId;
-								m_flg_accept = true;
-								Debug.Log("ユーザーデータを読み込みました");
+					
+					m_NCMB_ = objList[0];
+					//取得したデータに置き換え
+					m_NCMB_.ObjectId = objList[0].ObjectId;
+					m_flg_accept = true;
+					Debug.Log("ユーザーデータを読み込みました");
 
-								//取得したデータはDictionary型で保持
-								AppManager.Instance.user.m_temp.m_dic_.Add(m_NCMB_["data_Stage1"] as Dictionary<string,object>);
-								AppManager.Instance.user.m_temp.m_dic_.Add(m_NCMB_["data_Stage2"] as Dictionary<string,object>);
-							}
-						});
-					}
+					//取得したデータはDictionary型で保持
+					AppManager.Instance.user.m_temp.m_dic_.Add(m_NCMB_["data_Stage1"] as Dictionary<string,object>);
+					AppManager.Instance.user.m_temp.m_dic_.Add(m_NCMB_["data_Stage2"] as Dictionary<string,object>);
+						
 				}
 			});
 		}
@@ -166,7 +184,12 @@ namespace ToyBox{
 			if(m_flg_accept){
 				m_NCMB_ ["data_Stage1"] = AppManager.Instance.user.m_temp.m_dic_[0];
 				m_NCMB_ ["data_Stage2"] = AppManager.Instance.user.m_temp.m_dic_[1];
-				m_NCMB_.SaveAsync ();
+				m_NCMB_.SaveAsync ((NCMBException e) =>{
+					if(e != null){
+						//再接続用モーダルを表示
+						UIManager.Instance.PopupNetworkErrorModal(()=>{this.Save();});
+					}
+				});
 			}
 		}
 
