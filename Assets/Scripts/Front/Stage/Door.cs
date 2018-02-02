@@ -9,7 +9,9 @@ namespace ToyBox
         EventManager m_eventManager;
 
         Animator m_animator;
-
+        
+        //スタートまたはゴール
+        //今のところ意味ないです
         enum DoorType
         {
             Start,
@@ -25,11 +27,6 @@ namespace ToyBox
             m_animator = GetComponent<Animator>();
         }
         
-        void Update()
-        {
-            
-        }
-
         void OnTriggerEnter2D(Collider2D m_hitObject)
         {
             string layerName = LayerMask.LayerToName(m_hitObject.gameObject.layer);
@@ -40,6 +37,8 @@ namespace ToyBox
             }
         }
 
+
+        //ゲームが始まったときの処理
         void SetDoorType()
         {
             if(m_doorType == DoorType.Start)
@@ -49,10 +48,6 @@ namespace ToyBox
             else if(m_doorType == DoorType.End)
             {
                 
-            }
-            else
-            {
-                Debug.LogError("タイプが不明です");
             }
         }
 
@@ -66,17 +61,34 @@ namespace ToyBox
             return m_doorType == DoorType.End && arg_layerName == "Player";
         }
 
+        /// <summary>
+        /// ドアを開く
+        /// </summary>
         public void OpenDoor()
         {
             m_animator.Play("Open");
         }
 
-        public void CloseDoor()
+        /// <summary>
+        /// ドアが閉まるとき
+        /// </summary>
+        public void EnterCloseDoor()
         {
             m_animator.Play("Close");
             
         }
 
-        
+        //ドアが閉まったかどうか
+        public bool isAnimationCloseDoor()
+        {
+            AnimatorStateInfo stateInfo = m_animator.GetCurrentAnimatorStateInfo(0);
+            if (stateInfo.normalizedTime > 1)
+            {
+                return false;
+            }
+            return true;
+        }
+
+
     }
 }

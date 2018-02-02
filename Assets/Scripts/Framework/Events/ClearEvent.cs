@@ -7,33 +7,44 @@ namespace ToyBox
     public class ClearEvent : IEvent
     {
         
+        //プレイヤー関連
         private Player m_player;
         private Player.Direction m_currentDirection;
         private Rigidbody2D m_rigidbody;
         private Animator m_animator;
 
+        //イベントのアニメーション関連
         private GameObject m_eventPlayer;
         private Animator m_eventAnimation;
         AnimatorStateInfo m_eventAnimationInfo;
 
+        //ゴールのドア
         private GameObject m_doorObject;
         private Door m_door;
 
+        //ジャンプした回数
         private int m_countJump;
 
+        //イベントの進行状態
         enum ClearEventState
         {
             STANBY,
             RUN,
             ANIMETION,
             OPEN,
-            FADE,
+            PLAYERFADE,
             CLOSE,
             END
         }
 
         ClearEventState m_clearState;
 
+
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        /// <param name="arg_player">プレイヤーの情報</param>
+        /// <param name="arg_gimmickObject">ドアの情報</param>
         public virtual void OnStart(Player arg_player,GameObject arg_gimmickObject)
         {
             m_player = arg_player;
@@ -43,7 +54,7 @@ namespace ToyBox
             m_doorObject = arg_gimmickObject;
             m_door = m_doorObject.GetComponent<Door>();
 
-            m_eventPlayer = m_doorObject.transform.Find("EventAnimation").gameObject;
+            m_eventPlayer = m_doorObject.transform.Find("ClearAnimation").gameObject;
             m_eventAnimation = m_eventPlayer.GetComponent<Animator>();
 
             m_clearState = ClearEventState.STANBY;
@@ -55,80 +66,44 @@ namespace ToyBox
             switch (m_clearState)
             {
                 case ClearEventState.STANBY:
-
                     m_animator.SetBool("Run",true);
-                    
                     m_clearState = ClearEventState.RUN;
-
                     break;
 
                 case ClearEventState.RUN:
-
-                    
-                    m_rigidbody.velocity = new Vector3()
-                    {
-                        x = 3 * (int)GetPlayerDirection(),
-                        y = m_rigidbody.velocity.y,
-                        z = 0
-                    };
-
-                    if (PositionCheck())
-                    {
-                        AudioManager.Instance.ReleaseSE("Foot");
-
-                        m_rigidbody.velocity = new Vector3()
-                        {
-                            x = 0,
-                            y = m_rigidbody.velocity.y,
-                            z = 0
-                        };
-                        m_player.transform.position = new Vector3()
-                        {
-                            x = m_doorObject.transform.position.x,
-                            y = m_player.transform.position.y,
-                            z = m_player.transform.position.z
-
-                        };
-
-                        m_player.Stop(m_currentDirection);
-                        m_animator.SetBool("Run", false);
-
-                        m_player.gameObject.active = false;
-                        m_eventAnimation.gameObject.active = true;
-
-                        m_eventAnimation.Play("ANM_ClearEvent");
-                        m_clearState = ClearEventState.ANIMETION;
-                    }
-
+                    RunState();
                     break;
 
                 case ClearEventState.ANIMETION:
-                    
                     m_eventAnimationInfo = m_eventAnimation.GetCurrentAnimatorStateInfo(0);
-
                     if (m_eventAnimationInfo.normalizedTime > 1.0f)
                     {
                         m_clearState = ClearEventState.OPEN;
                     }
                     break;
+
                 case ClearEventState.OPEN:
                     m_door.OpenDoor();
                     m_eventAnimation.Play("ANM_ClearEventFade");
-                    m_clearState = ClearEventState.FADE;
+                    m_clearState = ClearEventState.PLAYERFADE;
                     break;
-                case ClearEventState.FADE:
 
+                case ClearEventState.PLAYERFADE:
                     m_eventAnimationInfo = m_eventAnimation.GetCurrentAnimatorStateInfo(0);
-
                     if (m_eventAnimationInfo.normalizedTime > 1.0f)
                     {
+                        m_door.EnterCloseDoor();
                         m_clearState = ClearEventState.CLOSE;
                     }
                     break;
+
                 case ClearEventState.CLOSE:
-                    m_door.CloseDoor();
-                    m_clearState = ClearEventState.END;
+                    if (m_door.isAnimationCloseDoor())
+                    {
+                        m_clearState = ClearEventState.END;
+                    }
                     break;
+
                 case ClearEventState.END:
                     break;
             }
@@ -147,11 +122,14 @@ namespace ToyBox
 
         public virtual void OnEnd()
         {
-            Debug.Log("イベント終了時");
-            OnEnterFade();
+
         }
 
-        Player.Direction GetPlayerDirection()
+        /// <summary>
+        /// プレイヤーがドアに対してどっちにいるか
+        /// </summary>
+        /// <returns></returns>
+        private Player.Direction GetPlayerDirection()
         {
             if (m_player.transform.position.x < m_doorObject.transform.position.x)
             {
@@ -163,7 +141,11 @@ namespace ToyBox
             }
         }
 
-        bool PositionCheck()
+        /// <summary>
+        /// プレイヤーが一定範囲内に入っているか
+        /// </summary>
+        /// <returns></returns>
+        private bool PositionCheck()
         {
             if (m_player.transform.position.x > m_doorObject.transform.position.x - 0.1f
                 && m_player.transform.position.x < m_doorObject.transform.position.x + 0.1f) 
@@ -173,11 +155,45 @@ namespace ToyBox
             return false;
         }
 
-        void OnEnterFade()
+        /// <summary>
+        ///プレイヤーの位置調整 
+        /// </summary>
+        private void RunState()
         {
+            m_rigidbody.velocity = new Vector3()
+            {
+                x = 3 * (int)GetPlayerDirection(),
+                y = m_rigidbody.velocity.y,
+                z = 0
+            };
 
-            Fade fade = AppManager.Instance.m_fade;
-            fade.StartFade(new FadeOut(), Color.white, 1.0f);
+            if (PositionCheck())
+            {
+                AudioManager.Instance.ReleaseSE("Foot");
+
+                m_rigidbody.velocity = new Vector3()
+                {
+                    x = 0,
+                    y = m_rigidbody.velocity.y,
+                    z = 0
+                };
+                m_player.transform.position = new Vector3()
+                {
+                    x = m_doorObject.transform.position.x,
+                    y = m_player.transform.position.y,
+                    z = m_player.transform.position.z
+
+                };
+
+                m_player.Stop(m_currentDirection);
+                m_animator.SetBool("Run", false);
+
+                m_player.gameObject.active = false;
+                m_eventAnimation.gameObject.active = true;
+
+                m_eventAnimation.Play("ANM_ClearEvent");
+                m_clearState = ClearEventState.ANIMETION;
+            }
         }
 
     }
