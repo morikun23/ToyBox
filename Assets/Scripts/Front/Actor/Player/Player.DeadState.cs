@@ -26,6 +26,8 @@ namespace ToyBox {
 
 			void IPlayerState.OnExit() {
 				m_player.AnimatorComponent.SetBool("Dead" , false);
+				m_player.m_animator.SetBool("OnGround" , true);
+
 			}
 			
 			IPlayerState IPlayerState.GetNextState() {
@@ -49,8 +51,7 @@ namespace ToyBox {
 		/// プレイヤーの死亡状態を解除する
 		/// </summary>
 		public void Revive() {
-			
-
+			m_dead = false;
 			AppManager.Instance.user.m_temp.m_isTouchUI = true;
 		}
 	}

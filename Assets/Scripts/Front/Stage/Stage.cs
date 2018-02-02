@@ -107,6 +107,10 @@ namespace ToyBox {
 		/// </summary>
 		/// <returns></returns>
 		private IEnumerator OnUpdate() {
+
+			//他の初期化が終了するまで待機する
+			yield return null;
+
 			while (true) {
 				
 				yield return new WaitWhile(() => m_player.GetCurrentState() != typeof(Player.DeadState));
@@ -124,9 +128,11 @@ namespace ToyBox {
 				Fade fade = AppManager.Instance.m_fade;
 				fade.StartFade(new FadeOut() , Color.black , 1.0f);
 				yield return new WaitWhile(AppManager.Instance.m_fade.IsFading);
-
+				m_player.gameObject.SetActive(false);
 				//プレイヤーのリスタート
 				PlayerGenerate();
+
+				yield return new WaitWhile(() => m_player.GetCurrentState() == typeof(Player.DeadState));
 
 				yield return new WaitForSeconds(0.5f);
 
@@ -145,6 +151,8 @@ namespace ToyBox {
 			//再生成
 			m_player.transform.position = m_activePlayroom.RestartPoint.position;
 			m_player.Revive();
+
+			m_player.gameObject.SetActive(true);
 
 			//カメラを移動させる
 			CameraPosController.Instance.SetTargetAndStart((int)m_activePlayroom.Id);

@@ -148,6 +148,8 @@ namespace ToyBox {
 			m_hand.AddCallBackReceiver(this);
 			m_hand.AddCallBackReceiver(m_arm);
 
+			m_currentState = new IdleState(this);
+
 			AudioManager.Instance.RegisterSE("extend","SE_PlayerHand_extend");
 		}
 
@@ -157,7 +159,10 @@ namespace ToyBox {
 		/// 有効化時に初期化を行う
 		/// </summary>
 		private void OnEnable() {
-			m_currentState = new IdleState(this);
+
+			//各行動用のフラグ
+			m_leftRun = m_rightRun = m_reach = m_jump = false;
+
 			m_arm.gameObject.SetActive(false);
 			m_hand.gameObject.SetActive(false);
 		}
