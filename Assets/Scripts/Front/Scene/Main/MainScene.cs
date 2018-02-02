@@ -225,47 +225,9 @@ namespace ToyBox {
 			AudioManager.Instance.StopBGM();
 			AudioManager.Instance.StopSE("Foot");
 			AudioManager.Instance.ReleaseSE("Foot");
+			
+			SaveUserPlayData();
 
-
-			if(AppManager.Instance.NCMB.IsAbleNCMBWrrite()){
-				//クリアデータをサーバーに送信
-				ArrayList timeList = new ArrayList ();
-				ArrayList deathList = new ArrayList ();
-				int selectedStage = (int)(AppManager.Instance.user.m_temp.m_playStageId / 1000) - 1;
-				//		クリア時間
-				timeList = AppManager.Instance.user.m_temp.m_dic_[selectedStage]["GoalTime"] as ArrayList;
-				if (System.Convert.ToSingle(timeList [0]) == 0) {
-					timeList [0] = m_cnt_elapsedTime;
-				} else {
-					timeList.Add (m_cnt_elapsedTime);
-				}
-				//		最大10件までの登録にする
-				if(timeList.Count == 11){
-					timeList.RemoveAt (0);
-				}
-				AppManager.Instance.user.m_temp.m_dic_[selectedStage]["GoalTime"] = timeList;
-
-				//		死亡回数
-				if (AppManager.Instance.user.m_temp.m_dic_[selectedStage].ContainsKey("DeathCount")) {
-					deathList = AppManager.Instance.user.m_temp.m_dic_[selectedStage] ["DeathCount"] as ArrayList;
-				}
-				deathList.Add (AppManager.Instance.user.m_temp.m_cnt_death);
-				//		最大10件までの登録にする
-				if(deathList.Count == 11){
-					deathList.RemoveAt (0);
-				}
-				AppManager.Instance.user.m_temp.m_dic_[selectedStage] ["DeathCount"] = deathList;
-
-				//		クリア(遊んだステージ)
-				AppManager.Instance.user.m_temp.m_dic_[selectedStage] ["Clear"] = true;
-
-
-
-				AppManager.Instance.NCMB.Save ();
-			}
-			AppManager.Instance.user.DataInitalize ();
-
-            
 			SceneManager.LoadScene("Home");
 		}
 
@@ -465,8 +427,57 @@ namespace ToyBox {
 		#endregion
 
 
+		//----------------------------------------
+		//	クラウドデータ処理
+		//----------------------------------------
 
-		IEnumerator AddTime(){
+		/// <summary>
+		/// ユーザーデータをサーバーに送信する
+		/// </summary>
+		private void SaveUserPlayData() {
+			if (AppManager.Instance.NCMB.IsAbleNCMBWrrite()) {
+				//クリアデータをサーバーに送信
+				ArrayList timeList = new ArrayList();
+				ArrayList deathList = new ArrayList();
+				int selectedStage = (int)(AppManager.Instance.user.m_temp.m_playStageId / 1000) - 1;
+				//		クリア時間
+				timeList = AppManager.Instance.user.m_temp.m_dic_[selectedStage]["GoalTime"] as ArrayList;
+				if (System.Convert.ToSingle(timeList[0]) == 0) {
+					timeList[0] = m_cnt_elapsedTime;
+				}
+				else {
+					timeList.Add(m_cnt_elapsedTime);
+				}
+				//		最大10件までの登録にする
+				if (timeList.Count == 11) {
+					timeList.RemoveAt(0);
+				}
+				AppManager.Instance.user.m_temp.m_dic_[selectedStage]["GoalTime"] = timeList;
+
+				//		死亡回数
+				if (AppManager.Instance.user.m_temp.m_dic_[selectedStage].ContainsKey("DeathCount")) {
+					deathList = AppManager.Instance.user.m_temp.m_dic_[selectedStage]["DeathCount"] as ArrayList;
+				}
+				deathList.Add(AppManager.Instance.user.m_temp.m_cnt_death);
+				//		最大10件までの登録にする
+				if (deathList.Count == 11) {
+					deathList.RemoveAt(0);
+				}
+				AppManager.Instance.user.m_temp.m_dic_[selectedStage]["DeathCount"] = deathList;
+
+				//		クリア(遊んだステージ)
+				AppManager.Instance.user.m_temp.m_dic_[selectedStage]["Clear"] = true;
+
+				AppManager.Instance.NCMB.Save();
+			}
+			AppManager.Instance.user.DataInitalize();
+		}
+
+		/// <summary>
+		/// プレイ時間を加える
+		/// </summary>
+		/// <returns></returns>
+		private IEnumerator AddTime(){
 			while(!m_isAbleSceneTransition){
 				m_cnt_elapsedTime += Time.deltaTime;
 				AppManager.Instance.user.m_temp.m_num_roomWaitTime += Time.deltaTime;
