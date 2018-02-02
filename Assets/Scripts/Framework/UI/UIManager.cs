@@ -84,6 +84,30 @@ namespace ToyBox {
 		}
 
 		/// <summary>
+		/// Y/Nモーダルを表示する
+		/// </summary>
+		/// <param name="arg_message">表示内容</param>
+		/// <param name="arg_onGamePlay">Yesボタンプッシュ時コールバック</param>
+		/// <param name="arg_onGamePlay">Noボタンプッシュ時コールバック</param>
+		/// <param name="arg_callBack">モーダル表示終了後コールバック</param>
+		public void PopupYesNoModal(string arg_message ,System.Action arg_onYesButton,System.Action arg_onNoButton = null,System.Action arg_callBack = null) {
+
+			YesNoSelectModal modal = InstantiateModal(m_modalContainer["YesNoSelectModal"]) as YesNoSelectModal;
+
+			modal.m_message = arg_message;
+			modal.m_playActionYes = arg_onYesButton;
+
+			//Noボタンに何も割り当てられていなければ何事もなくHideに移す
+			if (arg_onNoButton != null) {
+				modal.m_playActionNo = arg_onNoButton;
+			} else {
+				modal.m_playActionNo = modal.Hide ();
+			}
+			modal.Show(arg_callBack);
+
+		}
+
+		/// <summary>
 		/// ゲーム開始確認モーダルを表示する
 		/// </summary>
 		/// <param name="arg_message">表示内容</param>
