@@ -202,6 +202,11 @@ namespace ToyBox {
 			//フラグが立つまでシーン遷移を実行しない
 			while(!m_isAbleSceneTransition){
 				
+				if(m_player.GetCurrentState() == typeof(Player.DeadState)) {
+					//プレイヤーの死亡時に予測線UIを非表示
+					m_armReachLine.gameObject.SetActive(false);
+				}
+
 				uint selectRoom = AppManager.Instance.user.m_temp.m_playingRoomId;
 				AppManager.Instance.user.m_temp.m_dic_room [(int)selectRoom - 1] ["Time"] = AppManager.Instance.user.m_temp.m_num_roomWaitTime;
 
