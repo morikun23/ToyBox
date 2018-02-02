@@ -55,6 +55,13 @@ namespace ToyBox {
 		[SerializeField]
 		private float m_range = 10;
 
+		/// <summary>
+		/// ジャンプに影響させる腕の長さの割合
+		/// 腕の長さ * JUMP_POWER_RATE = 押し出される距離
+		/// </summary>
+		[SerializeField , Range(0 , 1)]
+		private float m_jumpPowerRate = 0.5f;
+
 		/// <summary>この座標まで腕を伸ばす</summary>
 		private Vector2 m_targetPosition;
 
@@ -76,14 +83,7 @@ namespace ToyBox {
 		
 		/// <summary>コールバックを受け取る対象</summary>
 		private readonly List<IArmCallBackReceiver> m_callBackReceivers = new List<IArmCallBackReceiver>();
-
-		/// <summary>
-		/// ジャンプに影響させる腕の長さの割合
-		/// 腕の長さ * JUMP_POWER_RATE = 押し出される距離
-		/// </summary>
-		[SerializeField]
-		private float m_jumpPowerRate = 0.5f;
-
+		
 		/// <summary>
 		/// 射程距離
 		/// </summary>
