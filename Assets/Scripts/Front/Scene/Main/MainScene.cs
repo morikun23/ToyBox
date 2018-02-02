@@ -201,13 +201,7 @@ namespace ToyBox {
 		public override IEnumerator OnUpdate() {
 			//フラグが立つまでシーン遷移を実行しない
 			while(!m_isAbleSceneTransition){
-
-				//小部屋毎のデータを記録
-//				string selectStage = "data_Stage" +
-//                 (int)(AppManager.Instance.user.m_temp.m_playStageId / 1000) +
-//                 "-" +
-//                 AppManager.Instance.user.m_temp.m_playingRoomId;
-
+				
 				uint selectRoom = AppManager.Instance.user.m_temp.m_playingRoomId;
 				AppManager.Instance.user.m_temp.m_dic_room [(int)selectRoom - 1] ["Time"] = AppManager.Instance.user.m_temp.m_num_roomWaitTime;
 
