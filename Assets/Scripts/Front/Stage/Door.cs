@@ -6,9 +6,9 @@ namespace ToyBox
 {
     public class Door : MonoBehaviour
     {
-        EventManager m_eventManager;
+        private EventManager m_eventManager;
 
-        Animator m_animator;
+        private Animator m_animator;
         
         //スタートまたはゴール
         //今のところ意味ないです
@@ -19,15 +19,15 @@ namespace ToyBox
         }
 
         [SerializeField]
-        DoorType m_doorType;
+        private DoorType m_doorType;
 
-        void Start()
+        private void Start()
         {
             SetDoorType();
             m_animator = GetComponent<Animator>();
         }
         
-        void OnTriggerEnter2D(Collider2D m_hitObject)
+        private void OnTriggerEnter2D(Collider2D m_hitObject)
         {
             string layerName = LayerMask.LayerToName(m_hitObject.gameObject.layer);
 
@@ -39,16 +39,10 @@ namespace ToyBox
 
 
         //ゲームが始まったときの処理
-        void SetDoorType()
+        private void SetDoorType()
         {
-            if(m_doorType == DoorType.Start)
-            {
-                
-            }
-            else if(m_doorType == DoorType.End)
-            {
-                
-            }
+            if(m_doorType == DoorType.Start) { }
+            else if(m_doorType == DoorType.End) { }
         }
 
         /// <summary>
@@ -56,7 +50,7 @@ namespace ToyBox
         /// </summary>
         /// <param name="arg_layerName"></param>
         /// <returns></returns>
-        bool IsDoorHit(string arg_layerName)
+        private bool IsDoorHit(string arg_layerName)
         {
             return m_doorType == DoorType.End && arg_layerName == "Player";
         }

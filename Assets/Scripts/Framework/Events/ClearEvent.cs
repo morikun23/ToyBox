@@ -15,8 +15,8 @@ namespace ToyBox
 
         //イベントのアニメーション関連
         private GameObject m_eventPlayer;
-        private Animator m_eventAnimation;
-        AnimatorStateInfo m_eventAnimationInfo;
+        private Animator m_eventAnimator;
+        AnimatorStateInfo m_eventAnimatorInfo;
 
         //ゴールのドア
         private GameObject m_doorObject;
@@ -55,7 +55,7 @@ namespace ToyBox
             m_door = m_doorObject.GetComponent<Door>();
 
             m_eventPlayer = m_doorObject.transform.Find("ClearAnimation").gameObject;
-            m_eventAnimation = m_eventPlayer.GetComponent<Animator>();
+            m_eventAnimator = m_eventPlayer.GetComponent<Animator>();
 
             m_clearState = ClearEventState.STANBY;
         }
@@ -75,8 +75,8 @@ namespace ToyBox
                     break;
 
                 case ClearEventState.ANIMETION:
-                    m_eventAnimationInfo = m_eventAnimation.GetCurrentAnimatorStateInfo(0);
-                    if (m_eventAnimationInfo.normalizedTime > 1.0f)
+                    m_eventAnimatorInfo = m_eventAnimator.GetCurrentAnimatorStateInfo(0);
+                    if (m_eventAnimatorInfo.normalizedTime > 1.0f)
                     {
                         m_clearState = ClearEventState.OPEN;
                     }
@@ -84,13 +84,13 @@ namespace ToyBox
 
                 case ClearEventState.OPEN:
                     m_door.OpenDoor();
-                    m_eventAnimation.Play("ANM_ClearEventFade");
+                    m_eventAnimator.Play("ANM_ClearEventFade");
                     m_clearState = ClearEventState.PLAYERFADE;
                     break;
 
                 case ClearEventState.PLAYERFADE:
-                    m_eventAnimationInfo = m_eventAnimation.GetCurrentAnimatorStateInfo(0);
-                    if (m_eventAnimationInfo.normalizedTime > 1.0f)
+                    m_eventAnimatorInfo = m_eventAnimator.GetCurrentAnimatorStateInfo(0);
+                    if (m_eventAnimatorInfo.normalizedTime > 1.0f)
                     {
                         m_door.EnterCloseDoor();
                         m_clearState = ClearEventState.CLOSE;
@@ -119,10 +119,9 @@ namespace ToyBox
                 
         }
 
-
         public virtual void OnEnd()
         {
-
+            //ゲーム終了の処理
         }
 
         /// <summary>
@@ -189,9 +188,9 @@ namespace ToyBox
                 m_animator.SetBool("Run", false);
 
                 m_player.gameObject.active = false;
-                m_eventAnimation.gameObject.active = true;
+                m_eventAnimator.gameObject.active = true;
 
-                m_eventAnimation.Play("ANM_ClearEvent");
+                m_eventAnimator.Play("ANM_ClearEvent");
                 m_clearState = ClearEventState.ANIMETION;
             }
         }
