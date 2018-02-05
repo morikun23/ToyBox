@@ -101,7 +101,7 @@ namespace ToyBox {
 			if (arg_onNoButton != null) {
 				modal.m_playActionNo = arg_onNoButton;
 			} else {
-				modal.m_playActionNo = modal.Hide ();
+				modal.m_playActionNo = modal.Hide;
 			}
 			modal.Show(arg_callBack);
 
