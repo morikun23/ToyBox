@@ -42,7 +42,7 @@ namespace ToyBox
 
         public override void OnActive()
         {
-            m_backStageSelectButton.Initialize(new ButtonAction(ButtonEventTrigger.OnPress, OnBackSelectButtonPrees));
+            m_backStageSelectButton.Initialize(new ButtonAction(ButtonEventTrigger.OnPress, OnBackSelectButtonPress));
             m_retryButton.Initialize(new ButtonAction(ButtonEventTrigger.OnPress, OnRetryButtonPress));
 
             if (m_audio == null)
@@ -54,7 +54,7 @@ namespace ToyBox
             m_seBar.value = m_audio.SEVolume;
         }
 
-        public void OnBackSelectButtonPrees()
+        public void OnBackSelectButtonPress()
         {
             ///<summary>ステージ選択に戻るボタンが押された時のコールバック</summary>
             m_playActionBackStageSelect();
@@ -90,7 +90,6 @@ namespace ToyBox
         public void OnBgmBarSwipe()
         {
             m_audio.BGMVolume = m_bgmBar.value;
-            Debug.Log(m_audio.BGMVolume);
         }
 
         //SEバーを動かしたときの処理

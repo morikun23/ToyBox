@@ -390,7 +390,6 @@ namespace ToyBox {
 		/// </summary>
 		private void OnOptionButtonUp()
         {
-            Debug.Log("オプション押した");
             if (UIManager.Instance)
             {
                 UIManager.Instance.PopupOptionModal(() => { });

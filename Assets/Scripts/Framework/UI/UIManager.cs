@@ -140,7 +140,6 @@ namespace ToyBox {
         /// オプションモーダルを表示する
         /// </summary>
         /// <param name="arg_onOption">Argument on OK push.</param>
-        /// <param name="arg_callBack">Argument call back.</param>
         public void PopupOptionModal(System.Action arg_onOption)
         {
             OptionModal modal = InstantiateModal(m_modalContainer["OptionModal"]) as OptionModal;
