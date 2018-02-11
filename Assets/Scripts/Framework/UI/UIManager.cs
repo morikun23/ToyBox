@@ -135,13 +135,38 @@ namespace ToyBox {
 			modal.Show (arg_onOK);
 		}
 
-		/// <summary>
-		/// モーダルを生成する
-		/// 生成時にモーダルのデフォルト設定を適用させる
-		/// </summary>
-		/// <param name="arg_prefab"></param>
-		/// <returns></returns>
-		private ModalController InstantiateModal(GameObject arg_prefab) {
+
+        /// <summary>
+        /// オプションモーダルを表示する
+        /// </summary>
+        /// <param name="arg_onOption">Argument on OK push.</param>
+        public void PopupOptionModal(System.Action arg_onOption)
+        {
+            OptionModal modal = InstantiateModal(m_modalContainer["OptionModal"]) as OptionModal;
+            
+
+            modal.m_playActionBackStageSelect = arg_onOption;
+
+            if (arg_onOption != null)
+            {
+                modal.m_playRetry = arg_onOption;
+            }
+            else
+            {
+                modal.m_playRetry = modal.Hide;
+            }
+
+            modal.Show(arg_onOption);
+        }
+
+
+        /// <summary>
+        /// モーダルを生成する
+        /// 生成時にモーダルのデフォルト設定を適用させる
+        /// </summary>
+        /// <param name="arg_prefab"></param>
+        /// <returns></returns>
+        private ModalController InstantiateModal(GameObject arg_prefab) {
 			Canvas canvas = Instantiate(arg_prefab).GetComponent<Canvas>();
 
 			canvas.renderMode = RenderMode.ScreenSpaceCamera;

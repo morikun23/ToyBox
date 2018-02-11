@@ -160,11 +160,16 @@ namespace ToyBox {
 
 			AudioManager.Instance.PlayBGM(1.5f);
 
-			#endregion
+            #endregion
 
-			#region ボタンの初期化
+            #region ボタンの初期化
 
-			m_leftButton.Initialize(
+            m_optionButton.Initialize(
+                //new ButtonAction(ButtonEventTrigger.OnRelease, () => { UIManager.Instance.PopupOptionModal(() => { }); })
+                new ButtonAction(ButtonEventTrigger.OnRelease, this.OnOptionButtonUp)
+            );
+
+            m_leftButton.Initialize(
 				new ButtonAction(ButtonEventTrigger.OnLongPress , this.OnMoveButtonDown , (int)Player.Direction.LEFT) ,
 				new ButtonAction(ButtonEventTrigger.OnRelease , this.OnMoveButtonUp , (int)Player.Direction.LEFT)
 			);
@@ -379,12 +384,25 @@ namespace ToyBox {
 			}
 		}
 
-		//----------------------------------------
-		//	アームからのコールバック
-		//----------------------------------------
-		#region アームからのコールバック（時間停止用）
+        /// <summary>
+		/// オプションが押された時の処理
+		/// オプションモーダルを開く
+		/// </summary>
+		private void OnOptionButtonUp()
+        {
+            if (UIManager.Instance)
+            {
+                UIManager.Instance.PopupOptionModal(() => { });
+            }
+        }
 
-		void IArmCallBackReceiver.OnStartLengthen(Arm arg_arm) {
+
+        //----------------------------------------
+        //	アームからのコールバック
+        //----------------------------------------
+        #region アームからのコールバック（時間停止用）
+
+        void IArmCallBackReceiver.OnStartLengthen(Arm arg_arm) {
 			//AppManager.Instance.m_timeManager.Pause();
 		}
 
